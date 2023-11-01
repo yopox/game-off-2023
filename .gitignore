@@ -1,0 +1,8 @@
+/target/
+Cargo.lock
+**/*.rs.bk
+
+# Don't push licensed fonts
+*.ttf
+
+/dist/
