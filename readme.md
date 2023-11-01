@@ -1,5 +1,9 @@
 # Bevy game template
 
+## Try it online
+
+https://yopox.github.io/game-off-2023/
+
 ## How to run
 
 - Desktop build:
