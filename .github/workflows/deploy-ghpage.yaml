@@ -38,6 +38,11 @@ jobs:
         with:
           version: 'latest'
 
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "my-shared-cache-key"
+
       - name: Build
         run: trunk build --release
   
