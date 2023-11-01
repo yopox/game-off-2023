@@ -8,6 +8,7 @@ mkShell rec {
     udev alsa-lib vulkan-loader
     xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr # To use the x11 feature
     libxkbcommon wayland # To use the wayland feature
+    trunk
   ];
   RUSTC_VERSION =
     builtins.elemAt
@@ -19,5 +20,6 @@ mkShell rec {
   LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
   shellHook = ''
     rustup toolchain install ''${RUSTC_VERSION}
+    rustup target install wasm32-unknown-unknown
   '';
 }
