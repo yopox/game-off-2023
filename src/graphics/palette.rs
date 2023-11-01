@@ -15,6 +15,6 @@ impl Into<Color> for Palette {
 
 lazy_static! {
     static ref COLORS: HashMap<Palette, Color> = HashMap::from([
-        (Palette::Background, Color::BLACK),
+        (Palette::Background, Color::WHITE),
     ]);
 }

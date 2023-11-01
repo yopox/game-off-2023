@@ -1,7 +1,7 @@
 use bevy::prelude::*;
+use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSelection, SetClearColor};
 
 use crate::entities::EntitiesPlugin;
-use crate::GameState::SimpleText;
 use crate::graphics::GraphicsPlugin;
 use crate::logic::LogicPlugin;
 use crate::music::{AudioPlugin, BGM};
@@ -22,6 +22,7 @@ pub enum GameState {
     Loading,
     SimpleText,
     Title,
+    Game,
     GameOver,
 }
 
@@ -54,6 +55,12 @@ fn main() {
             })
         )
         .add_plugins((EntitiesPlugin, GraphicsPlugin, LogicPlugin, ScreensPlugin, AudioPlugin))
+        .add_plugins((LdtkPlugin))
+        .insert_resource(LevelSelection::index(0))
+        .insert_resource(LdtkSettings {
+            set_clear_color: SetClearColor::FromLevelBackground,
+            ..Default::default()
+        })
         .add_state::<GameState>()
         .add_systems(Startup, init)
         .run();
