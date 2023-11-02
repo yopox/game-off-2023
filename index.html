@@ -7,11 +7,28 @@
     <link data-trunk rel="inline" href="build/web/styles.css"/>
 </head>
 <body>
+<link data-trunk rel="inline" href="build/web/progressive-fetch.js"/>
 <link data-trunk rel="inline" href="build/web/sound.js"/>
 <div class="game-container">
     <canvas id="bevy">
         Javascript and support for canvas is required!
     </canvas>
 </div>
+<script>
+    function myInit(realInit, resource) {
+        const promise = progressiveFetch(resource, {
+            start: ({lengthBytes, filename}) => {
+                console.log(`Start downloading ${filename} (${lengthBytes} bytes)`);
+            },
+            update: ({loadedPercent, loadedBytes, lengthBytes, filename}) => {
+                console.log(`Downloaded ${loadedPercent}% (${loadedBytes} of ${lengthBytes} bytes)`);
+            },
+            finish: ({lengthBytes, filename}) => {
+                console.log(`Finished downloading ${filename} (${lengthBytes} bytes)`);
+            },
+        }, { handleCompression: true, });
+        realInit(promise);
+    }
+</script>
 </body>
 </html>

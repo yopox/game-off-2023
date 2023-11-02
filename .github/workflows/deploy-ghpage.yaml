@@ -47,9 +47,7 @@ jobs:
         run: trunk build --release
   
       - name: Patch paths
-        run: |
-            sed "s@'/@'./@g; s@\"/@\"./@g" ./dist/index.html > ./dist/temp.html
-            mv ./dist/temp.html ./dist/index.html
+        run: ./build/prepare-deploy.sh
   
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
