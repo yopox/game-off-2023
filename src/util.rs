@@ -3,15 +3,21 @@ use std::f32::consts::PI;
 use bevy::math::{Vec2, vec2};
 use bevy::prelude::{Res, State, States};
 
-pub const WIDTH: usize = 320;
+pub const WIDTH: usize = 426;
 pub const HALF_WIDTH: f32 = WIDTH as f32 / 2.;
-pub const HEIGHT: usize = 180;
+pub const HEIGHT: usize = 240;
 pub const HALF_HEIGHT: f32 = HEIGHT as f32 / 2.;
 
-pub const SCALE: f32 = 1.;
+pub const SCALE: f32 = 3.;
 
 pub mod z_pos {
     pub const GUI: f32 = 100.;
+}
+
+pub mod game {
+    use crate::util::HEIGHT;
+
+    pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
 }
 
 /// Angle in degrees

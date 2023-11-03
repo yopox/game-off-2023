@@ -1,8 +1,9 @@
 use bevy::app::App;
-use bevy::core_pipeline::upscaling;
+use bevy::math::vec3;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::LdtkWorldBundle;
-use crate::GameState;
+
+use crate::{GameState, util};
 use crate::entities::Player;
 use crate::graphics::ScreenTransition;
 use crate::screens::{Fonts, Textures};
@@ -40,7 +41,7 @@ fn enter(
     textures: Res<Textures>,
     asset_server: Res<AssetServer>,
 ) {
-    let ldtk_handle = asset_server.load("Typical_2D_platformer_example.ldtk");
+    let ldtk_handle = asset_server.load("tilemaps/sample.ldtk");
 
     commands.spawn(LdtkWorldBundle {
         ldtk_handle,
@@ -67,7 +68,7 @@ fn sync_camera(
     if let Some(player) = player.iter().next() {
         if let Some(mut camera) = camera.iter_mut().next() {
             // no idea why the *2 is needed :D
-            camera.translation = player.translation * 2.;
+            camera.translation = player.translation * 2. + vec3(0., util::game::CAM_Y_OFFSET, 0.);
         }
     }
 }

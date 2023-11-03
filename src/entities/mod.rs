@@ -1,6 +1,6 @@
 use bevy::app::App;
 use bevy::prelude::*;
-use bevy_ecs_ldtk::{LdtkEntity, Worldly, EntityInstance, prelude::LdtkEntityAppExt};
+use bevy_ecs_ldtk::{EntityInstance, LdtkEntity, prelude::LdtkEntityAppExt, Worldly};
 
 pub struct EntitiesPlugin;
 
@@ -18,7 +18,7 @@ pub struct Player;
 
 #[derive(Clone, Default, Bundle, LdtkEntity)]
 pub struct PlayerBundle {
-    #[sprite_bundle("player.png")]
+    #[sprite_bundle("hero.png")]
     pub sprite_bundle: SpriteBundle,
     pub player: Player,
     #[worldly]
