@@ -321,8 +321,8 @@
 			"maxCount": 1,
 			"limitScope": "PerLevel",
 			"limitBehavior": "PreventAdding",
-			"pivotX": 0,
-			"pivotY": 1,
+			"pivotX": 0.5,
+			"pivotY": 0.5,
 			"fieldDefs": []
 		}
 	], "tilesets": [
@@ -1153,18 +1153,18 @@
 					"entityInstances": [
 						{
 							"__identifier": "Player",
-							"__grid": [29,41],
-							"__pivot": [0,1],
+							"__grid": [29,38],
+							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#BE4A2F",
 							"__worldX": 22,
-							"__worldY": 56,
+							"__worldY": 40,
 							"iid": "241397e0-6280-11ee-a85a-5f207cfe60c8",
 							"width": 16,
 							"height": 32,
 							"defUid": 14,
-							"px": [118,168],
+							"px": [118,152],
 							"fieldInstances": []
 						}
 					]

@@ -1,11 +1,14 @@
 use bevy::app::App;
-use bevy::math::vec3;
+use bevy::math::{vec2, vec3};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::LdtkWorldBundle;
+use bevy_rapier2d::dynamics::{CoefficientCombineRule, RigidBody};
+use bevy_rapier2d::prelude::{Collider, Friction, KinematicCharacterController, LockedAxes};
 
 use crate::{GameState, util};
 use crate::entities::Player;
 use crate::graphics::ScreenTransition;
+use crate::logic::ColliderBundle;
 use crate::screens::{Fonts, Textures};
 
 pub struct GamePlugin;
@@ -20,9 +23,9 @@ impl Plugin for GamePlugin {
                 (
                     update,
                     movement,
-                    sync_camera,
                 ).chain().run_if(in_state(GameState::Game))
             )
+            .add_systems(Last, (sync_camera))
             .add_systems(OnEnter(GameState::Game), enter)
             .add_systems(OnExit(GameState::Game), exit)
         ;
@@ -45,9 +48,23 @@ fn enter(
 
     commands.spawn(LdtkWorldBundle {
         ldtk_handle,
-        transform: Transform::from_scale(Vec3::splat(2.)),
         ..Default::default()
     });
+
+    // Spawn a fake ground
+    commands
+        .spawn(ColliderBundle {
+            collider: Collider::cuboid(100., 4.),
+            rigid_body: RigidBody::Fixed,
+            rotation_constraints: LockedAxes::ROTATION_LOCKED,
+            friction: Friction {
+                coefficient: 2.0,
+                combine_rule: CoefficientCombineRule::Min,
+            },
+            ..default()
+        })
+        .insert(TransformBundle::from_transform(Transform::from_xyz(100., 84., 0.))
+        );
 }
 
 fn exit(
@@ -68,25 +85,19 @@ fn sync_camera(
     if let Some(player) = player.iter().next() {
         if let Some(mut camera) = camera.iter_mut().next() {
             // no idea why the *2 is needed :D
-            camera.translation = player.translation * 2. + vec3(0., util::game::CAM_Y_OFFSET, 0.);
+            camera.translation = player.translation + vec3(0., util::game::CAM_Y_OFFSET, 0.);
         }
     }
 }
 
 pub fn movement(
     input: Res<Input<KeyCode>>,
-    mut query: Query<&mut Transform, With<Player>>,
+    mut query: Query<&mut KinematicCharacterController, With<Player>>,
 ) {
-    for mut transform in &mut query {
+    for mut controller in &mut query {
         let right = if input.pressed(KeyCode::Right) { 1. } else { 0. };
         let left = if input.pressed(KeyCode::Left) { 1. } else { 0. };
 
-        transform.translation.x += (right - left) * 5.0;
-
-
-        let up = if input.pressed(KeyCode::Up) { 1. } else { 0. };
-        let down = if input.pressed(KeyCode::Down) { 1. } else { 0. };
-
-        transform.translation.y += (up - down) * 5.0;
+        controller.translation = Some(vec2((right - left) * 0.7, 0.));
     }
 }

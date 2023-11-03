@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSelection, SetClearColor};
+use bevy_rapier2d::prelude::*;
 
 use crate::entities::EntitiesPlugin;
 use crate::graphics::GraphicsPlugin;
@@ -15,6 +16,11 @@ mod graphics;
 mod logic;
 mod screens;
 mod music;
+
+#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+pub enum CustomSets {
+    Last,
+}
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 pub enum GameState {
@@ -56,6 +62,8 @@ fn main() {
         )
         .add_plugins((EntitiesPlugin, GraphicsPlugin, LogicPlugin, ScreensPlugin, AudioPlugin))
         .add_plugins((LdtkPlugin))
+        .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
+        .add_plugins(RapierDebugRenderPlugin::default())
         .insert_resource(LevelSelection::index(0))
         .insert_resource(LdtkSettings {
             set_clear_color: SetClearColor::FromLevelBackground,
