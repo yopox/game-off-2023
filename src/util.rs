@@ -14,6 +14,10 @@ pub mod z_pos {
     pub const GUI: f32 = 100.;
 }
 
+pub mod movement {
+    pub const PLAYER_X: f32 = 0.7;
+}
+
 pub mod game {
     use crate::util::HEIGHT;
 

@@ -2,14 +2,13 @@ use bevy::app::App;
 use bevy::math::{vec2, vec3};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::LdtkWorldBundle;
-use bevy_rapier2d::dynamics::{CoefficientCombineRule, RigidBody};
-use bevy_rapier2d::prelude::{Collider, Friction, KinematicCharacterController, LockedAxes};
+use bevy_rapier2d::prelude::KinematicCharacterController;
 
 use crate::{GameState, util};
 use crate::entities::Player;
 use crate::graphics::ScreenTransition;
-use crate::logic::ColliderBundle;
 use crate::screens::{Fonts, Textures};
+use crate::util::movement;
 
 pub struct GamePlugin;
 
@@ -50,21 +49,6 @@ fn enter(
         ldtk_handle,
         ..Default::default()
     });
-
-    // Spawn a fake ground
-    commands
-        .spawn(ColliderBundle {
-            collider: Collider::cuboid(100., 4.),
-            rigid_body: RigidBody::Fixed,
-            rotation_constraints: LockedAxes::ROTATION_LOCKED,
-            friction: Friction {
-                coefficient: 2.0,
-                combine_rule: CoefficientCombineRule::Min,
-            },
-            ..default()
-        })
-        .insert(TransformBundle::from_transform(Transform::from_xyz(100., 84., 0.))
-        );
 }
 
 fn exit(
@@ -94,10 +78,14 @@ pub fn movement(
     input: Res<Input<KeyCode>>,
     mut query: Query<&mut KinematicCharacterController, With<Player>>,
 ) {
-    for mut controller in &mut query {
-        let right = if input.pressed(KeyCode::Right) { 1. } else { 0. };
-        let left = if input.pressed(KeyCode::Left) { 1. } else { 0. };
+    let Ok(mut controller) = query.get_single_mut() else { return };
 
-        controller.translation = Some(vec2((right - left) * 0.7, 0.));
+    // Side movement
+    let right = if input.pressed(KeyCode::Right) { 1. } else { 0. };
+    let left = if input.pressed(KeyCode::Left) { 1. } else { 0. };
+    controller.translation = Some(vec2((right - left) * movement::PLAYER_X, 0.));
+
+    // Jump
+    if input.just_pressed(KeyCode::Space) {
     }
 }

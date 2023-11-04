@@ -1,10 +1,11 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSelection, SetClearColor};
+use bevy_ecs_ldtk::prelude::LdtkIntCellAppExt;
 use bevy_rapier2d::prelude::*;
 
 use crate::entities::EntitiesPlugin;
 use crate::graphics::GraphicsPlugin;
-use crate::logic::LogicPlugin;
+use crate::logic::{LogicPlugin, TileBundle};
 use crate::music::{AudioPlugin, BGM};
 use crate::screens::ScreensPlugin;
 use crate::util::{HALF_HEIGHT, HALF_WIDTH, HEIGHT, SCALE, WIDTH};
@@ -65,6 +66,7 @@ fn main() {
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
         .add_plugins(RapierDebugRenderPlugin::default())
         .insert_resource(LevelSelection::index(0))
+        .register_ldtk_int_cell::<TileBundle>(1)
         .insert_resource(LdtkSettings {
             set_clear_color: SetClearColor::FromLevelBackground,
             ..Default::default()

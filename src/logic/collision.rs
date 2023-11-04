@@ -36,3 +36,57 @@ impl From<&EntityInstance> for ColliderBundle {
         }
     }
 }
+
+#[derive(Copy, Clone, Eq, PartialEq, Debug, Default, Component)]
+pub struct Tile;
+
+#[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
+pub struct TileBundle {
+    tile: Tile,
+}
+
+pub fn spawn_wall_collision(
+    mut commands: Commands,
+    wall_query: Query<(&GridCoords, &Parent), Added<Tile>>,
+    parent_query: Query<&Parent, Without<Tile>>,
+    level_query: Query<(Entity, &LevelIid)>,
+    ldtk_projects: Query<&Handle<LdtkProject>>,
+    ldtk_project_assets: Res<Assets<LdtkProject>>,
+) {
+    if wall_query.is_empty() { return; }
+
+    let ldtk_project = ldtk_project_assets
+        .get(ldtk_projects.single())
+        .expect("Couldn't find project");
+
+    for (level_entity, level_iid) in &level_query {
+        let level = ldtk_project
+            .as_standalone()
+            .get_loaded_level_by_iid(&level_iid.to_string())
+            .expect("Couldn't find level");
+
+
+        let layer = &level.layer_instances()[0].auto_layer_tiles;
+
+        for tile in layer {
+            // Don't spawn colliders for inner tiles
+            // TODO: magical 17? I want to ignore tiles from the first rule
+            if tile.d[0] == 17 { continue }
+            bevy::log::info!("{};{} {} - {:?}", tile.px.x, tile.px.y, tile.t, tile.d);
+
+            commands
+                .spawn(ColliderBundle {
+                    collider: Collider::cuboid(4., 4.),
+                    rigid_body: RigidBody::Fixed,
+                    rotation_constraints: LockedAxes::ROTATION_LOCKED,
+                    friction: Friction {
+                        coefficient: 2.0,
+                        combine_rule: CoefficientCombineRule::Min,
+                    },
+                    ..default()
+                })
+                .insert(TransformBundle::from_transform(Transform::from_xyz(tile.px.x as f32 + 4., *level.px_hei() as f32 - (tile.px.y as f32 + 4.), 0.))
+                );
+        }
+    }
+}
