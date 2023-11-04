@@ -47,13 +47,12 @@ pub struct TileBundle {
 
 pub fn spawn_wall_collision(
     mut commands: Commands,
-    wall_query: Query<(&GridCoords, &Parent), Added<Tile>>,
-    parent_query: Query<&Parent, Without<Tile>>,
+    tiles_query: Query<(&GridCoords, &Parent), Added<Tile>>,
     level_query: Query<(Entity, &LevelIid)>,
     ldtk_projects: Query<&Handle<LdtkProject>>,
     ldtk_project_assets: Res<Assets<LdtkProject>>,
 ) {
-    if wall_query.is_empty() { return; }
+    if tiles_query.is_empty() { return; }
 
     let ldtk_project = ldtk_project_assets
         .get(ldtk_projects.single())
@@ -76,7 +75,7 @@ pub fn spawn_wall_collision(
 
             commands
                 .spawn(ColliderBundle {
-                    collider: Collider::cuboid(4., 4.),
+                    collider: collider_for_tile(tile.t),
                     rigid_body: RigidBody::Fixed,
                     rotation_constraints: LockedAxes::ROTATION_LOCKED,
                     friction: Friction {
@@ -88,5 +87,16 @@ pub fn spawn_wall_collision(
                 .insert(TransformBundle::from_transform(Transform::from_xyz(tile.px.x as f32 + 4., *level.px_hei() as f32 - (tile.px.y as f32 + 4.), 0.))
                 );
         }
+    }
+}
+
+fn collider_for_tile(t: i32) -> Collider {
+    match t {
+        0..=3 => Collider::compound(vec![(
+            Vect::new(0.0, 2.0),
+            0.0,
+            Collider::cuboid(4., 2.)
+        )]),
+        _ => Collider::cuboid(4., 4.),
     }
 }
