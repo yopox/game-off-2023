@@ -9,6 +9,9 @@ use crate::util::movement;
 pub struct Jump(f32);
 
 #[derive(Component)]
+pub struct Jumped;
+
+#[derive(Component)]
 pub struct Fall(f32);
 
 fn grav_speed(dt: f32) -> f32 { dt * movement::GRAVITY }
@@ -20,10 +23,12 @@ pub fn move_player(
     input: Res<Input<KeyCode>>,
     mut query: Query<(
         Entity, &mut KinematicCharacterController,
-        Option<&KinematicCharacterControllerOutput>, Option<&Jump>, Option<&Fall>,
+        Option<&KinematicCharacterControllerOutput>, Option<&Jump>, Option<&Fall>, Option<&Jumped>,
     ), With<Player>>,
 ) {
-    let Ok((e, mut controller, output, jump, lg)) = query.get_single_mut() else { return };
+    let Ok((e, mut controller, output, jump, fall, jumped)) = query.get_single_mut() else { return };
+
+    let delta = time.delta_seconds();
 
     let mut player = commands.entity(e);
     let mut translation = vec2(0., -1.4);
@@ -37,18 +42,30 @@ pub fn move_player(
 
     if grounded {
         player.insert(Fall(time.elapsed_seconds()));
+        player.remove::<Jumped>();
     } else {
         translation.y = 0.;
+        if jump.is_some() { player.insert(Jumped); }
     }
 
     // Jump
-    if grounded && input.just_pressed(KeyCode::Space) {
-        player.insert(Jump(time.elapsed_seconds()));
+    if input.just_pressed(KeyCode::Space) && jumped.is_none() {
+        let coyote = match fall {
+            Some(Fall(t)) => {
+                // info!("{}", time.elapsed_seconds() - *t);
+                time.elapsed_seconds() - *t < movement::COYOTE_TIME
+            },
+            _ => false
+        };
+        if grounded || coyote {
+            player.insert(Jump(time.elapsed_seconds()));
+            player.insert(Jumped);
+        }
     }
 
     if let Some(Jump(t_0)) = jump {
         let t_jump = time.elapsed_seconds() - t_0;
-        let dy = time.delta_seconds() * (jump_speed(t_jump) + jump_speed(t_jump - time.delta_seconds()) / 2.);
+        let dy = delta * (jump_speed(t_jump) + jump_speed(t_jump - delta) / 2.);
 
         let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > movement::JUMP_MIN;
         let landed = grounded && t_jump > movement::JUMP_MIN;
@@ -62,9 +79,9 @@ pub fn move_player(
             translation.y += dy;
         }
     } else {
-        if let Some(Fall(t_0)) = lg {
+        if let Some(Fall(t_0)) = fall {
             let t_fall = time.elapsed_seconds() - t_0;
-            translation.y -= time.delta_seconds() * (grav_speed(t_fall) + grav_speed(t_fall - time.delta_seconds()) / 2.);
+            translation.y -= delta * (grav_speed(t_fall) + grav_speed(t_fall - delta) / 2.);
         }
     }
 

@@ -18,6 +18,7 @@ pub mod movement {
     pub const GRAVITY: f32 = 380.;
     pub const PLAYER_X: f32 = 80.0;
 
+    pub const COYOTE_TIME: f32 = 0.05;
     pub const JUMP: f32 = 150.0;
     pub const JUMP_MIN: f32 = 0.15;
 }
