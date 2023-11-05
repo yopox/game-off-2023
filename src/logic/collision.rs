@@ -11,6 +11,7 @@ pub struct ColliderBundle {
     pub gravity_scale: GravityScale,
     pub friction: Friction,
     pub density: ColliderMassProperties,
+    pub controller: KinematicCharacterController,
 }
 
 impl From<&EntityInstance> for ColliderBundle {
@@ -30,6 +31,13 @@ impl From<&EntityInstance> for ColliderBundle {
                     combine_rule: CoefficientCombineRule::Min,
                 },
                 rotation_constraints,
+                controller: KinematicCharacterController {
+                    autostep: Some(CharacterAutostep {
+                        max_height: CharacterLength::Relative(0.1),
+                        ..default()
+                    }),
+                    ..default()
+                },
                 ..Default::default()
             },
             _ => ColliderBundle::default()
