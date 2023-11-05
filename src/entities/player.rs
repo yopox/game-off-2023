@@ -6,6 +6,13 @@ use crate::logic::ColliderBundle;
 #[derive(Clone, Default, Component)]
 pub struct Player;
 
+#[derive(Copy, Clone, Eq, PartialEq, Default)]
+pub enum PlayerSize {
+    #[default]
+    Default,
+    Small,
+}
+
 #[derive(Clone, Default, Bundle, LdtkEntity)]
 pub struct PlayerBundle {
     #[sprite_bundle("hero.png")]

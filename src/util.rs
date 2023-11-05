@@ -15,11 +15,11 @@ pub mod z_pos {
 }
 
 pub mod movement {
-    pub const GRAVITY: f32 = 5.2;
-    pub const PLAYER_X: f32 = 0.7;
+    pub const GRAVITY: f32 = 380.;
+    pub const PLAYER_X: f32 = 80.0;
 
-    pub const JUMP: f32 = 2.0;
-    pub const JUMP_MIN: f32 = 0.1;
+    pub const JUMP: f32 = 150.0;
+    pub const JUMP_MIN: f32 = 0.15;
 }
 
 pub mod game {
