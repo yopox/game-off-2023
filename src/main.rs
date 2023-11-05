@@ -1,3 +1,4 @@
+use bevy::ecs::schedule::{LogLevel, ScheduleBuildSettings};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSelection, SetClearColor};
 use bevy_ecs_ldtk::prelude::LdtkIntCellAppExt;
@@ -45,7 +46,8 @@ fn main() {
     std::panic::set_hook(Box::new(console_error_panic_hook::hook));
 
     App::new()
-        .insert_resource(Msaa::Off)
+
+        // Plugins
         .add_plugins(DefaultPlugins
             .set(ImagePlugin::default_nearest())
             .set(WindowPlugin {
@@ -65,14 +67,26 @@ fn main() {
         .add_plugins((LdtkPlugin))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
         // .add_plugins(RapierDebugRenderPlugin::default())
+
+        // Resources
+        .insert_resource(Msaa::Off)
         .insert_resource(LevelSelection::index(0))
         .register_ldtk_int_cell::<TileBundle>(1)
         .insert_resource(LdtkSettings {
             set_clear_color: SetClearColor::FromLevelBackground,
             ..Default::default()
         })
+
+        // Scheduling
+        .edit_schedule(Main, |schedule| {
+            schedule.set_build_settings(ScheduleBuildSettings {
+                ambiguity_detection: LogLevel::Warn,
+                ..default()
+            });
+        })
         .add_state::<GameState>()
         .add_systems(Startup, init)
+
         .run();
 }
 
