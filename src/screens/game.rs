@@ -21,7 +21,7 @@ impl Plugin for GamePlugin {
                     update,
                 ).chain().run_if(in_state(GameState::Game))
             )
-            .add_systems(PostUpdate, (sync_camera))
+            .add_systems(Last, (sync_camera))
             .add_systems(OnEnter(GameState::Game), enter)
             .add_systems(OnExit(GameState::Game), exit)
         ;

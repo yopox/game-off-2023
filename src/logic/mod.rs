@@ -13,7 +13,7 @@ impl Plugin for LogicPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_systems(Update, collision::spawn_wall_collision)
-            .add_systems(First, movement::move_player)
+            .add_systems(Update, movement::move_player)
         ;
     }
 }
