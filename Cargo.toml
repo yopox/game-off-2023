@@ -1,5 +1,5 @@
 [package]
-name = "bevy_template"
+name = "game_off_2023"
 version = "0.0.0"
 authors = ["yopox <yopoxdev@gmail.com>"]
 description = ""

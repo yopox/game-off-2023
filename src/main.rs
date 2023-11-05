@@ -56,7 +56,7 @@ fn main() {
                         WIDTH as f32 * SCALE,
                         HEIGHT as f32 * SCALE,
                     ).into(),
-                    title: "bevy_template".to_string(),
+                    title: "game off 2023".to_string(),
                     canvas: Some("#bevy".to_owned()),
                     ..default()
                 }),
