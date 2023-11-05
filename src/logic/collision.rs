@@ -71,7 +71,6 @@ pub fn spawn_wall_collision(
             // Don't spawn colliders for inner tiles
             // TODO: magical 17? I want to ignore tiles from the first rule
             if tile.d[0] == 17 { continue }
-            bevy::log::info!("{};{} {} - {:?}", tile.px.x, tile.px.y, tile.t, tile.d);
 
             commands
                 .spawn(ColliderBundle {

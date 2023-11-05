@@ -3,19 +3,23 @@ use std::f32::consts::PI;
 use bevy::math::{Vec2, vec2};
 use bevy::prelude::{Res, State, States};
 
-pub const WIDTH: usize = 426;
+pub const WIDTH: usize = 320;
 pub const HALF_WIDTH: f32 = WIDTH as f32 / 2.;
-pub const HEIGHT: usize = 240;
+pub const HEIGHT: usize = 180;
 pub const HALF_HEIGHT: f32 = HEIGHT as f32 / 2.;
 
-pub const SCALE: f32 = 3.;
+pub const SCALE: f32 = 4.;
 
 pub mod z_pos {
     pub const GUI: f32 = 100.;
 }
 
 pub mod movement {
+    pub const GRAVITY: f32 = 5.2;
     pub const PLAYER_X: f32 = 0.7;
+
+    pub const JUMP: f32 = 2.0;
+    pub const JUMP_MIN: f32 = 0.1;
 }
 
 pub mod game {

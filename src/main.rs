@@ -64,7 +64,7 @@ fn main() {
         .add_plugins((EntitiesPlugin, GraphicsPlugin, LogicPlugin, ScreensPlugin, AudioPlugin))
         .add_plugins((LdtkPlugin))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
-        .add_plugins(RapierDebugRenderPlugin::default())
+        // .add_plugins(RapierDebugRenderPlugin::default())
         .insert_resource(LevelSelection::index(0))
         .register_ldtk_int_cell::<TileBundle>(1)
         .insert_resource(LdtkSettings {
