@@ -19,7 +19,7 @@ pub mod movement {
     pub const PLAYER_X: f32 = 80.0;
 
     pub const COYOTE_TIME: f32 = 0.05;
-    pub const JUMP: f32 = 3.3;
+    pub const JUMP: f32 = 190.;
     pub const JUMP_MIN: f32 = 0.15;
 }
 

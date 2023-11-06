@@ -36,7 +36,7 @@ pub fn move_player(
     // Side movement
     let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
     let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };
-    translation.x = delta * (right - left) * movement::PLAYER_X;
+    translation.x = delta * movement::PLAYER_X * (right - left);
 
     let grounded = output.is_none() || output.unwrap().grounded;
 
@@ -65,7 +65,7 @@ pub fn move_player(
 
     if let Some(Jump(t_0)) = jump {
         let t_jump = time.elapsed_seconds() - t_0;
-        let dy = movement::JUMP - movement::GRAVITY * delta * (t_jump + delta / 2.);
+        let dy = delta * (movement::JUMP - movement::GRAVITY * (t_jump + delta / 2.));
 
         let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > movement::JUMP_MIN;
         let landed = grounded && t_jump > movement::JUMP_MIN;
