@@ -1,5 +1,6 @@
 use bevy::math::vec2;
 use bevy::prelude::*;
+use bevy::sprite::Anchor;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::math::Vect;
 use bevy_rapier2d::prelude::Collider;
@@ -30,28 +31,26 @@ impl PlayerSize {
         }
     }
 
-    pub fn size(&self) -> Vec2 {
+    pub fn hitbox(&self) -> Vec2 {
         match self {
-            PlayerSize::S => vec2(32., 32.),
-            PlayerSize::M => vec2(16., 16.),
+            PlayerSize::S => vec2(5., 10.),
+            PlayerSize::M => vec2(6., 17.),
         }
     }
 }
 
 impl From<PlayerSize> for Collider {
     fn from(value: PlayerSize) -> Self {
-        match value {
-            PlayerSize::M => Collider::compound(vec![(
-                Vect::new(0.0, -7.0),
-                0.0,
-                Collider::cuboid(4., 9.)
-            )]),
-            PlayerSize::S => Collider::compound(vec![(
-                Vect::new(0.0, -2.5),
-                0.0,
-                Collider::cuboid(2.5, 5.5)
-            )]),
-        }
+        let (offset, size) = match value {
+            PlayerSize::S => (vec2(-0.5, 5.0), PlayerSize::S.hitbox() / 2.),
+            PlayerSize::M => (vec2(0.0, 8.0), PlayerSize::M.hitbox() / 2.),
+        };
+
+        Collider::compound(vec![(
+            Vect::new(offset.x, offset.y),
+            0.0,
+            Collider::cuboid(size.x, size.y)
+        )])
     }
 }
 
@@ -77,7 +76,10 @@ pub fn player_spawned(
     commands
         .entity(e)
         .insert(p.size.atlas(&textures))
-        .insert(TextureAtlasSprite::default())
+        .insert(TextureAtlasSprite {
+            anchor: Anchor::BottomCenter,
+            ..default()
+        })
     ;
 }
 
