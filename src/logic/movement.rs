@@ -14,9 +14,6 @@ pub struct Jumped;
 #[derive(Component)]
 pub struct Fall(f32);
 
-fn grav_speed(dt: f32) -> f32 { dt * movement::GRAVITY }
-fn jump_speed(dt: f32) -> f32 { movement::JUMP - movement::GRAVITY * dt }
-
 pub fn move_player(
     mut commands: Commands,
     time: Res<Time>,
@@ -28,6 +25,9 @@ pub fn move_player(
 ) {
     let Ok((e, mut controller, mut sprite, output, jump, fall, jumped)) = query.get_single_mut() else { return };
 
+    // TODO: Find a way to not use this hack (it makes delta time stable???)
+    info!("step");
+
     let delta = time.delta_seconds();
 
     let mut player = commands.entity(e);
@@ -36,7 +36,7 @@ pub fn move_player(
     // Side movement
     let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
     let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };
-    translation.x = time.delta_seconds() * (right - left) * movement::PLAYER_X;
+    translation.x = delta * (right - left) * movement::PLAYER_X;
 
     let grounded = output.is_none() || output.unwrap().grounded;
 
@@ -65,7 +65,7 @@ pub fn move_player(
 
     if let Some(Jump(t_0)) = jump {
         let t_jump = time.elapsed_seconds() - t_0;
-        let dy = delta * (jump_speed(t_jump) + jump_speed(t_jump - delta) / 2.);
+        let dy = movement::JUMP - movement::GRAVITY * delta * (t_jump + delta / 2.);
 
         let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > movement::JUMP_MIN;
         let landed = grounded && t_jump > movement::JUMP_MIN;
@@ -81,7 +81,8 @@ pub fn move_player(
     } else {
         if let Some(Fall(t_0)) = fall {
             let t_fall = time.elapsed_seconds() - t_0;
-            translation.y -= delta * (grav_speed(t_fall) + grav_speed(t_fall - delta) / 2.);
+            let dy = -movement::GRAVITY * delta * (t_fall + delta / 2.);
+            translation.y += dy;
         }
     }
 
