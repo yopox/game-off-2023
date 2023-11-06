@@ -1,7 +1,9 @@
 use bevy::app::App;
 use bevy::math::vec3;
 use bevy::prelude::*;
+use bevy::transform::TransformSystem::TransformPropagate;
 use bevy_ecs_ldtk::LdtkWorldBundle;
+use bevy_rapier2d::plugin::PhysicsSet;
 
 use crate::{GameState, util};
 use crate::entities::Player;
@@ -21,7 +23,7 @@ impl Plugin for GamePlugin {
                     update,
                 ).chain().run_if(in_state(GameState::Game))
             )
-            .add_systems(Last, (sync_camera))
+            .add_systems(PostUpdate, (sync_camera).after(PhysicsSet::Writeback).before(TransformPropagate))
             .add_systems(OnEnter(GameState::Game), enter)
             .add_systems(OnExit(GameState::Game), exit)
         ;
