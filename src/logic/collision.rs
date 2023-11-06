@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::entities::player::PlayerSize;
+
 #[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
 pub struct ColliderBundle {
     pub collider: Collider,
@@ -20,11 +22,7 @@ impl From<&EntityInstance> for ColliderBundle {
 
         match value.identifier.as_ref() {
             "Player" => ColliderBundle {
-                collider: Collider::compound(vec![(
-                    Vect::new(0.0, -7.0),
-                    0.0,
-                    Collider::cuboid(4., 9.)
-                )]),
+                collider: Collider::from(PlayerSize::M),
                 rigid_body: RigidBody::KinematicPositionBased,
                 friction: Friction {
                     coefficient: 0.0,

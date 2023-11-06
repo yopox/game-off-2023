@@ -21,9 +21,9 @@
 	"defaultLevelHeight": 256,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
-	"defaultGridSize": 16,
-	"defaultEntityWidth": 16,
-	"defaultEntityHeight": 16,
+	"defaultGridSize": 8,
+	"defaultEntityWidth": 8,
+	"defaultEntityHeight": 8,
 	"bgColor": "#40465B",
 	"defaultLevelBgColor": "#040405",
 	"minifyJson": false,
@@ -1184,18 +1184,18 @@
 					"entityInstances": [
 						{
 							"__identifier": "Player",
-							"__grid": [8,8],
+							"__grid": [35,10],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#BE4A2F",
-							"__worldX": -62,
-							"__worldY": -80,
+							"__worldX": 46,
+							"__worldY": -72,
 							"iid": "241397e0-6280-11ee-a85a-5f207cfe60c8",
 							"width": 16,
 							"height": 32,
 							"defUid": 14,
-							"px": [34,32],
+							"px": [142,40],
 							"fieldInstances": []
 						}
 					]
