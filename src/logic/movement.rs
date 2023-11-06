@@ -22,11 +22,11 @@ pub fn move_player(
     time: Res<Time>,
     input: Res<Input<KeyCode>>,
     mut query: Query<(
-        Entity, &mut KinematicCharacterController,
+        Entity, &mut KinematicCharacterController, &mut TextureAtlasSprite,
         Option<&KinematicCharacterControllerOutput>, Option<&Jump>, Option<&Fall>, Option<&Jumped>,
     ), With<Player>>,
 ) {
-    let Ok((e, mut controller, output, jump, fall, jumped)) = query.get_single_mut() else { return };
+    let Ok((e, mut controller, mut sprite, output, jump, fall, jumped)) = query.get_single_mut() else { return };
 
     let delta = time.delta_seconds();
 
@@ -34,8 +34,8 @@ pub fn move_player(
     let mut translation = vec2(0., -1.4);
 
     // Side movement
-    let right = if input.pressed(KeyCode::Right) { 1. } else { 0. };
-    let left = if input.pressed(KeyCode::Left) { 1. } else { 0. };
+    let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
+    let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };
     translation.x = time.delta_seconds() * (right - left) * movement::PLAYER_X;
 
     let grounded = output.is_none() || output.unwrap().grounded;
