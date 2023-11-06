@@ -5,6 +5,7 @@ use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::math::Vect;
 use bevy_rapier2d::prelude::Collider;
 
+use crate::graphics::particles::{PlayerSpawner, PlayFor};
 use crate::logic::ColliderBundle;
 use crate::screens::Textures;
 
@@ -88,6 +89,7 @@ pub fn change_size(
     input: Res<Input<KeyCode>>,
     textures: Res<Textures>,
     mut player: Query<(Entity, &mut Player), With<Player>>,
+    mut player_emitter: Query<(Entity, &mut Transform), With<PlayerSpawner>>,
 ) {
     if input.just_pressed(KeyCode::X) {
         let Ok((e, mut p)) = player.get_single_mut() else { return };
@@ -103,5 +105,14 @@ pub fn change_size(
             .insert(new_size.atlas(&textures))
             .insert(Collider::from(new_size))
         ;
+
+        if let Ok((e, mut transform)) = player_emitter.get_single_mut() {
+            transform.translation.y = new_size.hitbox().y / 2.;
+
+            commands
+                .entity(e)
+                .insert(PlayFor(0.1))
+            ;
+        }
     }
 }

@@ -9,7 +9,7 @@ pub use transition::ScreenTransition;
 mod palette;
 mod text;
 mod transition;
-mod particles;
+pub mod particles;
 
 pub struct GraphicsPlugin;
 
@@ -19,7 +19,9 @@ impl Plugin for GraphicsPlugin {
             .insert_resource(ClearColor(Palette::Background.into()))
             .insert_resource(ScreenTransition::default())
             .add_systems(Update, transition::update)
-            .add_systems(Update, (particles::init_player_spawner))
+            .add_systems(Update, (
+                particles::update_spawners, particles::init_player_spawner,
+            ))
         ;
     }
 }

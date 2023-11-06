@@ -67,7 +67,7 @@ fn main() {
         .add_plugins((EntitiesPlugin, GraphicsPlugin, LogicPlugin, ScreensPlugin, AudioPlugin))
         .add_plugins((LdtkPlugin))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
-        .add_plugins(RapierDebugRenderPlugin::default())
+        // .add_plugins(RapierDebugRenderPlugin::default())
         .add_plugins(ParticleSystemPlugin)
 
         // Resources
