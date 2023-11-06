@@ -2,6 +2,7 @@ use bevy::ecs::schedule::{LogLevel, ScheduleBuildSettings};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSelection, SetClearColor};
 use bevy_ecs_ldtk::prelude::LdtkIntCellAppExt;
+use bevy_hanabi::HanabiPlugin;
 use bevy_rapier2d::prelude::*;
 
 use crate::entities::EntitiesPlugin;
@@ -67,6 +68,7 @@ fn main() {
         .add_plugins((LdtkPlugin))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
         // .add_plugins(RapierDebugRenderPlugin::default())
+        .add_plugins(HanabiPlugin)
 
         // Resources
         .insert_resource(Msaa::Off)

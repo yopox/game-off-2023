@@ -24,6 +24,7 @@ bevy_common_assets = { version = "0.7.0", features = ["ron"] }
 
 bevy_rapier2d = { version = "0.22.0", features = [ "debug-render-2d" ] }
 bevy_ecs_ldtk = { git = "https://github.com/Trouv/bevy_ecs_ldtk", features = ["atlas"] }
+bevy_hanabi = "0.7.0"
 
 lazy_static = "1.4"
 strum = "0.25.0"
