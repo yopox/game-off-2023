@@ -33,8 +33,8 @@ pub struct Textures {
     #[asset(path = "hero_M.png")]
     pub hero_m: Handle<TextureAtlas>,
 
-    // #[asset(path = "image.png")]
-    // pub image: Handle<Image>,
+    #[asset(path = "pixel.png")]
+    pub pixel: Handle<Image>,
 }
 
 #[derive(AssetCollection, Resource)]
