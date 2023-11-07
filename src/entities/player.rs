@@ -122,10 +122,10 @@ pub fn update_sprite(
     sprite.index = match player.state {
         PlayerState::Idle => 0,
         PlayerState::Walk => 0,
-        PlayerState::Prejump => 1,
+        PlayerState::Prejump => 5,
         PlayerState::Jump => if player.timer <= animation::JUMP_T { 2 } else { 3 },
         PlayerState::Fall => if player.timer <= animation::FALL_T { 4 } else { 2 },
-        PlayerState::Land => 5,
+        PlayerState::Land => 1,
         PlayerState::Attack => 0,
     };
 
