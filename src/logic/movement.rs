@@ -19,34 +19,49 @@ pub fn move_player(
     time: Res<Time>,
     input: Res<Input<KeyCode>>,
     mut query: Query<(
-        Entity, &mut KinematicCharacterController, &mut TextureAtlasSprite,
+        Entity, &Player,
+        &mut KinematicCharacterController, &mut TextureAtlasSprite,
         Option<&KinematicCharacterControllerOutput>, Option<&Jump>, Option<&Fall>, Option<&Jumped>,
-    ), With<Player>>,
+    )>,
 ) {
-    let Ok((e, mut controller, mut sprite, output, jump, fall, jumped)) = query.get_single_mut() else { return };
+    let Ok((
+               e, player,
+               mut controller, mut sprite,
+               output,
+               jump, fall, jumped
+           )) = query.get_single_mut() else { return };
 
     // TODO: Find a way to not use this hack (it makes delta time stable???)
-    info!("step");
+    // info!("step");
 
     let delta = time.delta_seconds();
 
-    let mut player = commands.entity(e);
-    let mut translation = vec2(0., -1.4);
+    let mut translation = vec2(0., -0.1);
 
     // Side movement
-    let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
-    let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };
+    let right = if input.pressed(KeyCode::Right) {
+        sprite.flip_x = false;
+        1.
+    } else { 0. };
+    let left = if input.pressed(KeyCode::Left) {
+        sprite.flip_x = true;
+        1.
+    } else { 0. };
     translation.x = delta * movement::PLAYER_X * (right - left);
 
     let grounded = output.is_none() || output.unwrap().grounded;
 
+    let mut player_commands = commands.entity(e);
     if grounded {
-        player.insert(Fall(time.elapsed_seconds()));
-        player.remove::<Jumped>();
+        player_commands.insert(Fall(time.elapsed_seconds()));
+        player_commands.remove::<Jumped>();
     } else {
         translation.y = 0.;
-        if jump.is_some() { player.insert(Jumped); }
+        if jump.is_some() { player_commands.insert(Jumped); }
     }
+
+    let G = movement::gravity(player.size);
+    let J = movement::jump(player.size);
 
     // Jump
     if input.just_pressed(KeyCode::Space) && jumped.is_none() {
@@ -54,26 +69,29 @@ pub fn move_player(
             Some(Fall(t)) => {
                 // info!("{}", time.elapsed_seconds() - *t);
                 time.elapsed_seconds() - *t < movement::COYOTE_TIME
-            },
+            }
             _ => false
         };
         if grounded || coyote {
-            player.insert(Jump(time.elapsed_seconds()));
-            player.insert(Jumped);
+            player_commands.insert(Jump(time.elapsed_seconds()));
+            player_commands.insert(Jumped);
         }
     }
 
     if let Some(Jump(t_0)) = jump {
         let t_jump = time.elapsed_seconds() - t_0;
-        let dy = delta * (movement::JUMP - movement::GRAVITY * (t_jump + delta / 2.));
+        let dy = delta * (J - G * (t_jump + delta / 2.));
+
+        info!("{dy}");
 
         let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > movement::JUMP_MIN;
         let landed = grounded && t_jump > movement::JUMP_MIN;
 
         if dy <= 0. || mid_jump_stop || landed {
+            info!("no jump");
             // Jump ended
-            player.remove::<Jump>();
-            player.insert(Fall(time.elapsed_seconds()));
+            player_commands.remove::<Jump>();
+            player_commands.insert(Fall(time.elapsed_seconds()));
         } else {
             // Jumping
             translation.y += dy;
@@ -81,10 +99,10 @@ pub fn move_player(
     } else {
         if let Some(Fall(t_0)) = fall {
             let t_fall = time.elapsed_seconds() - t_0;
-            let dy = -movement::GRAVITY * delta * (t_fall + delta / 2.);
+            let dy = -G * delta * (t_fall + delta / 2.);
             translation.y += dy;
         }
     }
-
+    info!("{translation}");
     controller.translation = Some(translation);
 }

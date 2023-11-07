@@ -15,12 +15,28 @@ pub mod z_pos {
 }
 
 pub mod movement {
+    use crate::entities::player::PlayerSize;
+
     pub const GRAVITY: f32 = 380.;
     pub const PLAYER_X: f32 = 80.0;
 
     pub const COYOTE_TIME: f32 = 0.05;
     pub const JUMP: f32 = 190.;
     pub const JUMP_MIN: f32 = 0.15;
+
+    pub fn gravity(size: PlayerSize) -> f32 {
+        match size {
+            PlayerSize::S => GRAVITY * 0.55,
+            PlayerSize::M => GRAVITY * 1.0,
+        }
+    }
+
+    pub fn jump(size: PlayerSize) -> f32 {
+        match size {
+            PlayerSize::S => JUMP * 0.55,
+            PlayerSize::M => JUMP * 1.0,
+        }
+    }
 }
 
 pub mod game {
