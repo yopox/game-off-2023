@@ -22,14 +22,14 @@ pub fn move_player(
     mut query: Query<(
         Entity, &mut Player,
         &mut KinematicCharacterController, &mut TextureAtlasSprite,
-        Option<&KinematicCharacterControllerOutput>, Option<&Jump>, Option<&Fall>, Option<&Jumped>,
+        Option<&KinematicCharacterControllerOutput>, Option<&mut Jump>, Option<&Fall>, Option<&Jumped>,
     )>,
 ) {
     let Ok((
                e, mut player,
                mut controller, mut sprite,
                output,
-               jump, fall, jumped
+               mut jump, fall, jumped
            )) = query.get_single_mut() else { return };
 
     // TODO: Find a way to not use this hack (it makes delta time stable???)
@@ -39,16 +39,12 @@ pub fn move_player(
 
     let mut translation = vec2(0., -0.1);
 
-    // Side movement
-    let right = if input.pressed(KeyCode::Right) {
-        sprite.flip_x = false;
-        1.
-    } else { 0. };
-    let left = if input.pressed(KeyCode::Left) {
-        sprite.flip_x = true;
-        1.
-    } else { 0. };
-    translation.x = delta * movement::PLAYER_X * (right - left);
+    if !player.in_state(PlayerState::Prejump) {
+        // Side movement
+        let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
+        let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true;1. } else { 0. };
+        translation.x = delta * movement::PLAYER_X * (right - left);
+    }
 
     let grounded = output.is_none() || output.unwrap().grounded;
 
@@ -61,7 +57,9 @@ pub fn move_player(
         translation.y = 0.;
         if jump.is_some() {
             player_commands.insert(Jumped);
-            player.set_state(PlayerState::Jump);
+            if !player.in_state(PlayerState::Jump) && !player.in_state(PlayerState::Prejump) {
+                player.set_state(PlayerState::Prejump);
+            }
         }
         else {
             player.set_state(PlayerState::Fall);
@@ -86,8 +84,16 @@ pub fn move_player(
         }
     }
 
-    if let Some(Jump(t_0)) = jump {
-        let t_jump = time.elapsed_seconds() - t_0;
+    if player.in_state(PlayerState::Prejump) {
+        if let Some(mut jump) = jump {
+            jump.0 = time.elapsed_seconds();
+        }
+        if !input.pressed(KeyCode::Space) {
+            // Leave prejump for small jumps
+            player.set_state(PlayerState::Jump);
+        }
+    } else if let Some(jump) = jump {
+        let t_jump = time.elapsed_seconds() - jump.0;
         let dy = delta * (J - G * (t_jump + delta / 2.));
 
         info!("{dy}");

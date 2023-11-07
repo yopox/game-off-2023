@@ -39,6 +39,12 @@ pub mod movement {
     }
 }
 
+pub mod animation {
+    pub const PREJUMP_T: f32 = 0.1;
+    pub const JUMP_T: f32 = 0.125;
+    pub const FALL_T: f32 = 0.3;
+}
+
 pub mod game {
     use crate::util::HEIGHT;
 

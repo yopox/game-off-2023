@@ -8,6 +8,7 @@ use bevy_rapier2d::prelude::Collider;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
 use crate::logic::ColliderBundle;
 use crate::screens::Textures;
+use crate::util::animation;
 
 #[derive(Clone, Default, Component)]
 pub struct Player {
@@ -22,6 +23,10 @@ impl Player {
         self.state = s;
         self.timer = 0.;
     }
+
+    pub fn in_state(&self, s: PlayerState) -> bool {
+        self.state == s
+    }
 }
 
 #[derive(Clone, Default, Eq, PartialEq)]
@@ -29,6 +34,7 @@ pub enum PlayerState {
     #[default]
     Idle,
     Walk,
+    Prejump,
     Jump,
     Fall,
     Attack,
@@ -112,14 +118,17 @@ pub fn update_sprite(
 
     player.timer += time.delta_seconds();
 
-    info!("{}", player.timer);
-
     sprite.index = match player.state {
         PlayerState::Idle => 0,
         PlayerState::Walk => 0,
-        PlayerState::Jump => if player.timer <= 0.1 { 1 } else { 2 },
-        PlayerState::Fall => if player.timer <= 0.3 { 3 } else { 1 },
+        PlayerState::Prejump => 1,
+        PlayerState::Jump => if player.timer <= animation::JUMP_T { 2 } else { 3 },
+        PlayerState::Fall => if player.timer <= animation::FALL_T { 4 } else { 2 },
         PlayerState::Attack => 0,
+    };
+
+    if player.state == PlayerState::Prejump && player.timer >= animation::PREJUMP_T {
+        player.set_state(PlayerState::Jump);
     }
 }
 
