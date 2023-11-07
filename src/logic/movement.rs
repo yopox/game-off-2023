@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::entities::Player;
+use crate::entities::player::PlayerState;
 use crate::util::movement;
 
 #[derive(Component)]
@@ -19,20 +20,20 @@ pub fn move_player(
     time: Res<Time>,
     input: Res<Input<KeyCode>>,
     mut query: Query<(
-        Entity, &Player,
+        Entity, &mut Player,
         &mut KinematicCharacterController, &mut TextureAtlasSprite,
         Option<&KinematicCharacterControllerOutput>, Option<&Jump>, Option<&Fall>, Option<&Jumped>,
     )>,
 ) {
     let Ok((
-               e, player,
+               e, mut player,
                mut controller, mut sprite,
                output,
                jump, fall, jumped
            )) = query.get_single_mut() else { return };
 
     // TODO: Find a way to not use this hack (it makes delta time stable???)
-    // info!("step");
+    info!("step");
 
     let delta = time.delta_seconds();
 
@@ -53,11 +54,18 @@ pub fn move_player(
 
     let mut player_commands = commands.entity(e);
     if grounded {
+        player.set_state(PlayerState::Idle);
         player_commands.insert(Fall(time.elapsed_seconds()));
         player_commands.remove::<Jumped>();
     } else {
         translation.y = 0.;
-        if jump.is_some() { player_commands.insert(Jumped); }
+        if jump.is_some() {
+            player_commands.insert(Jumped);
+            player.set_state(PlayerState::Jump);
+        }
+        else {
+            player.set_state(PlayerState::Fall);
+        }
     }
 
     let G = movement::gravity(player.size);
@@ -88,10 +96,10 @@ pub fn move_player(
         let landed = grounded && t_jump > movement::JUMP_MIN;
 
         if dy <= 0. || mid_jump_stop || landed {
-            info!("no jump");
             // Jump ended
             player_commands.remove::<Jump>();
             player_commands.insert(Fall(time.elapsed_seconds()));
+            player.set_state(PlayerState::Fall);
         } else {
             // Jumping
             translation.y += dy;
@@ -103,6 +111,6 @@ pub fn move_player(
             translation.y += dy;
         }
     }
-    info!("{translation}");
+    // info!("{translation}");
     controller.translation = Some(translation);
 }

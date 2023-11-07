@@ -12,6 +12,26 @@ use crate::screens::Textures;
 #[derive(Clone, Default, Component)]
 pub struct Player {
     pub size: PlayerSize,
+    state: PlayerState,
+    timer: f32,
+}
+
+impl Player {
+    pub fn set_state(&mut self, s: PlayerState) {
+        if self.state == s { return; }
+        self.state = s;
+        self.timer = 0.;
+    }
+}
+
+#[derive(Clone, Default, Eq, PartialEq)]
+pub enum PlayerState {
+    #[default]
+    Idle,
+    Walk,
+    Jump,
+    Fall,
+    Attack,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Default)]
@@ -82,6 +102,25 @@ pub fn player_spawned(
             ..default()
         })
     ;
+}
+
+pub fn update_sprite(
+    mut player: Query<(&mut Player, &mut TextureAtlasSprite)>,
+    time: Res<Time>,
+) {
+    let Ok((mut player, mut sprite)) = player.get_single_mut() else { return };
+
+    player.timer += time.delta_seconds();
+
+    info!("{}", player.timer);
+
+    sprite.index = match player.state {
+        PlayerState::Idle => 0,
+        PlayerState::Walk => 0,
+        PlayerState::Jump => if player.timer <= 0.1 { 1 } else { 2 },
+        PlayerState::Fall => if player.timer <= 0.3 { 3 } else { 1 },
+        PlayerState::Attack => 0,
+    }
 }
 
 pub fn change_size(
