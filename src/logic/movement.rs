@@ -50,7 +50,13 @@ pub fn move_player(
 
     let mut player_commands = commands.entity(e);
     if grounded {
-        player.set_state(PlayerState::Idle);
+        if !player.in_state(PlayerState::Idle) && !player.in_state(PlayerState::Land) {
+            if player.in_state(PlayerState::Fall) {
+                player.set_state(PlayerState::Land);
+            } else {
+                player.set_state(PlayerState::Idle);
+            }
+        }
         player_commands.insert(Fall(time.elapsed_seconds()));
         player_commands.remove::<Jumped>();
     } else {

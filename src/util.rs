@@ -43,6 +43,7 @@ pub mod animation {
     pub const PREJUMP_T: f32 = 0.1;
     pub const JUMP_T: f32 = 0.125;
     pub const FALL_T: f32 = 0.3;
+    pub const LAND_T: f32 = 0.2;
 }
 
 pub mod game {

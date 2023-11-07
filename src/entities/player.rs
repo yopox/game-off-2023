@@ -37,6 +37,7 @@ pub enum PlayerState {
     Prejump,
     Jump,
     Fall,
+    Land,
     Attack,
 }
 
@@ -124,11 +125,15 @@ pub fn update_sprite(
         PlayerState::Prejump => 1,
         PlayerState::Jump => if player.timer <= animation::JUMP_T { 2 } else { 3 },
         PlayerState::Fall => if player.timer <= animation::FALL_T { 4 } else { 2 },
+        PlayerState::Land => 5,
         PlayerState::Attack => 0,
     };
 
     if player.state == PlayerState::Prejump && player.timer >= animation::PREJUMP_T {
         player.set_state(PlayerState::Jump);
+    }
+    if player.state == PlayerState::Land && player.timer >= animation::LAND_T {
+        player.set_state(PlayerState::Idle);
     }
 }
 
