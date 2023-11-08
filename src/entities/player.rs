@@ -27,6 +27,10 @@ impl Player {
     pub fn in_state(&self, s: PlayerState) -> bool {
         self.state == s
     }
+
+    pub fn is_jumping(&self) -> bool {
+        self.state == PlayerState::Prejump || self.state == PlayerState::Jump
+    }
 }
 
 #[derive(Clone, Default, Eq, PartialEq)]
@@ -93,6 +97,9 @@ pub struct PlayerBundle {
     pub collider_bundle: ColliderBundle,
 }
 
+#[derive(Component)]
+pub struct Transformed;
+
 pub fn player_spawned(
     mut commands: Commands,
     textures: Option<Res<Textures>>,
@@ -141,7 +148,7 @@ pub fn change_size(
     mut commands: Commands,
     input: Res<Input<KeyCode>>,
     textures: Res<Textures>,
-    mut player: Query<(Entity, &mut Player), With<Player>>,
+    mut player: Query<(Entity, &mut Player), (With<Player>, Without<Transformed>)>,
     mut player_emitter: Query<(Entity, &mut Transform), With<PlayerSpawner>>,
 ) {
     if input.just_pressed(KeyCode::X) {
@@ -158,6 +165,10 @@ pub fn change_size(
             .insert(new_size.atlas(&textures))
             .insert(Collider::from(new_size))
         ;
+
+        if p.is_jumping() {
+            commands.entity(e).insert(Transformed);
+        }
 
         if let Ok((e, mut transform)) = player_emitter.get_single_mut() {
             transform.translation.y = new_size.hitbox().y / 2.;

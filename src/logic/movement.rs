@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::entities::Player;
-use crate::entities::player::PlayerState;
+use crate::entities::player::{PlayerState, Transformed};
 use crate::util::movement;
 
 #[derive(Component)]
@@ -59,11 +59,12 @@ pub fn move_player(
         }
         player_commands.insert(Fall(time.elapsed_seconds()));
         player_commands.remove::<Jumped>();
+        player_commands.remove::<Transformed>();
     } else {
         translation.y = 0.;
         if jump.is_some() {
             player_commands.insert(Jumped);
-            if !player.in_state(PlayerState::Jump) && !player.in_state(PlayerState::Prejump) {
+            if !player.is_jumping() {
                 player.set_state(PlayerState::Prejump);
             }
         }
