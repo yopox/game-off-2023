@@ -9,16 +9,17 @@ use crate::entities::EntitiesPlugin;
 use crate::graphics::GraphicsPlugin;
 use crate::logic::{LogicPlugin, TileBundle};
 use crate::music::{AudioPlugin, BGM};
+use crate::parameters::{HALF_HEIGHT, HALF_WIDTH, HEIGHT, SCALE, WIDTH};
 use crate::screens::ScreensPlugin;
-use crate::util::{HALF_HEIGHT, HALF_WIDTH, HEIGHT, SCALE, WIDTH};
 
-mod util;
+mod parameters;
 
 mod entities;
 mod graphics;
 mod logic;
 mod screens;
 mod music;
+mod util;
 
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub enum CustomSets {

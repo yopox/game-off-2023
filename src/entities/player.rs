@@ -7,8 +7,8 @@ use bevy_rapier2d::prelude::Collider;
 
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
 use crate::logic::ColliderBundle;
+use crate::parameters::animation;
 use crate::screens::Textures;
-use crate::util::animation;
 
 #[derive(Clone, Default, Component)]
 pub struct Player {
@@ -124,22 +124,27 @@ pub fn update_sprite(
 ) {
     let Ok((mut player, mut sprite)) = player.get_single_mut() else { return };
 
+    let frame = |k: animation::Keyframes, p: &Player| match p.size {
+        PlayerSize::M => k.0,
+        PlayerSize::S => k.1,
+    };
+
     player.timer += time.delta_seconds();
 
     sprite.index = match player.state {
         PlayerState::Idle => 0,
         PlayerState::Walk => 0,
         PlayerState::Prejump => 5,
-        PlayerState::Jump => if player.timer <= animation::JUMP_T { 2 } else { 3 },
-        PlayerState::Fall => if player.timer <= animation::FALL_T { 4 } else { 2 },
+        PlayerState::Jump => if player.timer <= frame(animation::JUMP_T, &player) { 2 } else { 3 },
+        PlayerState::Fall => if player.timer <= frame(animation::FALL_T, &player) { 4 } else { 2 },
         PlayerState::Land => 1,
         PlayerState::Attack => 0,
     };
 
-    if player.state == PlayerState::Prejump && player.timer >= animation::PREJUMP_T {
+    if player.state == PlayerState::Prejump && player.timer >= frame(animation::PREJUMP_T, &player) {
         player.set_state(PlayerState::Jump);
     }
-    if player.state == PlayerState::Land && player.timer >= animation::LAND_T {
+    if player.state == PlayerState::Land && player.timer >= frame(animation::LAND_T, &player) {
         player.set_state(PlayerState::Idle);
     }
 }

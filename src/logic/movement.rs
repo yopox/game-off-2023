@@ -4,7 +4,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::entities::Player;
 use crate::entities::player::{PlayerState, Transformed};
-use crate::util::movement;
+use crate::parameters::movement;
 
 #[derive(Component)]
 pub struct Jump(f32);
