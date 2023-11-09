@@ -33,7 +33,7 @@ pub fn move_player(
            )) = query.get_single_mut() else { return };
 
     // TODO: Find a way to not use this hack (it makes delta time stable???)
-    info!("step");
+    //info!("step");
 
     let delta = time.delta_seconds();
 

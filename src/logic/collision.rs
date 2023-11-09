@@ -4,6 +4,8 @@ use bevy_rapier2d::prelude::*;
 
 use crate::entities::player::PlayerSize;
 
+use super::level_loading::LevelUnloadedEvent;
+
 #[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
 pub struct ColliderBundle {
     pub collider: Collider,
@@ -46,6 +48,9 @@ impl From<&EntityInstance> for ColliderBundle {
 #[derive(Copy, Clone, Eq, PartialEq, Debug, Default, Component)]
 pub struct Tile;
 
+#[derive(Clone, Eq, PartialEq, Debug, Default, Component)]
+pub struct LevelColliderGroup(LevelIid);
+
 #[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
 pub struct TileBundle {
     tile: Tile,
@@ -53,23 +58,22 @@ pub struct TileBundle {
 
 pub fn spawn_wall_collision(
     mut commands: Commands,
-    tiles_query: Query<(&GridCoords, &Parent), Added<Tile>>,
-    level_query: Query<(Entity, &LevelIid)>,
+    new_levels_query: Query<&LevelIid, Added<LevelIid>>,
     ldtk_projects: Query<&Handle<LdtkProject>>,
     ldtk_project_assets: Res<Assets<LdtkProject>>,
 ) {
-    if tiles_query.is_empty() { return; }
+    if new_levels_query.is_empty() { return; }
 
     let ldtk_project = ldtk_project_assets
         .get(ldtk_projects.single())
         .expect("Couldn't find project");
 
-    for (level_entity, level_iid) in &level_query {
+    for level_iid in &new_levels_query {
+        println!("Spawning walls for level {}", level_iid.to_string());
         let level = ldtk_project
             .as_standalone()
             .get_loaded_level_by_iid(&level_iid.to_string())
             .expect("Couldn't find level");
-
 
         let layer = &level.layer_instances()[0].auto_layer_tiles;
 
@@ -77,6 +81,9 @@ pub fn spawn_wall_collision(
             // Don't spawn colliders for inner tiles
             // TODO: magical 17? I want to ignore tiles from the first rule
             if tile.d[0] == 17 { continue }
+
+            let x = *level.world_x() as f32 + tile.px.x as f32 + 4.;
+            let y = -*level.world_y() as f32 - (tile.px.y as f32 + 4.);
 
             commands
                 .spawn(ColliderBundle {
@@ -89,8 +96,9 @@ pub fn spawn_wall_collision(
                     },
                     ..default()
                 })
-                .insert(TransformBundle::from_transform(Transform::from_xyz(tile.px.x as f32 + 4., *level.px_hei() as f32 - (tile.px.y as f32 + 4.), 0.))
-                );
+                .insert(LevelColliderGroup(level_iid.clone()))
+                .insert(TransformBundle::from_transform(Transform::from_xyz(x, y, 0.)))
+            ;
         }
     }
 }
@@ -103,5 +111,20 @@ fn collider_for_tile(t: i32) -> Collider {
             Collider::cuboid(4., 2.)
         )]),
         _ => Collider::cuboid(4., 4.),
+    }
+}
+
+pub fn despawn_wall_collision(
+    mut commands: Commands,
+    query: Query<(Entity, &LevelColliderGroup)>,
+    mut level_unloaded_events: EventReader<LevelUnloadedEvent>,
+) {
+    for event in level_unloaded_events.iter() {
+        println!("Despawning walls for level {}", event.0.to_string());
+        for (entity, group) in query.iter() {
+            if group.0 == event.0 {
+                commands.entity(entity).despawn_recursive();
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 use bevy::ecs::schedule::{LogLevel, ScheduleBuildSettings};
 use bevy::prelude::*;
-use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSelection, SetClearColor};
+use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, SetClearColor, LevelSpawnBehavior};
 use bevy_ecs_ldtk::prelude::LdtkIntCellAppExt;
 use bevy_particle_systems::ParticleSystemPlugin;
 use bevy_rapier2d::prelude::*;
@@ -73,10 +73,13 @@ fn main() {
 
         // Resources
         .insert_resource(Msaa::Off)
-        .insert_resource(LevelSelection::index(0))
         .register_ldtk_int_cell::<TileBundle>(1)
         .insert_resource(LdtkSettings {
             set_clear_color: SetClearColor::FromLevelBackground,
+            level_spawn_behavior: LevelSpawnBehavior::UseWorldTranslation {
+                // no need for this, we handle level loading ourselves in level_loading.rs
+                load_level_neighbors: false,
+            },
             ..Default::default()
         })
 
