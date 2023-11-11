@@ -73,8 +73,8 @@ pub fn move_player(
         }
     }
 
-    let G = movement::gravity(player.size);
-    let J = movement::jump(player.size);
+    let g = movement::PLAYER_G.get(player.size);
+    let j = movement::PLAYER_J.get(player.size);
 
     // Jump
     if input.just_pressed(KeyCode::Space) && jumped.is_none() {
@@ -101,7 +101,7 @@ pub fn move_player(
         }
     } else if let Some(jump) = jump {
         let t_jump = time.elapsed_seconds() - jump.0;
-        let dy = delta * (J - G * (t_jump + delta / 2.));
+        let dy = delta * (j - g * (t_jump + delta / 2.));
 
         info!("{dy}");
 
@@ -120,7 +120,7 @@ pub fn move_player(
     } else {
         if let Some(Fall(t_0)) = fall {
             let t_fall = time.elapsed_seconds() - t_0;
-            let dy = -G * delta * (t_fall + delta / 2.);
+            let dy = -g * delta * (t_fall + delta / 2.);
             translation.y += dy;
         }
     }

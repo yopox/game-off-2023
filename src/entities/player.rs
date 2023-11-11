@@ -124,27 +124,22 @@ pub fn update_sprite(
 ) {
     let Ok((mut player, mut sprite)) = player.get_single_mut() else { return };
 
-    let frame = |k: animation::Keyframes, p: &Player| match p.size {
-        PlayerSize::M => k.0,
-        PlayerSize::S => k.1,
-    };
-
     player.timer += time.delta_seconds();
 
     sprite.index = match player.state {
         PlayerState::Idle => 0,
         PlayerState::Walk => 0,
         PlayerState::Prejump => 5,
-        PlayerState::Jump => if player.timer <= frame(animation::JUMP_T, &player) { 2 } else { 3 },
-        PlayerState::Fall => if player.timer <= frame(animation::FALL_T, &player) { 4 } else { 2 },
+        PlayerState::Jump => if player.timer <= animation::JUMP_T.get(player.size) { 2 } else { 3 },
+        PlayerState::Fall => if player.timer <= animation::FALL_T.get(player.size) { 4 } else { 2 },
         PlayerState::Land => 1,
         PlayerState::Attack => 0,
     };
 
-    if player.state == PlayerState::Prejump && player.timer >= frame(animation::PREJUMP_T, &player) {
+    if player.state == PlayerState::Prejump && player.timer >= animation::PREJUMP_T.get(player.size) {
         player.set_state(PlayerState::Jump);
     }
-    if player.state == PlayerState::Land && player.timer >= frame(animation::LAND_T, &player) {
+    if player.state == PlayerState::Land && player.timer >= animation::LAND_T.get(player.size) {
         player.set_state(PlayerState::Idle);
     }
 }
