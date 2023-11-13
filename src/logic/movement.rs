@@ -4,6 +4,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::entities::Player;
 use crate::entities::player::{PlayerState, Transformed};
+use crate::logic::AttackState;
 use crate::parameters::movement;
 
 #[derive(Component)]
@@ -23,13 +24,15 @@ pub fn move_player(
         Entity, &mut Player,
         &mut KinematicCharacterController, &mut TextureAtlasSprite,
         Option<&KinematicCharacterControllerOutput>, Option<&mut Jump>, Option<&Fall>, Option<&Jumped>,
+        Option<&AttackState>,
     )>,
 ) {
     let Ok((
                e, mut player,
                mut controller, mut sprite,
                output,
-               mut jump, fall, jumped
+               mut jump, fall, jumped,
+               attack
            )) = query.get_single_mut() else { return };
 
     // TODO: Find a way to not use this hack (it makes delta time stable???)
@@ -37,13 +40,16 @@ pub fn move_player(
 
     let delta = time.delta_seconds();
 
-    let mut translation = vec2(0., -0.1);
+    let mut translation = match controller.translation {
+        Some(v) => vec2(v.x, v.y),
+        None => vec2(0., -0.1),
+    };
 
-    if !player.in_state(PlayerState::Prejump) {
+    if !player.in_state(PlayerState::Prejump) && attack.is_none() {
         // Side movement
         let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
         let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true;1. } else { 0. };
-        translation.x = delta * movement::PLAYER_X * (right - left);
+        translation.x += delta * movement::PLAYER_X * (right - left);
     }
 
     let grounded = output.is_none() || output.unwrap().grounded;

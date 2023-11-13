@@ -6,7 +6,7 @@ use bevy_rapier2d::math::Vect;
 use bevy_rapier2d::prelude::Collider;
 
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::ColliderBundle;
+use crate::logic::{AttackState, ColliderBundle};
 use crate::parameters::animation;
 use crate::screens::Textures;
 
@@ -148,7 +148,7 @@ pub fn change_size(
     mut commands: Commands,
     input: Res<Input<KeyCode>>,
     textures: Res<Textures>,
-    mut player: Query<(Entity, &mut Player), (With<Player>, Without<Transformed>)>,
+    mut player: Query<(Entity, &mut Player), (With<Player>, Without<Transformed>, Without<AttackState>)>,
     mut player_emitter: Query<(Entity, &mut Transform), With<PlayerSpawner>>,
 ) {
     if input.just_pressed(KeyCode::X) {
