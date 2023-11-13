@@ -18,6 +18,7 @@ mod entities;
 mod graphics;
 mod logic;
 mod screens;
+mod level_collision_data;
 mod music;
 mod util;
 
@@ -70,10 +71,10 @@ fn main() {
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
         // .add_plugins(RapierDebugRenderPlugin::default())
         .add_plugins(ParticleSystemPlugin)
-
+        .add_plugins(level_collision_data::LevelCollisionDataPlugin)
         // Resources
         .insert_resource(Msaa::Off)
-        .register_ldtk_int_cell::<TileBundle>(1)
+        //.register_ldtk_int_cell::<TileBundle>(1)
         .insert_resource(LdtkSettings {
             set_clear_color: SetClearColor::FromLevelBackground,
             level_spawn_behavior: LevelSpawnBehavior::UseWorldTranslation {

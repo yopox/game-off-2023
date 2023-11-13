@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
+use crate::level_collision_data::LevelCollisionData;
 
 use crate::entities::player::PlayerSize;
 
@@ -32,6 +33,7 @@ impl From<&EntityInstance> for ColliderBundle {
                 },
                 rotation_constraints,
                 controller: KinematicCharacterController {
+                    max_slope_climb_angle: 0.0,
                     autostep: Some(CharacterAutostep {
                         max_height: CharacterLength::Relative(0.1),
                         ..default()
@@ -56,13 +58,60 @@ pub struct TileBundle {
     tile: Tile,
 }
 
+
 pub fn spawn_wall_collision(
     mut commands: Commands,
     new_levels_query: Query<&LevelIid, Added<LevelIid>>,
     ldtk_projects: Query<&Handle<LdtkProject>>,
     ldtk_project_assets: Res<Assets<LdtkProject>>,
+    collision_wall_assets: Res<Assets<LevelCollisionData>>,
+    asset_server: Res<AssetServer>,
 ) {
     if new_levels_query.is_empty() { return; }
+
+    let ldtk_project: &LdtkProject = ldtk_project_assets
+        .get(ldtk_projects.single())
+        .expect("Couldn't find project");
+
+    for level_iid in &new_levels_query {
+        let level = ldtk_project
+            .as_standalone()
+            .get_loaded_level_by_iid(&level_iid.to_string())
+            .expect("Couldn't find level");
+
+        println!("Loading collision data for level {}", level.identifier());
+        let collision_data_handle = asset_server.load(format!("level-collisions/{}.collision.json", level.identifier()));
+        let collision_data = collision_wall_assets.get(&collision_data_handle).expect("Expected collision data to be loaded");
+
+        let level_x = *level.world_x() as f32;
+        let level_y = -*level.world_y() as f32;
+
+        println!("Spawning walls for level {}", level.identifier());
+
+        for hull in &collision_data.hulls {
+            let mut points = Vec::new();
+            for (x, y) in &hull.convex_polygons {
+                points.push(Vec2::new(*x, *y));
+            }
+            //points.reverse();
+
+            commands
+                .spawn(ColliderBundle {
+                    collider: Collider::convex_polyline(points).unwrap(),
+                    rigid_body: RigidBody::Fixed,
+                    rotation_constraints: LockedAxes::ROTATION_LOCKED,
+                    friction: Friction {
+                        coefficient: 2.0,
+                        combine_rule: CoefficientCombineRule::Min,
+                    },
+                    ..default()
+                })
+                .insert(LevelColliderGroup(level_iid.clone()))
+                .insert(TransformBundle::from_transform(Transform::from_xyz(level_x, level_y, 0.)))
+            ;
+        }
+    }
+    /*if new_levels_query.is_empty() { return; }
 
     let ldtk_project = ldtk_project_assets
         .get(ldtk_projects.single())
@@ -99,8 +148,7 @@ pub fn spawn_wall_collision(
                 .insert(LevelColliderGroup(level_iid.clone()))
                 .insert(TransformBundle::from_transform(Transform::from_xyz(x, y, 0.)))
             ;
-        }
-    }
+        }*/
 }
 
 fn collider_for_tile(t: i32) -> Collider {
