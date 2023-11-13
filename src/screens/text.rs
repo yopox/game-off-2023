@@ -4,7 +4,7 @@ use bevy::sprite::Anchor;
 
 use crate::GameState;
 use crate::graphics::{ScreenTransition, text, TextStyles};
-use crate::parameters::{HALF_HEIGHT, HALF_WIDTH, z_pos};
+use crate::params::{HALF_HEIGHT, HALF_WIDTH, z_pos};
 use crate::screens::Fonts;
 
 pub struct SimpleTextPlugin;

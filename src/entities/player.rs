@@ -7,7 +7,7 @@ use bevy_rapier2d::prelude::Collider;
 
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
 use crate::logic::{AttackState, ColliderBundle};
-use crate::parameters::animation;
+use crate::params;
 use crate::screens::Textures;
 
 #[derive(Clone, Default, Component)]
@@ -130,16 +130,16 @@ pub fn update_sprite(
         PlayerState::Idle => 0,
         PlayerState::Walk => 0,
         PlayerState::Prejump => 5,
-        PlayerState::Jump => if player.timer <= animation::JUMP_T.get(player.size) { 2 } else { 3 },
-        PlayerState::Fall => if player.timer <= animation::FALL_T.get(player.size) { 4 } else { 2 },
+        PlayerState::Jump => if player.timer <= params::JUMP_T.get(player.size) { 2 } else { 3 },
+        PlayerState::Fall => if player.timer <= params::FALL_T.get(player.size) { 4 } else { 2 },
         PlayerState::Land => 1,
         PlayerState::Attack => 0,
     };
 
-    if player.state == PlayerState::Prejump && player.timer >= animation::PREJUMP_T.get(player.size) {
+    if player.state == PlayerState::Prejump && player.timer >= params::PREJUMP_T.get(player.size) {
         player.set_state(PlayerState::Jump);
     }
-    if player.state == PlayerState::Land && player.timer >= animation::LAND_T.get(player.size) {
+    if player.state == PlayerState::Land && player.timer >= params::LAND_T.get(player.size) {
         player.set_state(PlayerState::Idle);
     }
 }

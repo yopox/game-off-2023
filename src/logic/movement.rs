@@ -5,7 +5,7 @@ use bevy_rapier2d::prelude::*;
 use crate::entities::Player;
 use crate::entities::player::{PlayerState, Transformed};
 use crate::logic::AttackState;
-use crate::parameters::movement;
+use crate::params;
 
 #[derive(Component)]
 pub struct Jump(f32);
@@ -49,7 +49,7 @@ pub fn move_player(
         // Side movement
         let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
         let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true;1. } else { 0. };
-        translation.x += delta * movement::PLAYER_X * (right - left);
+        translation.x += delta * params::PLAYER_X * (right - left);
     }
 
     let grounded = output.is_none() || output.unwrap().grounded;
@@ -79,15 +79,15 @@ pub fn move_player(
         }
     }
 
-    let g = movement::PLAYER_G.get(player.size);
-    let j = movement::PLAYER_J.get(player.size);
+    let g = params::PLAYER_G.get(player.size);
+    let j = params::PLAYER_J.get(player.size);
 
     // Jump
     if input.just_pressed(KeyCode::Space) && jumped.is_none() {
         let coyote = match fall {
             Some(Fall(t)) => {
                 // info!("{}", time.elapsed_seconds() - *t);
-                time.elapsed_seconds() - *t < movement::COYOTE_TIME
+                time.elapsed_seconds() - *t < params::COYOTE_TIME
             }
             _ => false
         };
@@ -111,8 +111,8 @@ pub fn move_player(
 
         info!("{dy}");
 
-        let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > movement::JUMP_MIN;
-        let landed = grounded && t_jump > movement::JUMP_MIN;
+        let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > params::JUMP_MIN;
+        let landed = grounded && t_jump > params::JUMP_MIN;
 
         if dy <= 0. || mid_jump_stop || landed {
             // Jump ended

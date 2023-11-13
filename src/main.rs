@@ -1,6 +1,6 @@
 use bevy::ecs::schedule::{LogLevel, ScheduleBuildSettings};
 use bevy::prelude::*;
-use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, SetClearColor, LevelSpawnBehavior};
+use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSpawnBehavior, SetClearColor};
 use bevy_ecs_ldtk::prelude::LdtkIntCellAppExt;
 use bevy_particle_systems::ParticleSystemPlugin;
 use bevy_rapier2d::prelude::*;
@@ -9,10 +9,10 @@ use crate::entities::EntitiesPlugin;
 use crate::graphics::GraphicsPlugin;
 use crate::logic::{LogicPlugin, TileBundle};
 use crate::music::{AudioPlugin, BGM};
-use crate::parameters::{HALF_HEIGHT, HALF_WIDTH, HEIGHT, SCALE, WIDTH};
+use crate::params::{HALF_HEIGHT, HALF_WIDTH, HEIGHT, SCALE, WIDTH};
 use crate::screens::ScreensPlugin;
 
-mod parameters;
+mod params;
 
 mod entities;
 mod graphics;

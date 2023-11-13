@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterController;
 
 use crate::entities::Player;
-use crate::parameters::animation;
+use crate::params;
 
 #[derive(Component)]
 pub struct AttackState {
@@ -45,7 +45,7 @@ pub fn update_player(
 
     let mut translation = vec2(0.0, 0.0);
 
-    let steps = animation::ATTACK_STEPS.get(p.size);
+    let steps = params::ATTACK_STEPS.get(p.size);
     attack.time += time.delta_seconds();
     let state = match attack.time {
         t if t <= steps.0 => AttackStep::Prepare1,

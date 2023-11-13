@@ -5,7 +5,7 @@ use bevy::transform::TransformSystem::TransformPropagate;
 use bevy_ecs_ldtk::LdtkWorldBundle;
 use bevy_rapier2d::plugin::PhysicsSet;
 
-use crate::{GameState, parameters};
+use crate::{GameState, params};
 use crate::entities::Player;
 use crate::graphics::ScreenTransition;
 use crate::screens::{Fonts, Textures};
@@ -65,9 +65,7 @@ fn sync_camera(
     player: Query<&Transform, With<Player>>,
     mut camera: Query<&mut Transform, (With<Camera2d>, Without<Player>)>,
 ) {
-    if let Some(player) = player.iter().next() {
-        if let Some(mut camera) = camera.iter_mut().next() {
-            camera.translation = player.translation + vec3(0., parameters::game::CAM_Y_OFFSET, 0.);
-        }
-    }
+    let Some(player) = player.iter().next() else { return };
+    let Some(mut camera) = camera.iter_mut().next() else { return };
+    camera.translation = player.translation + vec3(0., params::CAM_Y_OFFSET, 0.);
 }

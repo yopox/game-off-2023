@@ -5,7 +5,7 @@ use bevy::sprite::Anchor;
 use crate::GameState;
 use crate::graphics::{ScreenTransition, text, TextStyles};
 use crate::music::{PlaySFXEvent, SFX};
-use crate::parameters::{HALF_HEIGHT, HALF_WIDTH, z_pos};
+use crate::params::{HALF_HEIGHT, HALF_WIDTH, z_pos};
 use crate::screens::{Fonts, Textures};
 
 pub struct TitlePlugin;
