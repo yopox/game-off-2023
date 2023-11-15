@@ -2,7 +2,8 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterController;
 
-use crate::entities::Player;
+use crate::entities::EntityID;
+use crate::entities::player::Player;
 use crate::params;
 
 #[derive(Component)]
@@ -38,14 +39,15 @@ pub fn attack(
 
 pub fn update_player(
     mut commands: Commands,
-    mut player: Query<(Entity, &Player, &mut AttackState, &mut TextureAtlasSprite, &mut KinematicCharacterController)>,
+    mut player: Query<(Entity, &EntityID, &mut AttackState, &mut TextureAtlasSprite, &mut KinematicCharacterController), With<Player>>,
     time: Res<Time>,
 ) {
-    let Ok((e, p, mut attack, mut sprite, mut controller)) = player.get_single_mut() else { return };
+    let Ok((e, id, mut attack, mut sprite, mut controller)) = player.get_single_mut() else { return };
+    let EntityID::Player(size) = id else { return };
 
     let mut translation = vec2(0.0, 0.0);
 
-    let steps = params::ATTACK_STEPS.get(p.size);
+    let steps = params::ATTACK_STEPS.get(size);
     attack.time += time.delta_seconds();
     let state = match attack.time {
         t if t <= steps.0 => AttackStep::Prepare1,

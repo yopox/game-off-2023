@@ -1,7 +1,16 @@
 use std::f32::consts::PI;
+use std::sync::Mutex;
 
 use bevy::math::vec2;
 use bevy::prelude::*;
+use bevy::utils::HashSet;
+use lazy_static::lazy_static;
+
+use crate::entities::{AnimStep, EntityID};
+
+lazy_static! {
+    pub static ref MISSING_ANIMATIONS: Mutex<HashSet<(EntityID, AnimStep)>> = Mutex::new(HashSet::new());
+}
 
 /// Angle in degrees
 #[derive(Copy, Clone)]

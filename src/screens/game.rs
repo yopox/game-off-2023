@@ -6,7 +6,7 @@ use bevy_ecs_ldtk::LdtkWorldBundle;
 use bevy_rapier2d::plugin::PhysicsSet;
 
 use crate::{GameState, params};
-use crate::entities::Player;
+use crate::entities::player::Player;
 use crate::graphics::ScreenTransition;
 use crate::screens::{Fonts, Textures};
 

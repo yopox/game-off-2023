@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_particle_systems::{Curve, CurvePoint, JitteredValue, ParticleSystem, ParticleSystemBundle, ParticleTexture, Playing};
 use bevy_particle_systems::ColorOverTime::Gradient;
 
-use crate::entities::Player;
+use crate::entities::player::Player;
 use crate::screens::Textures;
 
 #[derive(Component)]

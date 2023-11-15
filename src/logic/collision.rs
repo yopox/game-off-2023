@@ -1,9 +1,10 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
-use crate::level_collision_data::LevelCollisionData;
 
 use crate::entities::player::PlayerSize;
+use crate::entities::zombie::ZombieSize;
+use crate::level_collision_data::LevelCollisionData;
 
 use super::level_loading::LevelUnloadedEvent;
 
@@ -41,6 +42,11 @@ impl From<&EntityInstance> for ColliderBundle {
                     ..default()
                 },
                 ..Default::default()
+            },
+            "Zombie" => ColliderBundle {
+                collider: Collider::from(ZombieSize::S),
+                rigid_body: RigidBody::Dynamic,
+                ..default()
             },
             _ => ColliderBundle::default()
         }

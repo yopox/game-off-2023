@@ -7,7 +7,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::entities::EntitiesPlugin;
 use crate::graphics::GraphicsPlugin;
-use crate::logic::{LogicPlugin, TileBundle};
+use crate::logic::LogicPlugin;
 use crate::music::{AudioPlugin, BGM};
 use crate::params::{HALF_HEIGHT, HALF_WIDTH, HEIGHT, SCALE, WIDTH};
 use crate::screens::ScreensPlugin;
@@ -74,7 +74,6 @@ fn main() {
         .add_plugins(level_collision_data::LevelCollisionDataPlugin)
         // Resources
         .insert_resource(Msaa::Off)
-        //.register_ldtk_int_cell::<TileBundle>(1)
         .insert_resource(LdtkSettings {
             set_clear_color: SetClearColor::FromLevelBackground,
             level_spawn_behavior: LevelSpawnBehavior::UseWorldTranslation {

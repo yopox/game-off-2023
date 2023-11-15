@@ -1,14 +1,11 @@
 use bevy::{app::App, utils::HashSet};
 use bevy::prelude::*;
-use bevy_ecs_ldtk::{prelude::LdtkProject, LevelIid, LevelSet};
+use bevy_ecs_ldtk::{LevelIid, LevelSet, prelude::LdtkProject};
 
-use crate::entities::Player;
-
-
+use crate::entities::player::Player;
 
 #[derive(Debug, Event)]
 pub struct LevelUnloadedEvent(pub LevelIid);
-
 
 pub struct LevelLoadingPlugin;
 

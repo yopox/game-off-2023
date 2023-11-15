@@ -21,7 +21,7 @@ pub struct SizeVal<T> where T: Copy {
 impl<T> SizeVal<T> where T: Copy {
     pub const fn new(m: T, s: T) -> Self { SizeVal { m, s } }
 
-    pub fn get(&self, size: PlayerSize) -> T {
+    pub fn get(&self, size: &PlayerSize) -> T {
         match size {
             PlayerSize::M => self.m,
             PlayerSize::S => self.s,
