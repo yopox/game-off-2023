@@ -1,4 +1,6 @@
+use bevy::asset::LoadState;
 use bevy::prelude::*;
+use bevy::utils::HashMap;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
@@ -64,13 +66,20 @@ pub struct TileBundle {
     tile: Tile,
 }
 
+// When a new level is coming into view, we need to load its collision data.
+// This resource keeps track of which levels need collision data loaded.
+// Loanding is started for new levels in enqueue_collisions_to_load.
+// When the collision data is loaded, it is removed from this resource in spawn_wall_collision.
+#[derive(Resource, Default)]
+pub struct CollisionsToSpawn {
+    collision_handles: HashMap<LevelIid, (Vec2, Handle<LevelCollisionData>)>,
+}
 
-pub fn spawn_wall_collision(
-    mut commands: Commands,
+pub fn enqueue_collisions_to_load(
+    mut collisions_to_spawn: ResMut<CollisionsToSpawn>,
     new_levels_query: Query<&LevelIid, Added<LevelIid>>,
     ldtk_projects: Query<&Handle<LdtkProject>>,
     ldtk_project_assets: Res<Assets<LdtkProject>>,
-    collision_wall_assets: Res<Assets<LevelCollisionData>>,
     asset_server: Res<AssetServer>,
 ) {
     if new_levels_query.is_empty() { return; }
@@ -87,84 +96,58 @@ pub fn spawn_wall_collision(
 
         println!("Loading collision data for level {}", level.identifier());
         let collision_data_handle = asset_server.load(format!("level-collisions/{}.collision.json", level.identifier()));
-        let collision_data = collision_wall_assets.get(&collision_data_handle).expect("Expected collision data to be loaded");
-
         let level_x = *level.world_x() as f32;
         let level_y = -*level.world_y() as f32;
-
-        println!("Spawning walls for level {}", level.identifier());
-
-        for hull in &collision_data.hulls {
-            let mut points = Vec::new();
-            for (x, y) in &hull.convex_polygons {
-                points.push(Vec2::new(*x, *y));
-            }
-            //points.reverse();
-
-            commands
-                .spawn(ColliderBundle {
-                    collider: Collider::convex_polyline(points).unwrap(),
-                    rigid_body: RigidBody::Fixed,
-                    rotation_constraints: LockedAxes::ROTATION_LOCKED,
-                    friction: Friction {
-                        coefficient: 2.0,
-                        combine_rule: CoefficientCombineRule::Min,
-                    },
-                    ..default()
-                })
-                .insert(LevelColliderGroup(level_iid.clone()))
-                .insert(TransformBundle::from_transform(Transform::from_xyz(level_x, level_y, 0.)))
-            ;
-        }
+        collisions_to_spawn.collision_handles.insert(level_iid.clone(), (Vec2::new(level_x, level_y), collision_data_handle));
     }
-    /*if new_levels_query.is_empty() { return; }
-
-    let ldtk_project = ldtk_project_assets
-        .get(ldtk_projects.single())
-        .expect("Couldn't find project");
-
-    for level_iid in &new_levels_query {
-        println!("Spawning walls for level {}", level_iid.to_string());
-        let level = ldtk_project
-            .as_standalone()
-            .get_loaded_level_by_iid(&level_iid.to_string())
-            .expect("Couldn't find level");
-
-        let layer = &level.layer_instances()[0].auto_layer_tiles;
-
-        for tile in layer {
-            // Don't spawn colliders for inner tiles
-            // TODO: magical 17? I want to ignore tiles from the first rule
-            if tile.d[0] == 17 { continue }
-
-            let x = *level.world_x() as f32 + tile.px.x as f32 + 4.;
-            let y = -*level.world_y() as f32 - (tile.px.y as f32 + 4.);
-
-            commands
-                .spawn(ColliderBundle {
-                    collider: collider_for_tile(tile.t),
-                    rigid_body: RigidBody::Fixed,
-                    rotation_constraints: LockedAxes::ROTATION_LOCKED,
-                    friction: Friction {
-                        coefficient: 2.0,
-                        combine_rule: CoefficientCombineRule::Min,
-                    },
-                    ..default()
-                })
-                .insert(LevelColliderGroup(level_iid.clone()))
-                .insert(TransformBundle::from_transform(Transform::from_xyz(x, y, 0.)))
-            ;
-        }*/
 }
 
-fn collider_for_tile(t: i32) -> Collider {
-    match t {
-        0..=3 => Collider::compound(vec![(
-            Vect::new(0.0, 2.0),
-            0.0,
-            Collider::cuboid(4., 2.)
-        )]),
-        _ => Collider::cuboid(4., 4.),
+pub fn spawn_wall_collision(
+    mut commands: Commands,
+    mut collisions_to_spawn: ResMut<CollisionsToSpawn>,
+    asset_server: Res<AssetServer>,
+    collision_wall_assets: Res<Assets<LevelCollisionData>>,
+) {
+    collisions_to_spawn.collision_handles.retain(|level_iid, (pos, handle)| {
+        if let Some(collision_data) = collision_wall_assets.get(handle) {
+            println!("Spawning walls for level {}", level_iid.to_string());
+            spawn_hulls(&mut commands, collision_data, level_iid, *pos);
+            false
+        } else {
+            let state = asset_server.get_load_state(handle.clone());
+            if state == LoadState::Failed {
+                error!("Failed to load collision data for level {}", level_iid.to_string());
+                false
+            } else {
+                true
+            }
+        }
+            
+    });
+}
+
+fn spawn_hulls(commands: &mut Commands, collision_data: &LevelCollisionData, level_iid: &LevelIid, level_pos: Vec2) {
+    for hull in &collision_data.hulls {
+        let mut points = Vec::new();
+        for (x, y) in &hull.convex_polygons {
+            points.push(Vec2::new(*x, *y));
+        }
+        //points.reverse();
+
+        commands
+            .spawn(ColliderBundle {
+                collider: Collider::convex_polyline(points).unwrap(),
+                rigid_body: RigidBody::Fixed,
+                rotation_constraints: LockedAxes::ROTATION_LOCKED,
+                friction: Friction {
+                    coefficient: 2.0,
+                    combine_rule: CoefficientCombineRule::Min,
+                },
+                ..default()
+            })
+            .insert(LevelColliderGroup(level_iid.clone()))
+            .insert(TransformBundle::from_transform(Transform::from_xyz(level_pos.x, level_pos.y, 0.)))
+        ;
     }
 }
 

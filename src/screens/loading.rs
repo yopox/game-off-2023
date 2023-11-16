@@ -17,7 +17,6 @@ impl Plugin for LoadingPlugin {
             .add_collection_to_loading_state::<_, Textures>(GameState::Loading)
             .add_collection_to_loading_state::<_, Fonts>(GameState::Loading)
             .add_collection_to_loading_state::<_, Sounds>(GameState::Loading)
-            .add_collection_to_loading_state::<_, LoadedLevelCollisionData>(GameState::Loading)
             .add_systems(OnExit(GameState::Loading), exit)
         ;
     }
@@ -47,12 +46,6 @@ pub struct Textures {
 pub struct Fonts {
     #[asset(path = "fonts/Absolute 10 Basic.ttf")]
     pub absolute: Handle<Font>,
-}
-
-#[derive(AssetCollection, Resource)]
-pub struct LoadedLevelCollisionData {
-    #[asset(path = "level-collisions", collection(typed))]
-    pub levels: Vec<Handle<LevelCollisionData>>,
 }
 
 #[derive(AssetCollection, Resource)]

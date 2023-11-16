@@ -18,7 +18,14 @@ impl Plugin for LogicPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_plugins(level_loading::LevelLoadingPlugin)
-            .add_systems(Update, (collision::spawn_wall_collision, collision::despawn_wall_collision))
+            .init_resource::<collision::CollisionsToSpawn>()
+            .add_systems(Update, 
+                (
+                    collision::enqueue_collisions_to_load,
+                    collision::spawn_wall_collision,
+                    collision::despawn_wall_collision
+                ).chain()
+            )
             .add_systems(Update, (movement::move_player, attack::attack))
             .add_systems(PostUpdate, (attack::update_player)
                 .after(player::update_state)
