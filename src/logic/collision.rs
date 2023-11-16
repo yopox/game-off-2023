@@ -34,9 +34,9 @@ impl From<&EntityInstance> for ColliderBundle {
                 },
                 rotation_constraints,
                 controller: KinematicCharacterController {
-                    max_slope_climb_angle: 0.0,
+                    //max_slope_climb_angle: 0.0,
                     autostep: Some(CharacterAutostep {
-                        max_height: CharacterLength::Relative(0.1),
+                   //     max_height: CharacterLength::Relative(0.1),
                         ..default()
                     }),
                     ..default()

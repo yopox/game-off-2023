@@ -44,10 +44,14 @@ impl From<PlayerSize> for Collider {
             PlayerSize::M => (vec2(0.0, 8.0), PlayerSize::M.hitbox() / 2.),
         };
 
+        let radius = size.x / 20.;
+
         Collider::compound(vec![(
             Vect::new(offset.x, offset.y),
             0.0,
-            Collider::cuboid(size.x, size.y)
+            // no idea why this must be 12. but it works
+            Collider::round_cuboid(size.x - radius * 12., size.y - radius * 12., radius)
+            //Collider::cuboid(size.x, size.y)
         )])
     }
 }
