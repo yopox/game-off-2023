@@ -10,6 +10,7 @@ pub const HALF_HEIGHT: f32 = HEIGHT as f32 / 2.;
 pub const SCALE: f32 = 4.;
 
 pub mod z_pos {
+    pub const PARTICLES: f32 = 60.0;
     pub const GUI: f32 = 100.;
 }
 

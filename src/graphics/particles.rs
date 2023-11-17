@@ -3,6 +3,7 @@ use bevy_particle_systems::{Curve, CurvePoint, JitteredValue, ParticleSystem, Pa
 use bevy_particle_systems::ColorOverTime::Gradient;
 
 use crate::entities::player::Player;
+use crate::params::z_pos;
 use crate::screens::Textures;
 
 #[derive(Component)]
@@ -52,6 +53,7 @@ pub fn init_player_spawner(
                         ])),
                         looping: true,
                         system_duration_seconds: 10.0,
+                        z_value_override: Some(JitteredValue::new(z_pos::PARTICLES)),
                         ..ParticleSystem::default()
                     },
                     ..ParticleSystemBundle::default()
