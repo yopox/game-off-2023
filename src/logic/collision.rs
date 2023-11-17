@@ -122,7 +122,7 @@ pub fn spawn_wall_collision(
                 true
             }
         }
-            
+
     });
 }
 

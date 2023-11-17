@@ -8,6 +8,7 @@ use bevy_rapier2d::plugin::PhysicsSet;
 use crate::{GameState, params};
 use crate::entities::player::Player;
 use crate::graphics::ScreenTransition;
+use crate::logic::AttackState;
 use crate::screens::{Fonts, Textures};
 
 pub struct GamePlugin;
@@ -62,10 +63,15 @@ fn exit(
 }
 
 fn sync_camera(
-    player: Query<&Transform, With<Player>>,
+    player: Query<(&Transform, Option<&AttackState>), With<Player>>,
     mut camera: Query<&mut Transform, (With<Camera2d>, Without<Player>)>,
 ) {
-    let Some(player) = player.iter().next() else { return };
+    let Some((player, attack)) = player.iter().next() else { return };
     let Some(mut camera) = camera.iter_mut().next() else { return };
-    camera.translation = player.translation + vec3(0., params::CAM_Y_OFFSET, 0.);
+    let x = player.translation.x + camera.translation.x * 23.0 ;
+    camera.translation = vec3(
+        if attack.is_none() { x / 24.0 } else { camera.translation.x },
+        player.translation.y + params::CAM_Y_OFFSET,
+        0.
+    );
 }

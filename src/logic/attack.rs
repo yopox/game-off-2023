@@ -57,7 +57,6 @@ pub fn update_player(
         _ => AttackStep::Recoil,
     };
 
-    // TODO: Smooth movement, use parameter
     if state != attack.state {
         attack.state = state;
         match attack.state {
