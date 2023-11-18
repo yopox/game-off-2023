@@ -21,6 +21,7 @@ mod screens;
 mod level_collision_data;
 mod music;
 mod util;
+mod definitions;
 
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub enum CustomSets {

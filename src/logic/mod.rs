@@ -19,6 +19,7 @@ impl Plugin for LogicPlugin {
         app
             .add_plugins(level_loading::LevelLoadingPlugin)
             .init_resource::<collision::CollisionsToSpawn>()
+            .add_event::<attack::SpawnSword>()
             .add_systems(Update, 
                 (
                     collision::enqueue_collisions_to_load,
@@ -26,7 +27,7 @@ impl Plugin for LogicPlugin {
                     collision::despawn_wall_collision
                 ).chain()
             )
-            .add_systems(Update, (movement::move_player, attack::attack))
+            .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword))
             .add_systems(PostUpdate, (attack::update_player)
                 .after(player::update_state)
                 .after(entities::update_index)

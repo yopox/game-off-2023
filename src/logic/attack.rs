@@ -1,9 +1,12 @@
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterController;
+use bevy_rapier2d::prelude::{RigidBody, Sensor};
 
+use crate::definitions::colliders;
 use crate::entities::EntityID;
 use crate::entities::player::Player;
+use crate::logic::ColliderBundle;
 use crate::params;
 
 #[derive(Component)]
@@ -40,6 +43,7 @@ pub fn attack(
 pub fn update_player(
     mut commands: Commands,
     mut player: Query<(Entity, &EntityID, &mut AttackState, &mut TextureAtlasSprite, &mut KinematicCharacterController), With<Player>>,
+    mut sword: EventWriter<SpawnSword>,
     time: Res<Time>,
 ) {
     let Ok((e, id, mut attack, mut sprite, mut controller)) = player.get_single_mut() else { return };
@@ -62,8 +66,8 @@ pub fn update_player(
         match attack.state {
             AttackStep::Prepare2 => { translation.x = -6.; }
             AttackStep::Prepare3 => { translation.x = 1.; }
-            AttackStep::Swing => { translation.x = 11.; }
-            AttackStep::Recoil => { translation.x = -6.; }
+            AttackStep::Swing => { translation.x = 11.; sword.send(SpawnSword(true)); }
+            AttackStep::Recoil => { translation.x = -6.; sword.send(SpawnSword(false)); }
             _ => ()
         }
         if sprite.flip_x { translation.x *= -1.; }
@@ -79,4 +83,42 @@ pub fn update_player(
 
     if attack.time >= steps.4 { commands.entity(e).remove::<AttackState>(); }
     controller.translation = Some(translation);
+}
+
+#[derive(Event)]
+pub struct SpawnSword(bool);
+
+#[derive(Component)]
+pub struct Sword;
+
+pub fn update_sword(
+    mut commands: Commands,
+    mut events: EventReader<SpawnSword>,
+    sword: Query<Entity, With<Sword>>,
+    player: Query<(&EntityID, &Transform, &TextureAtlasSprite), With<Player>>,
+) {
+    if let Ok(e) = sword.get_single() {
+        if let Ok((_, pos, _)) = player.get_single() {
+            commands.entity(e).insert(Transform::from_xyz(pos.translation.x, pos.translation.y, 0.0));
+        }
+    }
+
+    for &SpawnSword(appear) in events.iter() {
+        if !appear { sword.iter().for_each(|id| commands.entity(id).despawn_recursive()); }
+        else {
+            let Ok((EntityID::Player(size), pos, sprite)) = player.get_single() else { continue };
+            commands
+                .spawn(ColliderBundle {
+                    collider: colliders::sword_collider(size, sprite.flip_x),
+                    rigid_body: RigidBody::Fixed,
+                    ..default()
+                })
+                .insert(Sensor)
+                .insert(Transform::from_xyz(pos.translation.x, pos.translation.y, 0.0))
+                .insert(GlobalTransform::default())
+                .insert(Sword)
+            ;
+            // info!("{}", pos.translation);
+        }
+    }
 }
