@@ -6,13 +6,14 @@ use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieBundle;
 use crate::GameState;
 
+use self::checkpoint::CheckpointBundle;
 use self::player::PlayerSpawnBundle;
 
 pub mod player;
 pub mod zombie;
 mod common;
 pub mod animation;
-mod entity_spawner;
+mod checkpoint;
 
 pub struct EntitiesPlugin;
 
@@ -27,9 +28,17 @@ impl Plugin for EntitiesPlugin {
         app
             .register_ldtk_entity::<PlayerSpawnBundle>("PlayerSpawn")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
+            .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .add_systems(Update, (common::entity_spawned))
             .add_systems(Update, (player::update_state))
-            .add_systems(Update, (player::spawn_player, player::change_size, player::player_goes_out_of_screen).run_if(in_state(GameState::Game)))
+            .add_systems(Update, 
+                (
+                    player::spawn_player,
+                    player::change_size,
+                    player::player_goes_out_of_screen,
+                    checkpoint::check_player_in_checkpoint
+                ).run_if(in_state(GameState::Game))
+            )
             .add_systems(PostUpdate, (animation::reset_time, animation::update_timers, animation::update_index).chain())
             // .add_plugins()
         ;

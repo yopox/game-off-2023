@@ -114,8 +114,8 @@ fn get_pos_id(entity_instance: &EntityInstance) -> Option<String> {
         .field_instances
         .iter()
         .find(|field| field.identifier == "pos_id")
-        .map(|field| match &field.value {
-            FieldValue::String(value) => value.clone().expect("pos_id field must not be empty"),
+        .and_then(|field| match &field.value {
+            FieldValue::String(value) => value.clone(),
             _ => panic!("pos_id field must be a string"),
         })
 }
@@ -155,7 +155,7 @@ pub fn spawn_player(
     let current = level_manager.checkpoint();
     for (entity_instance, spawner, transform) in spawns.iter() {
         let has_global_transform_been_set = transform.compute_transform().translation != Vec3::ZERO;
-        if has_global_transform_been_set && spawner.pos_id == current.player_pos_id {
+        if has_global_transform_been_set && spawner.pos_id == current.spawner_pos_id {
             info!("Spawning player at spawn {}", spawner.pos_id);
             let instance = EntityInstance {
                 identifier: "Player".to_string(),

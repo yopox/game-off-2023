@@ -1,5 +1,3 @@
-use bevy::prelude::States;
-
 use crate::entities::player::PlayerSize;
 
 pub const WIDTH: usize = 320;
@@ -58,3 +56,7 @@ pub const ATTACK_STEPS: SizeVal<(f32, f32, f32, f32, f32)> = SizeVal::new(
 
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
+
+// --- Level
+pub const INITIAL_LEVEL_NAME: &str = "Zone_1";
+pub const INITIAL_SPAWNER_POS_ID: &str = "start";

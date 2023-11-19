@@ -66,6 +66,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
         "Player" => Some(EntityID::Player(PlayerSize::M)),
         "Zombie" => Some(EntityID::Zombie(get_zombie_size(&instance.field_instances))),
         "PlayerSpawn" => None,
+        "Checkpoint" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
     }
 }

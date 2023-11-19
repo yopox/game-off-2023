@@ -1,10 +1,11 @@
 use bevy::{app::App, utils::HashSet};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LevelIid, LevelSet, prelude::LdtkProject};
-use bevy_ecs_ldtk::Worldly;
+use bevy_ecs_ldtk::{Respawn, Worldly};
 
-use crate::entities::player::Player;
 use crate::GameState;
+use crate::entities::player::Player;
+use crate::params::{INITIAL_LEVEL_NAME, INITIAL_SPAWNER_POS_ID};
 
 #[derive(Debug, Event)]
 pub struct LevelUnloadedEvent(pub LevelIid);
@@ -42,17 +43,17 @@ impl LevelOutline {
 }
 
 #[derive(Debug, Clone)]
-pub struct Checkpoint {
+pub struct CheckpointInfo {
     pub level_name: String,
     // the id of the player entity in the level
-    pub player_pos_id: String,
+    pub spawner_pos_id: String,
 }
 
-impl Default for Checkpoint {
+impl Default for CheckpointInfo {
     fn default() -> Self {
-        Checkpoint {
-            level_name: "Zone_1".to_string(),
-            player_pos_id: "start".to_string(),
+        Self {
+            level_name: INITIAL_LEVEL_NAME.to_string(),
+            spawner_pos_id: INITIAL_SPAWNER_POS_ID.to_string(),
         }
     }
 
@@ -62,19 +63,26 @@ impl Default for Checkpoint {
 pub struct LevelManager {
     // TODO: replace with a better data structure like a grid, quadtree, etc.
     levels: Vec<LevelOutline>,
-    checkpoint: Checkpoint,
+    checkpoint: CheckpointInfo,
     reload: bool,
 }
 
 impl LevelManager {
     pub fn determine_level(&self, player_pos_id: &str) -> Option<&LevelOutline> {
         self.levels.iter().find(|level| {
-            level.name == player_pos_id
+            level.name == player_pos_id || level.id == player_pos_id
         })
     }
 
-    pub fn checkpoint(&self) -> &Checkpoint {
+    pub fn checkpoint(&self) -> &CheckpointInfo {
         &self.checkpoint
+    }
+
+    pub fn set_checkpoint(&mut self, level_name: String, spawner_pos_id: String) {
+        self.checkpoint = CheckpointInfo {
+            level_name,
+            spawner_pos_id,
+        };
     }
 
     pub fn current_checkpoint_level(&self) -> Option<&LevelOutline> {
@@ -116,7 +124,7 @@ fn init_level_manager(
 
     commands.insert_resource(LevelManager {
         levels,
-        checkpoint: Checkpoint::default(),
+        checkpoint: CheckpointInfo::default(),
         reload: false,
     });
 }
@@ -125,6 +133,7 @@ fn reload_world(
     mut commands: Commands,
     level_manager: Option<ResMut<LevelManager>>,
     mut level_set: Query<&mut LevelSet>,
+    levels: Query<Entity, With<LevelIid>>,
     worldly_entities: Query<Entity, With<Worldly>>,
     player: Query<Entity, With<Player>>,
 ) {
@@ -133,6 +142,10 @@ fn reload_world(
         level_manager.reload = false;
         for mut level in level_set.iter_mut() {
             level.iids.clear();
+        }
+
+        for level_entity in levels.iter() {
+            commands.entity(level_entity).insert(Respawn);
         }
 
         for entity in worldly_entities.iter() {
