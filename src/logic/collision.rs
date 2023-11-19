@@ -6,7 +6,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieSize;
-use crate::level_collision_data::LevelCollisionData;
+use crate::level_collision_data::{LevelCollisionData, collision_data_from_image};
 
 use super::level_loading::LevelUnloadedEvent;
 
@@ -72,7 +72,7 @@ pub struct TileBundle {
 // When the collision data is loaded, it is removed from this resource in spawn_wall_collision.
 #[derive(Resource, Default)]
 pub struct CollisionsToSpawn {
-    collision_handles: HashMap<LevelIid, (Vec2, Handle<LevelCollisionData>)>,
+    collision_handles: HashMap<LevelIid, (Vec2, Handle<Image>)>,
 }
 
 pub fn enqueue_collisions_to_load(
@@ -95,7 +95,7 @@ pub fn enqueue_collisions_to_load(
             .expect("Couldn't find level");
 
         println!("Loading collision data for level {}", level.identifier());
-        let collision_data_handle = asset_server.load(format!("level-collisions/{}.collision.json", level.identifier()));
+        let collision_data_handle = asset_server.load(format!("{}.collision.png", level.identifier()));
         let level_x = *level.world_x() as f32;
         let level_y = -*level.world_y() as f32;
         collisions_to_spawn.collision_handles.insert(level_iid.clone(), (Vec2::new(level_x, level_y), collision_data_handle));
@@ -106,12 +106,12 @@ pub fn spawn_wall_collision(
     mut commands: Commands,
     mut collisions_to_spawn: ResMut<CollisionsToSpawn>,
     asset_server: Res<AssetServer>,
-    collision_wall_assets: Res<Assets<LevelCollisionData>>,
+    images: Res<Assets<Image>>,
 ) {
     collisions_to_spawn.collision_handles.retain(|level_iid, (pos, handle)| {
-        if let Some(collision_data) = collision_wall_assets.get(handle) {
+        if let Some(collision_image) = images.get(handle) {
             println!("Spawning walls for level {}", level_iid.to_string());
-            spawn_hulls(&mut commands, collision_data, level_iid, *pos);
+            spawn_hulls(&mut commands, &collision_data_from_image(collision_image), level_iid, *pos);
             false
         } else {
             let state = asset_server.get_load_state(handle.clone());
@@ -128,15 +128,10 @@ pub fn spawn_wall_collision(
 
 fn spawn_hulls(commands: &mut Commands, collision_data: &LevelCollisionData, level_iid: &LevelIid, level_pos: Vec2) {
     for hull in &collision_data.hulls {
-        let mut points = Vec::new();
-        for (x, y) in &hull.convex_polygons {
-            points.push(Vec2::new(*x, *y));
-        }
-        //points.reverse();
-
+        info!("Spawning hull at {:?}", hull);
         commands
             .spawn(ColliderBundle {
-                collider: Collider::convex_polyline(points).unwrap(),
+                collider: Collider::cuboid(hull.size.0 / 2., hull.size.1 / 2.),
                 rigid_body: RigidBody::Fixed,
                 rotation_constraints: LockedAxes::ROTATION_LOCKED,
                 friction: Friction {
@@ -146,7 +141,14 @@ fn spawn_hulls(commands: &mut Commands, collision_data: &LevelCollisionData, lev
                 ..default()
             })
             .insert(LevelColliderGroup(level_iid.clone()))
-            .insert(TransformBundle::from_transform(Transform::from_xyz(level_pos.x, level_pos.y, 0.)))
+            .insert(
+                TransformBundle::from_transform(
+                    Transform::from_xyz(
+                        level_pos.x + hull.pos.0 + hull.size.0 / 2., 
+                        level_pos.y + hull.pos.1 - hull.size.1 / 2., 0.
+                    )
+                )
+            )
         ;
     }
 }

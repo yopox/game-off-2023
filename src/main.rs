@@ -72,7 +72,6 @@ fn main() {
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
         .add_plugins(RapierDebugRenderPlugin::default())
         .add_plugins(ParticleSystemPlugin)
-        .add_plugins(level_collision_data::LevelCollisionDataPlugin)
         // Resources
         .insert_resource(Msaa::Off)
         .insert_resource(LdtkSettings {

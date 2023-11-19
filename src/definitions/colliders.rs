@@ -13,13 +13,10 @@ fn rectangle(offset: Vec2, size: Vec2) -> Collider {
 }
 
 fn cuboid(offset: Vec2, size: Vec2) -> Collider {
-    let radius = size.x / 20.;
-
     Collider::compound(vec![(
         Vect::new(offset.x, offset.y),
         0.0,
-        // no idea why this must be 12. but it works
-        Collider::round_cuboid(size.x - radius * 12., size.y - radius * 12., radius)
+        Collider::cuboid(size.x, size.y)
     )])
 }
 
