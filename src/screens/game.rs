@@ -43,7 +43,7 @@ fn enter(
     textures: Res<Textures>,
     asset_server: Res<AssetServer>,
 ) {
-    let ldtk_handle = asset_server.load("tilemaps/sample.ldtk");
+    let ldtk_handle = asset_server.load("tilemaps/world.ldtk");
 
     commands.spawn(LdtkWorldBundle {
         ldtk_handle,
