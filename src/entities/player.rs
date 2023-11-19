@@ -177,3 +177,15 @@ pub fn spawn_player(
         }
     }
 }
+
+pub fn player_goes_out_of_screen(player: Query<&GlobalTransform, With<Player>>, level_manager: Option<ResMut<LevelManager>>) {
+    let Ok(transform) = player.get_single() else { return };
+    let Some(mut level_manager) = level_manager else { return };
+
+    let pos = transform.translation().truncate();
+
+    if !level_manager.is_vec_inside_any_level(pos) {
+        info!("Player went out of screen, reloading level");
+        level_manager.reload();
+    }
+}

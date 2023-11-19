@@ -29,7 +29,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .add_systems(Update, (common::entity_spawned))
             .add_systems(Update, (player::update_state))
-            .add_systems(Update, (player::spawn_player, player::change_size).run_if(in_state(GameState::Game)))
+            .add_systems(Update, (player::spawn_player, player::change_size, player::player_goes_out_of_screen).run_if(in_state(GameState::Game)))
             .add_systems(PostUpdate, (animation::reset_time, animation::update_timers, animation::update_index).chain())
             // .add_plugins()
         ;

@@ -35,6 +35,12 @@ pub struct LevelOutline {
     name: String,
 }
 
+impl LevelOutline {
+    pub fn rect(&self) -> Rect {
+        Rect::from_corners(self.pos, self.pos + self.size)
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Checkpoint {
     pub level_name: String,
@@ -77,10 +83,12 @@ impl LevelManager {
 
     pub fn is_vec_inside_any_level(&self, pos: Vec2) -> bool {
         self.levels.iter().any(|level| {
-            let min = level.pos;
-            let max = level.pos + level.size;
-            pos.x >= min.x && pos.x <= max.x && pos.y >= min.y && pos.y <= max.y
+            level.rect().contains(pos)
         })
+    }
+
+    pub fn reload(&mut self) {
+        self.reload = true;
     }
 }
 
@@ -118,6 +126,7 @@ fn reload_world(
     level_manager: Option<ResMut<LevelManager>>,
     mut level_set: Query<&mut LevelSet>,
     worldly_entities: Query<Entity, With<Worldly>>,
+    player: Query<Entity, With<Player>>,
 ) {
     let Some(mut level_manager) = level_manager else { return; };
     if level_manager.reload {
@@ -129,6 +138,10 @@ fn reload_world(
         for entity in worldly_entities.iter() {
             commands.entity(entity).despawn_recursive();
         }
+
+        for entity in player.iter() {
+            commands.entity(entity).despawn_recursive();
+        }
     }
 }
 
@@ -136,7 +149,7 @@ fn determine_loaded_levels(
     mut level_set: Query<&mut LevelSet>,
     level_manager: Option<ResMut<LevelManager>>,
     player_pos: Query<&Transform, With<Player>>,
-    q: Query<(&Camera, &GlobalTransform)>,
+    camera: Query<(&Camera, &GlobalTransform)>,
     mut unload_event_sink: EventWriter<LevelUnloadedEvent>,
 ) {
     let Some(level_manager) = level_manager else { return; };
@@ -147,7 +160,7 @@ fn determine_loaded_levels(
         current_level_set.iids.insert(LevelIid::new(current_level.id.clone()));
         return;
     }
-    let (camera, camera_transform) = q.single();
+    let (camera, camera_transform) = camera.single();
 
     // calculate the visible area of the camera
     let camera_rect = camera.logical_viewport_rect().unwrap();
@@ -163,9 +176,8 @@ fn determine_loaded_levels(
     //println!("Camera rect: {:?}", camera_rect);
 
     let visible_levels = level_manager.levels.iter().filter(|level| {
-        let level_rect = Rect::from_corners(level.pos,  level.pos + level.size);
         //println!("level rect: {:?}", level_rect);
-        !camera_rect.intersect(level_rect).is_empty()
+        !camera_rect.intersect(level.rect()).is_empty()
     }).map(|level| LevelIid::new(level.id.clone())).collect::<HashSet<_>>();
 
     if visible_levels.is_empty() {
