@@ -70,7 +70,10 @@ fn main() {
         .add_plugins((EntitiesPlugin, GraphicsPlugin, LogicPlugin, ScreensPlugin, AudioPlugin))
         .add_plugins((LdtkPlugin))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(12.0))
-        .add_plugins(RapierDebugRenderPlugin::default())
+        .add_plugins(RapierDebugRenderPlugin {
+            enabled: false,
+            ..Default::default()
+        })
         .add_plugins(ParticleSystemPlugin)
         // Resources
         .insert_resource(Msaa::Off)
@@ -92,7 +95,7 @@ fn main() {
         })
         .add_state::<GameState>()
         .add_systems(Startup, init)
-
+        .add_systems(Update, toggle_debug)
         .run();
 }
 
@@ -107,4 +110,13 @@ fn init(mut commands: Commands) {
             ..default()
         })
     ;
+}
+
+fn toggle_debug(
+    mut debug_render_context: ResMut<DebugRenderContext>,
+    keyboard_input: Res<Input<KeyCode>>
+) {
+    if keyboard_input.just_pressed(KeyCode::F1) {
+        debug_render_context.enabled = !debug_render_context.enabled;
+    }
 }
