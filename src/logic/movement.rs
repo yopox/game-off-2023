@@ -2,7 +2,8 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::entities::{AnimStep, EntityID, EntityTimer};
+use crate::entities::animation::{AnimStep, EntityTimer};
+use crate::entities::EntityID;
 use crate::entities::player::{Player, Transformed};
 use crate::logic::AttackState;
 use crate::params;

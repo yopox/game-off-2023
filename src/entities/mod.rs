@@ -2,9 +2,7 @@ use bevy::app::App;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::LdtkEntityAppExt;
 
-pub use animation::{AnimStep, EntityTimer, update_index};
-
-use crate::entities::player::{PlayerBundle, PlayerSize};
+use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieBundle;
 use crate::GameState;
 
@@ -13,7 +11,7 @@ use self::player::PlayerSpawnBundle;
 pub mod player;
 pub mod zombie;
 mod common;
-mod animation;
+pub mod animation;
 mod entity_spawner;
 
 pub struct EntitiesPlugin;

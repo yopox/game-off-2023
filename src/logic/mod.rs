@@ -5,8 +5,7 @@ pub use attack::AttackState;
 pub use collision::ColliderBundle;
 pub use level_loading::*;
 
-use crate::entities;
-use crate::entities::player;
+use crate::entities::{animation, player};
 
 mod collision;
 mod movement;
@@ -24,7 +23,7 @@ impl Plugin for LogicPlugin {
             .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword))
             .add_systems(PostUpdate, (attack::update_player)
                 .after(player::update_state)
-                .after(entities::update_index)
+                .after(animation::update_index)
             )
         ;
     }

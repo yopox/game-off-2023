@@ -6,7 +6,8 @@ use bevy::prelude::*;
 use bevy::utils::HashSet;
 use lazy_static::lazy_static;
 
-use crate::entities::{AnimStep, EntityID};
+use crate::entities::animation::AnimStep;
+use crate::entities::EntityID;
 
 lazy_static! {
     pub static ref MISSING_ANIMATIONS: Mutex<HashSet<(EntityID, AnimStep)>> = Mutex::new(HashSet::new());
