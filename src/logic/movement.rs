@@ -42,7 +42,10 @@ pub fn move_player(
         translation.x += delta * params::PLAYER_X * (right - left);
     }
 
-    let grounded = output.is_none() || output.unwrap().grounded;
+    let grounded = match output {
+        None => true,
+        Some(output) => output.grounded,
+    };
 
     let mut player_commands = commands.entity(e);
     if !state.is_jumping() {
@@ -86,7 +89,7 @@ pub fn move_player(
         let t_jump = time.elapsed_seconds() - timer.t_0;
         let dy = delta * (j - g * (t_jump + delta / 2.));
 
-        info!("{dy}");
+        //info!("{dy}");
 
         let mid_jump_stop = !input.pressed(KeyCode::Space) && t_jump > params::JUMP_MIN;
         let landed = grounded && t_jump > params::JUMP_MIN;
@@ -95,6 +98,16 @@ pub fn move_player(
             // Jump ended
             state.set_if_neq(AnimStep::Fall);
         } else {
+            if let Some(output) = output {
+                for collision in &output.collisions {
+                    let toi = &collision.toi;
+                    if toi.status == TOIStatus::Converged && toi.normal1.y < -0.5 {
+                        // Jump ended
+                        info!("Jumped against ceiling");
+                        state.set_if_neq(AnimStep::Fall);
+                    }
+                }
+            }
             // Jumping
             translation.y += dy;
         }
