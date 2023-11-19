@@ -10,6 +10,24 @@ use crate::level_collision_data::{LevelCollisionData, collision_data_from_image}
 
 use super::level_loading::LevelUnloadedEvent;
 
+
+pub struct CollisionPlugin;
+
+impl Plugin for CollisionPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .init_resource::<CollisionsToSpawn>()
+            .add_systems(Update, 
+                (
+                    enqueue_collisions_to_load,
+                    spawn_wall_collision,
+                    despawn_wall_collision
+                ).chain()
+            );
+    }
+}
+
+
 #[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
 pub struct ColliderBundle {
     pub collider: Collider,
@@ -55,27 +73,20 @@ impl From<&EntityInstance> for ColliderBundle {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, Debug, Default, Component)]
-pub struct Tile;
 
 #[derive(Clone, Eq, PartialEq, Debug, Default, Component)]
 pub struct LevelColliderGroup(LevelIid);
-
-#[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
-pub struct TileBundle {
-    tile: Tile,
-}
 
 // When a new level is coming into view, we need to load its collision data.
 // This resource keeps track of which levels need collision data loaded.
 // Loanding is started for new levels in enqueue_collisions_to_load.
 // When the collision data is loaded, it is removed from this resource in spawn_wall_collision.
 #[derive(Resource, Default)]
-pub struct CollisionsToSpawn {
+struct CollisionsToSpawn {
     collision_handles: HashMap<LevelIid, (Vec2, Handle<Image>)>,
 }
 
-pub fn enqueue_collisions_to_load(
+fn enqueue_collisions_to_load(
     mut collisions_to_spawn: ResMut<CollisionsToSpawn>,
     new_levels_query: Query<&LevelIid, Added<LevelIid>>,
     ldtk_projects: Query<&Handle<LdtkProject>>,
@@ -102,7 +113,7 @@ pub fn enqueue_collisions_to_load(
     }
 }
 
-pub fn spawn_wall_collision(
+fn spawn_wall_collision(
     mut commands: Commands,
     mut collisions_to_spawn: ResMut<CollisionsToSpawn>,
     asset_server: Res<AssetServer>,
@@ -153,7 +164,7 @@ fn spawn_hulls(commands: &mut Commands, collision_data: &LevelCollisionData, lev
     }
 }
 
-pub fn despawn_wall_collision(
+fn despawn_wall_collision(
     mut commands: Commands,
     query: Query<(Entity, &LevelColliderGroup)>,
     mut level_unloaded_events: EventReader<LevelUnloadedEvent>,

@@ -1,4 +1,4 @@
-use bevy::prelude::{DetectChangesMut, EventWriter, NextState, Query, Res, ResMut, Resource, Time};
+use bevy::prelude::{DetectChangesMut, EventWriter, NextState, ResMut, Resource};
 
 use crate::GameState;
 use crate::music::PlayBGMEvent;

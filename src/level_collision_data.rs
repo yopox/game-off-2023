@@ -1,5 +1,4 @@
-use anyhow::Error;
-use bevy::{prelude::*, asset::{AssetLoader, LoadContext, LoadedAsset}, reflect::{TypePath, TypeUuid}, utils::BoxedFuture};
+use bevy::{prelude::*, reflect::{TypePath, TypeUuid}};
 use serde::{Serialize, Deserialize};
 
 
