@@ -2,7 +2,6 @@ use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 
 use crate::GameState;
-use crate::level_collision_data::LevelCollisionData;
 use crate::music::{BGM, PlayBGMEvent};
 
 pub struct LoadingPlugin;

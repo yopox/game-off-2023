@@ -3,6 +3,7 @@ use bevy::prelude::*;
 
 pub use attack::AttackState;
 pub use collision::ColliderBundle;
+pub use level_loading::*;
 
 use crate::entities;
 use crate::entities::player;

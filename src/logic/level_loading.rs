@@ -1,7 +1,9 @@
 use bevy::{app::App, utils::HashSet};
 use bevy::prelude::*;
+use bevy_ecs_ldtk::Worldly;
 use bevy_ecs_ldtk::{LevelIid, LevelSet, prelude::LdtkProject};
 
+use crate::GameState;
 use crate::entities::player::Player;
 
 #[derive(Debug, Event)]
@@ -13,27 +15,73 @@ impl Plugin for LevelLoadingPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_event::<LevelUnloadedEvent>()
-            .add_systems(PreUpdate, (init_level_manager, determine_loaded_levels).chain())
+            .add_systems(Update, init_level_manager)
+            .add_systems(
+                PreUpdate, 
+                (
+                    reload_world,
+                    determine_loaded_levels,
+                ).chain()
+                    .run_if(in_state(GameState::Game)))
         ;
-        /*app
-            .add_systems(Update, collision::spawn_wall_collision)
-            .add_systems(Update, movement::move_player)
-        ;*/
     }
 }
 
 #[derive(Default, Debug, Clone)]
-struct LevelOutline {
+pub struct LevelOutline {
     pos: Vec2,
     size: Vec2,
     id: String,
     name: String,
 }
 
+#[derive(Debug, Clone)]
+pub struct Checkpoint {
+    pub level_name: String,
+    // the id of the player entity in the level
+    pub player_pos_id: String,
+}
+
+impl Default for Checkpoint {
+    fn default() -> Self {
+        Checkpoint {
+            level_name: "Level_0".to_string(),
+            player_pos_id: "start".to_string(),
+        }
+    }
+
+}
+
 #[derive(Default, Resource)]
 pub struct LevelManager {
     // TODO: replace with a better data structure like a grid, quadtree, etc.
     levels: Vec<LevelOutline>,
+    checkpoint: Checkpoint,
+    reload: bool,
+}
+
+impl LevelManager {
+    pub fn determine_level(&self, player_pos_id: &str) -> Option<&LevelOutline> {
+        self.levels.iter().find(|level| {
+            level.name == player_pos_id
+        })
+    }
+
+    pub fn checkpoint(&self) -> &Checkpoint {
+        &self.checkpoint
+    }
+
+    pub fn current_checkpoint_level(&self) -> Option<&LevelOutline> {
+        self.determine_level(&self.checkpoint.level_name)
+    }
+
+    pub fn is_vec_inside_any_level(&self, pos: Vec2) -> bool {
+        self.levels.iter().any(|level| {
+            let min = level.pos;
+            let max = level.pos + level.size;
+            pos.x >= min.x && pos.x <= max.x && pos.y >= min.y && pos.y <= max.y
+        })
+    }
 }
 
 fn init_level_manager(
@@ -56,11 +104,32 @@ fn init_level_manager(
         name: ll.identifier().clone(),
     }).collect::<Vec<_>>();
 
-    println!("Loaded levels: {:?}", levels);
+    info!("Loaded levels: {:?}", levels);
 
     commands.insert_resource(LevelManager {
-        levels
+        levels,
+        checkpoint: Checkpoint::default(),
+        reload: false,
     });
+}
+
+fn reload_world(
+    mut commands: Commands,
+    level_manager: Option<ResMut<LevelManager>>,
+    mut level_set: Query<&mut LevelSet>,
+    worldly_entities: Query<Entity, With<Worldly>>,
+) {
+    let Some(mut level_manager) = level_manager else { return; };
+    if level_manager.reload {
+        level_manager.reload = false;
+        for mut level in level_set.iter_mut() {
+            level.iids.clear();
+        }
+
+        for entity in worldly_entities.iter() {
+            commands.entity(entity).despawn_recursive();
+        }
+    }
 }
 
 fn determine_loaded_levels(
@@ -74,7 +143,8 @@ fn determine_loaded_levels(
     let Ok(mut current_level_set) = level_set.get_single_mut() else { return; };
 
     if player_pos.is_empty() {
-        current_level_set.iids.insert(LevelIid::new(level_manager.levels[0].id.clone()));
+        let current_level = level_manager.current_checkpoint_level().unwrap();
+        current_level_set.iids.insert(LevelIid::new(current_level.id.clone()));
         return;
     }
     let (camera, camera_transform) = q.single();

@@ -6,7 +6,7 @@ use bevy_rapier2d::prelude::Collider;
 use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{AttackState, ColliderBundle};
+use crate::logic::{AttackState, ColliderBundle, LevelManager};
 use crate::params;
 use crate::screens::Textures;
 
@@ -39,15 +39,12 @@ impl PlayerSize {
 #[derive(Component, Clone, Default)]
 pub struct Player;
 
-#[derive(Clone, Default, Bundle, LdtkEntity)]
+#[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
-    #[worldly]
-    pub worldly: Worldly,
-    #[from_entity_instance]
-    entity_instance: EntityInstance,
-    #[from_entity_instance]
+    pub instance: EntityInstance,
     pub collider_bundle: ColliderBundle,
+    pub spatial: SpatialBundle,
 }
 
 #[derive(Component)]
@@ -101,6 +98,82 @@ pub fn change_size(
                 .entity(e)
                 .insert(PlayFor(0.1))
             ;
+        }
+    }
+}
+
+
+
+#[derive(Debug, Component, Default)]
+pub struct PlayerEntitySpawn {
+    pub pos_id: String,
+}
+
+fn get_pos_id(entity_instance: &EntityInstance) -> Option<String> {
+    entity_instance
+        .field_instances
+        .iter()
+        .find(|field| field.identifier == "pos_id")
+        .map(|field| match &field.value {
+            FieldValue::String(value) => value.clone().expect("pos_id field must not be empty"),
+            _ => panic!("pos_id field must be a string"),
+        })
+}
+
+impl From<&EntityInstance> for PlayerEntitySpawn {
+    fn from(entity_instance: &EntityInstance) -> Self {
+        PlayerEntitySpawn {
+            pos_id: get_pos_id(entity_instance).unwrap_or_else(|| entity_instance.iid.clone())
+        }
+    }
+}
+
+
+#[derive(Debug, Bundle, Default, LdtkEntity)]
+pub struct PlayerSpawnBundle {
+    #[from_entity_instance]
+    player_spawn: PlayerEntitySpawn,
+    #[from_entity_instance]
+    entity_instance: EntityInstance,
+}
+
+pub fn spawn_player(
+    mut commands: Commands,
+    players: Query<Entity, With<Player>>,
+    spawns: Query<(&EntityInstance, &PlayerEntitySpawn, &GlobalTransform)>,
+    level_manager: Option<Res<LevelManager>>,
+    mut camera: Query<&mut Transform, (With<Camera2d>, Without<Player>, Without<PlayerEntitySpawn>)>,
+) {
+    if !players.is_empty() {
+        return;
+    }
+
+    let Some(level_manager) = level_manager else {
+        return;
+    };
+
+    let current = level_manager.checkpoint();
+    for (entity_instance, spawner, transform) in spawns.iter() {
+        let has_global_transform_been_set = transform.compute_transform().translation != Vec3::ZERO;
+        if has_global_transform_been_set && spawner.pos_id == current.player_pos_id {
+            info!("Spawning player at spawn {}", spawner.pos_id);
+            let instance = EntityInstance {
+                identifier: "Player".to_string(),
+                iid: "991397e0-7318-22ab-a85b-3a208cfe03d3".to_string(),
+                ..entity_instance.clone()
+            };
+            info!("Spawning player at transform {:?}", transform);
+            let mut transform = transform.compute_transform();
+            transform.translation.z = 1.1;
+            camera.single_mut().translation = transform.translation;
+            info!("Spawning player at transform {:?}", transform);
+            commands.spawn(PlayerBundle {
+                player: Player,
+                collider_bundle: ColliderBundle::from(&instance),
+                instance,
+                spatial: SpatialBundle::from_transform(transform),
+            });
+            return;
         }
     }
 }

@@ -139,7 +139,7 @@ fn spawn_wall_collision(
 
 fn spawn_hulls(commands: &mut Commands, collision_data: &LevelCollisionData, level_iid: &LevelIid, level_pos: Vec2) {
     for hull in &collision_data.hulls {
-        info!("Spawning hull at {:?}", hull);
+        //info!("Spawning hull at {:?}", hull);
         commands
             .spawn(ColliderBundle {
                 collider: Collider::cuboid(hull.size.0 / 2., hull.size.1 / 2.),

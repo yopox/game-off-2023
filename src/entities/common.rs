@@ -39,28 +39,34 @@ pub fn entity_spawned(
     for (e, instance) in &entity {
         let mut e_c = commands.entity(e);
 
+        info!("Entity spawned: {:?}", instance.identifier);
         // Add EntityBundle
-        e_c.insert(GameEntityBundle {
-            id: match instance.identifier.as_ref() {
-                "Player" => EntityID::Player(PlayerSize::M),
-                "Zombie" => EntityID::Zombie(get_zombie_size(&instance.field_instances)),
-                _ => panic!("Unknown entity: {}", instance.identifier)
-            },
-            time: Default::default(),
-            state: Default::default(),
-        });
+        if let Some(id) = get_entity_id(&instance) {
+            e_c.insert(GameEntityBundle {
+                id,
+                time: Default::default(),
+                state: Default::default(),
+            });
+        }
 
         // Add TextureAtlasSprite
-        match sprite_atlas(&instance.identifier, &textures) {
-            None => (),
-            Some(handle) => { e_c
+        if let Some(handle) = sprite_atlas(&instance.identifier, &textures) {
+            e_c
                 .insert(handle)
                 .insert(TextureAtlasSprite {
                     anchor: Anchor::BottomCenter,
                     ..default()
                 });
-            }
         }
+    }
+}
+
+fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
+    match instance.identifier.as_ref() {
+        "Player" => Some(EntityID::Player(PlayerSize::M)),
+        "Zombie" => Some(EntityID::Zombie(get_zombie_size(&instance.field_instances))),
+        "PlayerSpawn" => None,
+        _ => panic!("Unknown entity: {}", instance.identifier)
     }
 }
 
