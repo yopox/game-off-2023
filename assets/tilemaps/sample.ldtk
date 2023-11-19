@@ -30,13 +30,13 @@
 	"externalLevels": false,
 	"exportTiled": false,
 	"simplifiedExport": false,
-	"imageExportMode": "OneImagePerLevel",
-	"exportLevelBg": true,
+	"imageExportMode": "None",
+	"exportLevelBg": false,
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"backupRelPath": null,
-	"levelNamePattern": "Level_%idx",
+	"levelNamePattern": "%world",
 	"tutorialDesc": null,
 	"customCommands": [],
 	"flags": [],
@@ -255,7 +255,7 @@
 	], "enums": [{ "identifier": "Collision", "uid": 21, "values": [ { "id": "Full", "tileRect": { "tilesetUid": 22, "x": 1, "y": 1, "w": 8, "h": 8 }, "color": 12470831 }, { "id": "Top_Half", "tileRect": { "tilesetUid": 22, "x": 10, "y": 1, "w": 8, "h": 8 }, "color": 14120515 } ], "iconTilesetUid": 22, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "Level_0",
+			"identifier": "Zone_1",
 			"iid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40",
 			"uid": 0,
 			"worldX": -872,
@@ -265,8 +265,8 @@
 			"pxHei": 416,
 			"__bgColor": "#040405",
 			"bgColor": null,
-			"useAutoIdentifier": true,
-			"bgRelPath": "../Level_0.png",
+			"useAutoIdentifier": false,
+			"bgRelPath": "../Zone_1.png",
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
@@ -356,7 +356,7 @@
 			"__neighbours": [{ "levelIid": "fa8e5360-6280-11ee-a7e7-7bf140496e21", "dir": "e" }]
 		},
 		{
-			"identifier": "Level_1",
+			"identifier": "World",
 			"iid": "fa8e5360-6280-11ee-a7e7-7bf140496e21",
 			"uid": 25,
 			"worldX": 232,
@@ -405,7 +405,7 @@
 			"__neighbours": [ { "levelIid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40", "dir": "w" }, { "levelIid": "75fc98f0-6280-11ee-a7e7-ed9fc6bca4a3", "dir": "e" } ]
 		},
 		{
-			"identifier": "Level_2",
+			"identifier": "World2",
 			"iid": "75fc98f0-6280-11ee-a7e7-ed9fc6bca4a3",
 			"uid": 26,
 			"worldX": 488,

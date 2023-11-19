@@ -1,10 +1,10 @@
 use bevy::{app::App, utils::HashSet};
 use bevy::prelude::*;
-use bevy_ecs_ldtk::Worldly;
 use bevy_ecs_ldtk::{LevelIid, LevelSet, prelude::LdtkProject};
+use bevy_ecs_ldtk::Worldly;
 
-use crate::GameState;
 use crate::entities::player::Player;
+use crate::GameState;
 
 #[derive(Debug, Event)]
 pub struct LevelUnloadedEvent(pub LevelIid);
@@ -45,7 +45,7 @@ pub struct Checkpoint {
 impl Default for Checkpoint {
     fn default() -> Self {
         Checkpoint {
-            level_name: "Level_0".to_string(),
+            level_name: "Zone_1".to_string(),
             player_pos_id: "start".to_string(),
         }
     }
