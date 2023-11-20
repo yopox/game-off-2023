@@ -1,8 +1,6 @@
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
-use bevy_rapier2d::math::Vect;
-use bevy_rapier2d::prelude::Collider;
 
 use crate::logic::ColliderBundle;
 use crate::screens::Textures;
@@ -24,20 +22,6 @@ impl ZombieSize {
         match self {
             ZombieSize::S => vec2(7., 11.),
         }
-    }
-}
-
-impl From<ZombieSize> for Collider {
-    fn from(value: ZombieSize) -> Self {
-        let (offset, size) = match value {
-            ZombieSize::S => (vec2(-0.5, 5.0), ZombieSize::S.hitbox() / 2.),
-        };
-
-        Collider::compound(vec![(
-            Vect::new(offset.x, offset.y),
-            0.0,
-            Collider::cuboid(size.x, size.y)
-        )])
     }
 }
 

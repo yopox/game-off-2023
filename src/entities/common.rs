@@ -18,11 +18,7 @@ pub struct GameEntityBundle {
 impl From<&EntityInstance> for GameEntityBundle {
     fn from(value: &EntityInstance) -> Self {
         GameEntityBundle {
-            id: match value.identifier.as_ref() {
-                "Player" => EntityID::Player(PlayerSize::M),
-                "Zombie" => EntityID::Zombie(1),
-                _ => panic!("Unknown entity: {}", value.identifier)
-            },
+            id: get_entity_id(value).expect("Unknown entity"),
             time: EntityTimer::default(),
             state: AnimStep::Idle,
         }
@@ -65,6 +61,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
     match instance.identifier.as_ref() {
         "Player" => Some(EntityID::Player(PlayerSize::M)),
         "Zombie" => Some(EntityID::Zombie(get_zombie_size(&instance.field_instances))),
+        "DetectionPlatform" => Some(EntityID::DetectionPlatform(get_platform_size(&instance.field_instances))),
         "PlayerSpawn" => None,
         "Checkpoint" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
@@ -78,6 +75,19 @@ fn get_zombie_size(fields: &Vec<FieldInstance>) -> usize {
             if field.identifier == "Size" {
                 let FieldValue::Int(Some(i)) = field.value else {panic!("Missing zombie size #2") };
                 return i as usize;
+            }
+            panic!("Missing zombie size #3")
+        }
+    }
+}
+
+fn get_platform_size(fields: &Vec<FieldInstance>) -> PlayerSize {
+    match fields.get(0) {
+        None => panic!("Missing zombie size #1"),
+        Some(field) => {
+            if field.identifier == "Size" {
+                let FieldValue::String(Some(ref i)) = field.value else {panic!("Missing zombie size #2") };
+                return PlayerSize::from(i);
             }
             panic!("Missing zombie size #3")
         }

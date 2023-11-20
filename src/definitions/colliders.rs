@@ -2,7 +2,9 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::entities::platform::PlatformType;
 use crate::entities::player::PlayerSize;
+use crate::entities::zombie::ZombieSize;
 
 fn rectangle(offset: Vec2, size: Vec2) -> Collider {
     Collider::compound(vec![(
@@ -12,22 +14,38 @@ fn rectangle(offset: Vec2, size: Vec2) -> Collider {
     )])
 }
 
-fn cuboid(offset: Vec2, size: Vec2) -> Collider {
-    Collider::compound(vec![(
-        Vect::new(offset.x, offset.y),
-        0.0,
-        Collider::cuboid(size.x, size.y)
-    )])
-}
-
 impl From<PlayerSize> for Collider {
     fn from(value: PlayerSize) -> Self {
         let (offset, size) = match value {
-            PlayerSize::S => (vec2(-0.5, 5.0), PlayerSize::S.hitbox() / 2.),
-            PlayerSize::M => (vec2(0.0, 8.0), PlayerSize::M.hitbox() / 2.),
+            PlayerSize::S => (vec2(-0.5, 5.0), PlayerSize::S.hitbox()),
+            PlayerSize::M => (vec2(0.0, 8.0), PlayerSize::M.hitbox()),
         };
 
-        cuboid(offset, size)
+        rectangle(offset, size)
+    }
+}
+
+impl From<ZombieSize> for Collider {
+    fn from(value: ZombieSize) -> Self {
+        let (offset, size) = match value {
+            ZombieSize::S => (vec2(-0.5, 5.0), ZombieSize::S.hitbox() / 2.),
+        };
+
+        Collider::compound(vec![(
+            Vect::new(offset.x, offset.y),
+            0.0,
+            Collider::cuboid(size.x, size.y)
+        )])
+    }
+}
+
+impl From<PlatformType> for Collider {
+    fn from(value: PlatformType) -> Self {
+        let (offset, size) = match value {
+            PlatformType::Detection(_) => (Vec2::ZERO, vec2(16., 3.)),
+        };
+
+        rectangle(offset, size)
     }
 }
 

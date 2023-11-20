@@ -4,12 +4,12 @@ use bevy::utils::HashMap;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::entities::platform::PlatformType;
 use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieSize;
-use crate::level_collision_data::{LevelCollisionData, collision_data_from_image};
+use crate::level_collision_data::{collision_data_from_image, LevelCollisionData};
 
 use super::level_loading::LevelUnloadedEvent;
-
 
 pub struct CollisionPlugin;
 
@@ -66,6 +66,11 @@ impl From<&EntityInstance> for ColliderBundle {
             "Zombie" => ColliderBundle {
                 collider: Collider::from(ZombieSize::S),
                 rigid_body: RigidBody::Dynamic,
+                ..default()
+            },
+            "DetectionPlatform" => ColliderBundle {
+                collider: Collider::from(PlatformType::Detection(PlayerSize::S)),
+                rigid_body: RigidBody::Fixed,
                 ..default()
             },
             _ => ColliderBundle::default()
