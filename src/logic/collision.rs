@@ -48,10 +48,10 @@ impl From<&EntityInstance> for ColliderBundle {
             "Player" => ColliderBundle {
                 collider: Collider::from(PlayerSize::M),
                 rigid_body: RigidBody::KinematicPositionBased,
-                friction: Friction {
-                    coefficient: 0.0,
-                    combine_rule: CoefficientCombineRule::Min,
-                },
+                // friction: Friction {
+                //     coefficient: 0.0,
+                //     combine_rule: CoefficientCombineRule::Min,
+                // },
                 rotation_constraints,
                 controller: KinematicCharacterController {
                     //max_slope_climb_angle: 0.0,
@@ -70,7 +70,7 @@ impl From<&EntityInstance> for ColliderBundle {
             },
             "DetectionPlatform" => ColliderBundle {
                 collider: Collider::from(PlatformType::Detection(PlayerSize::S)),
-                rigid_body: RigidBody::Fixed,
+                rigid_body: RigidBody::KinematicVelocityBased,
                 ..default()
             },
             _ => ColliderBundle::default()
