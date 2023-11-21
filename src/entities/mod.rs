@@ -33,13 +33,13 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
-            .add_systems(Update, (common::entity_spawned))
+            .add_systems(Update, (common::entity_spawned, common::add_initial_y))
             .add_systems(Update, (player::update_state))
             .add_systems(Update,
                 (
                     player::spawn_player,
                     player::change_size,
-                    player::player_goes_out_of_screen,
+                    // player::player_goes_out_of_screen,
                     checkpoint::check_player_in_checkpoint,
                     platform::move_platform,
                 ).run_if(in_state(GameState::Game))

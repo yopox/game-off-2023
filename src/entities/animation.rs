@@ -129,7 +129,8 @@ impl EntityID {
     fn get_rule(&self, state: &AnimStep) -> AnimationRule {
         match self {
             EntityID::Player(size) => get_player_rule(state, size),
-            EntityID::Zombie(size) => get_zombie_rule(state),
+            EntityID::Zombie(_) => get_zombie_rule(state),
+            EntityID::DetectionPlatform(_) => get_platform_rule(state),
             _ => AnimationRule::Missing,
         }
     }
@@ -163,6 +164,14 @@ pub fn get_zombie_rule(state: &AnimStep) -> AnimationRule {
             SeqPart::Frame(1),
             SeqPart::Wait(0.75),
         ]),
+        _ => AnimationRule::Missing,
+    }
+}
+
+pub fn get_platform_rule(state: &AnimStep) -> AnimationRule {
+    match state {
+        AnimStep::Idle => AnimationRule::Still(0),
+        AnimStep::Jump => AnimationRule::Still(1),
         _ => AnimationRule::Missing,
     }
 }

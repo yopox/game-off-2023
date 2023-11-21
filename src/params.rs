@@ -54,6 +54,11 @@ pub const ATTACK_STEPS: SizeVal<(f32, f32, f32, f32, f32)> = SizeVal::new(
     (0.15, 0.2, 0.25, 0.5, 0.7),
 );
 
+// --- Platform
+pub const PLATFORM_UP_SPEED: f32 = 80.0;
+pub const PLATFORM_DOWN_SPEED: f32 = -100.0;
+pub const PLATFORM_DEAD_TIME: f32 = 0.35; // [up -> down] transition time when the player leaves
+
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
 

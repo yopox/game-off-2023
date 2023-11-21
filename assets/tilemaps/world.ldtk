@@ -491,10 +491,11 @@
 							"height": 32,
 							"defUid": 14,
 							"px": [103,181],
-                            "fieldInstances": [{ "__identifier": "pos_id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "pos_id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["start"]
-							}] }]						},
+							}] }]
+						},
 						{
 							"__identifier": "Zombie",
 							"__grid": [896,343],
@@ -543,7 +544,7 @@
 							"px": [45,198],
 							"fieldInstances": [
 								{ "__identifier": "Size", "__type": "String", "__value": "S", "__tile": null, "defUid": 32, "realEditorValues": [] },
-								{ "__identifier": "Range", "__type": "Int", "__value": 0, "__tile": null, "defUid": 33, "realEditorValues": [] }
+								{ "__identifier": "Range", "__type": "Int", "__value": 320, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [320] }] }
 							]
 						}
 					]

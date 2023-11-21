@@ -1,16 +1,21 @@
-use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterControllerOutput;
 use bevy_rapier2d::prelude::Velocity;
 
+use crate::entities::animation::{AnimStep, EntityTimer};
+use crate::entities::common::InitialY;
 use crate::entities::EntityID;
 use crate::entities::player::{Player, PlayerSize};
 use crate::logic::ColliderBundle;
+use crate::params;
 
 pub enum PlatformType {
     Detection(PlayerSize)
 }
+
+#[derive(Component)]
+pub struct Range(pub f32);
 
 impl From<&String> for PlayerSize {
     fn from(value: &String) -> Self {
@@ -36,8 +41,7 @@ pub struct DetectionPlatformBundle {
 }
 
 pub fn move_platform(
-    mut commands: Commands,
-    mut platform: Query<(Entity, &EntityID, &EntityInstance, &Transform, &mut Velocity), Without<Player>>,
+    mut platform: Query<(Entity, &EntityID, &EntityInstance, &mut AnimStep, &EntityTimer, &Transform, &mut Velocity, &InitialY, &Range), Without<Player>>,
     player: Query<(&EntityID, Option<&KinematicCharacterControllerOutput>), With<Player>>,
 ) {
     let mut collisions = vec![];
@@ -47,19 +51,29 @@ pub fn move_platform(
         output.collisions.iter().for_each(|c| collisions.push(c));
     }
 
-    for (entity, id, instance, pos, mut velocity) in platform.iter_mut() {
-        if let EntityID::DetectionPlatform(target) = id {
-            // TODO: Contact with the floor
-            let mut translation = vec2(0.0, -1.0);
-            if target == size {
+    for (entity, id, instance, mut step, timer, pos, mut velocity, InitialY(y_0), Range(range)) in platform.iter_mut() {
+        if let EntityID::DetectionPlatform(target) = *id {
+            // Update state
+            let mut stop = true;
+            if target == *size {
                 if let Some(collision) = collisions.iter().find(|c| c.entity == entity) {
                     if collision.toi.normal2.y < -0.5 {
-                        // TODO: Range limit
-                        translation.y = 40.0;
+                        stop = false;
+                        step.set_if_neq(AnimStep::Jump);
                     }
                 }
             }
-            velocity.linvel.y = translation.y;
+            if stop {
+                if timer.time > params::PLATFORM_DEAD_TIME { step.set_if_neq(AnimStep::Idle); }
+            }
+
+            // Update pos
+            let y_velocity = match *step {
+                AnimStep::Idle => if pos.translation.y <= *y_0 { 0.0 } else { params::PLATFORM_DOWN_SPEED },
+                AnimStep::Jump => if pos.translation.y < *y_0 + *range { params::PLATFORM_UP_SPEED } else { 0.0 },
+                _ => 0.0
+            } ;
+            velocity.linvel.y = y_velocity;
         }
     }
 }
