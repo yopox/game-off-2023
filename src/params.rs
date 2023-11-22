@@ -59,6 +59,9 @@ pub const PLATFORM_UP_SPEED: f32 = 80.0;
 pub const PLATFORM_DOWN_SPEED: f32 = -100.0;
 pub const PLATFORM_DEAD_TIME: f32 = 0.35; // [up -> down] transition time when the player leaves
 
+// --- Zombie
+pub const DEFAULT_ZOMBIE_SPEED: f32 = 0.5;
+
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
 

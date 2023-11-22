@@ -66,6 +66,7 @@ impl From<&EntityInstance> for ColliderBundle {
             "Zombie" => ColliderBundle {
                 collider: Collider::from(ZombieSize::S),
                 rigid_body: RigidBody::Dynamic,
+                rotation_constraints,
                 ..default()
             },
             "DetectionPlatform" => ColliderBundle {

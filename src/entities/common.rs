@@ -8,6 +8,7 @@ use crate::entities::EntityID;
 use crate::entities::platform::Range;
 use crate::entities::player::PlayerSize;
 use crate::screens::Textures;
+use crate::util::get_ldtk_field_int;
 
 #[derive(Clone, Bundle)]
 pub struct GameEntityBundle {
@@ -53,7 +54,7 @@ pub fn entity_spawned(
         match instance.identifier.as_ref() {
             "DetectionPlatform" => {
                 e_c.insert(Range(
-                    get_int(&instance.field_instances, "Range").expect("Can't find platform range.") as f32)
+                    get_ldtk_field_int(&instance.field_instances, "Range").expect("Can't find platform range.") as f32)
                 );
             },
             _ => ()
@@ -75,7 +76,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
     match instance.identifier.as_ref() {
         "Player" => Some(EntityID::Player(PlayerSize::M)),
         "Zombie" => Some(EntityID::Zombie(
-            get_int(&instance.field_instances, "Size").expect("Can't find zombie size."),
+            get_ldtk_field_int(&instance.field_instances, "Size").expect("Can't find zombie size."),
         )),
         "DetectionPlatform" => Some(EntityID::DetectionPlatform(
             get_platform_size(&instance.field_instances),
@@ -93,17 +94,6 @@ pub fn add_initial_y(
     for (e, pos) in &entities {
         commands.entity(e).insert(InitialY(pos.translation.y));
     }
-}
-
-fn get_int(fields: &Vec<FieldInstance>, name: &str) -> Option<usize> {
-    for field in fields {
-        if field.identifier == name {
-            if let FieldValue::Int(Some(i)) = field.value {
-                return Some(i as usize);
-            }
-        }
-    }
-    return None
 }
 
 fn get_platform_size(fields: &Vec<FieldInstance>) -> PlayerSize {

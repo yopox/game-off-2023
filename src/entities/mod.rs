@@ -42,6 +42,7 @@ impl Plugin for EntitiesPlugin {
                     // player::player_goes_out_of_screen,
                     checkpoint::check_player_in_checkpoint,
                     platform::move_platform,
+                    zombie::patrol_zombie,
                 ).run_if(in_state(GameState::Game))
             )
             .add_systems(PostUpdate, (animation::reset_time, animation::update_timers, animation::update_index).chain())
