@@ -8,6 +8,7 @@ use crate::entities::platform::PlatformType;
 use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieSize;
 use crate::level_collision_data::{collision_data_from_image, LevelCollisionData};
+use crate::logic::attack::Sword;
 
 use super::level_loading::LevelUnloadedEvent;
 
@@ -17,16 +18,17 @@ impl Plugin for CollisionPlugin {
     fn build(&self, app: &mut App) {
         app
             .init_resource::<CollisionsToSpawn>()
+            .add_event::<Damaged>()
             .add_systems(Update, 
                 (
                     enqueue_collisions_to_load,
                     spawn_wall_collision,
-                    despawn_wall_collision
+                    despawn_wall_collision,
+                    collide_sword,
                 ).chain()
             );
     }
 }
-
 
 #[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
 pub struct ColliderBundle {
@@ -79,6 +81,28 @@ impl From<&EntityInstance> for ColliderBundle {
     }
 }
 
+#[derive(Clone, Default, Component)]
+pub struct Hitbox;
+
+#[derive(Event)]
+pub struct Damaged(Entity);
+
+pub fn collide_sword(
+    mut sword: Query<(Entity, &mut Sword)>,
+    collisions: Res<RapierContext>,
+    hitbox: Query<Entity, With<Hitbox>>,
+    mut damaged: EventWriter<Damaged>,
+) {
+    for (sword_e, mut s) in sword.iter_mut() {
+        for e in &hitbox {
+            if s.0.contains(&e) { continue }
+            if collisions.intersection_pair(sword_e, e).is_some() {
+                s.0.push(e);
+                damaged.send(Damaged(e));
+            }
+        }
+    }
+}
 
 #[derive(Clone, Eq, PartialEq, Debug, Default, Component)]
 pub struct LevelColliderGroup(LevelIid);

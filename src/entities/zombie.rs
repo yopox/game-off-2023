@@ -4,7 +4,7 @@ use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::{KinematicCharacterController, KinematicCharacterControllerOutput};
 use bevy_rapier2d::geometry::TOIStatus;
 
-use crate::logic::ColliderBundle;
+use crate::logic::{ColliderBundle, Hitbox};
 use crate::params::DEFAULT_ZOMBIE_SPEED;
 use crate::screens::Textures;
 use crate::util::get_ldtk_field_float;
@@ -57,6 +57,7 @@ pub struct ZombieBundle {
     entity_instance: EntityInstance,
     #[from_entity_instance]
     pub collider_bundle: ColliderBundle,
+    hitbox: Hitbox,
 }
 
 pub fn patrol_zombie(

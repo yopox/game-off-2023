@@ -89,7 +89,7 @@ pub fn update_player(
 pub struct SpawnSword(bool);
 
 #[derive(Component)]
-pub struct Sword;
+pub struct Sword(pub Vec<Entity>);
 
 pub fn update_sword(
     mut commands: Commands,
@@ -116,7 +116,7 @@ pub fn update_sword(
                 .insert(Sensor)
                 .insert(Transform::from_xyz(pos.translation.x, pos.translation.y, 0.0))
                 .insert(GlobalTransform::default())
-                .insert(Sword)
+                .insert(Sword(vec![]))
             ;
             // info!("{}", pos.translation);
         }
