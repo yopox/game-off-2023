@@ -4,6 +4,7 @@ use bevy::utils::HashMap;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::definitions::colliders;
 use crate::entities::platform::PlatformType;
 use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieSize;
@@ -76,6 +77,11 @@ impl From<&EntityInstance> for ColliderBundle {
                 rigid_body: RigidBody::KinematicVelocityBased,
                 ..default()
             },
+            "Boss1" => ColliderBundle {
+                collider: colliders::boss1(0),
+                rigid_body: RigidBody::Fixed,
+                ..default()
+            },
             _ => ColliderBundle::default()
         }
     }
@@ -85,7 +91,7 @@ impl From<&EntityInstance> for ColliderBundle {
 pub struct Hitbox;
 
 #[derive(Event)]
-pub struct Damaged(Entity);
+pub struct Damaged(pub Entity);
 
 pub fn collide_sword(
     mut sword: Query<(Entity, &mut Sword)>,

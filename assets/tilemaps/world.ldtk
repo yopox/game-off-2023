@@ -11,7 +11,7 @@
 	"iid": "f044a4b0-6280-11ee-ae32-c162b57b0ec1",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 36,
+	"nextUid": 37,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -460,6 +460,40 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "Boss1",
+			"uid": 36,
+			"tags": [],
+			"exportToToc": false,
+			"doc": null,
+			"width": 96,
+			"height": 80,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#E4A672",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 1,
+			"limitScope": "PerWorld",
+			"limitBehavior": "PreventAdding",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -549,18 +583,18 @@
 					"entityInstances": [
 						{
 							"__identifier": "PlayerSpawn",
-							"__grid": [103,181],
+							"__grid": [296,208],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#BE4A2F",
-							"__worldX": -769,
-							"__worldY": -91,
+							"__worldX": -576,
+							"__worldY": -64,
 							"iid": "dfd1dee0-6280-11ee-9d9b-87dafa468ea2",
 							"width": 16,
 							"height": 32,
 							"defUid": 14,
-							"px": [103,181],
+							"px": [296,208],
 							"fieldInstances": [{ "__identifier": "pos_id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["start"]
@@ -587,26 +621,6 @@
 							]
 						},
 						{
-							"__identifier": "Zombie",
-							"__grid": [296,223],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#D77643",
-							"__worldX": -576,
-							"__worldY": -48,
-							"iid": "ef54c3e0-6280-11ee-8171-5d89b1194585",
-							"width": 8,
-							"height": 12,
-							"defUid": 27,
-							"px": [296,224],
-							"fieldInstances": [
-								{ "__identifier": "Size", "__type": "Int", "__value": 1, "__tile": null, "defUid": 28, "realEditorValues": [] },
-								{ "__identifier": "Speed", "__type": "Float", "__value": null, "__tile": null, "defUid": 34, "realEditorValues": [] },
-								{ "__identifier": "Direction", "__type": "Float", "__value": null, "__tile": null, "defUid": 35, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "DetectionPlatform",
 							"__grid": [45,197],
 							"__pivot": [0.5,1],
@@ -627,18 +641,18 @@
 						},
 						{
 							"__identifier": "Zombie",
-							"__grid": [155,193],
+							"__grid": [296,305],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#D77643",
-							"__worldX": -717,
-							"__worldY": -78,
+							"__worldX": -576,
+							"__worldY": 34,
 							"iid": "a2f46c90-6280-11ee-adb8-13e1b40a2f58",
 							"width": 8,
 							"height": 12,
 							"defUid": 27,
-							"px": [155,194],
+							"px": [296,306],
 							"fieldInstances": [
 								{ "__identifier": "Size", "__type": "Int", "__value": 1, "__tile": null, "defUid": 28, "realEditorValues": [] },
 								{ "__identifier": "Speed", "__type": "Float", "__value": null, "__tile": null, "defUid": 34, "realEditorValues": [] },
@@ -647,23 +661,39 @@
 						},
 						{
 							"__identifier": "Zombie",
-							"__grid": [176,194],
+							"__grid": [353,304],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#D77643",
-							"__worldX": -696,
-							"__worldY": -77,
+							"__worldX": -519,
+							"__worldY": 33,
 							"iid": "a5eec0d0-6280-11ee-adb8-195358814694",
 							"width": 8,
 							"height": 12,
 							"defUid": 27,
-							"px": [176,195],
+							"px": [353,305],
 							"fieldInstances": [
 								{ "__identifier": "Size", "__type": "Int", "__value": 1, "__tile": null, "defUid": 28, "realEditorValues": [] },
 								{ "__identifier": "Speed", "__type": "Float", "__value": 0.3, "__tile": null, "defUid": 34, "realEditorValues": [{ "id": "V_Float", "params": [0.3] }] },
 								{ "__identifier": "Direction", "__type": "Float", "__value": -1, "__tile": null, "defUid": 35, "realEditorValues": [{ "id": "V_Float", "params": [-1] }] }
 							]
+						},
+						{
+							"__identifier": "Boss1",
+							"__grid": [112,200],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#E4A672",
+							"__worldX": -760,
+							"__worldY": -72,
+							"iid": "0d693e60-8990-11ee-b63f-dd0f82456d9d",
+							"width": 96,
+							"height": 80,
+							"defUid": 36,
+							"px": [112,200],
+							"fieldInstances": []
 						}
 					]
 				}

@@ -2,7 +2,7 @@ use bevy::app::App;
 use bevy::prelude::*;
 
 pub use attack::AttackState;
-pub use collision::{ColliderBundle, Hitbox};
+pub use collision::{ColliderBundle, Damaged, Hitbox};
 pub use level_loading::*;
 
 use crate::entities::{animation, player};

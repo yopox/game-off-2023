@@ -69,7 +69,7 @@ pub fn patrol_zombie(
         if zombie.direction == 0.0 {
             // random!
             zombie.direction = zombie.speed * (rand::random::<f32>() - 0.5).signum();
-            info!("new random dx: {dx}", dx = zombie.direction);
+            // info!("new random dx: {dx}", dx = zombie.direction);
         }
         
         if let Some(output) = output {
@@ -78,11 +78,11 @@ pub fn patrol_zombie(
                     continue;
                 }
                 let normal = col.toi.normal1.x;
-                info!("normal: {normal}");
+                // info!("normal: {normal}");
                 if normal.signum() == zombie.direction.signum() || normal.abs() < 0.5 {
                     continue;
                 }
-                info!("zombie turn around");
+                // info!("zombie turn around");
                 zombie.direction = -zombie.direction;
                 break;
             }

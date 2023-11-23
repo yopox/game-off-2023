@@ -81,6 +81,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
         "DetectionPlatform" => Some(EntityID::DetectionPlatform(
             get_platform_size(&instance.field_instances),
         )),
+        "Boss1" => Some(EntityID::Boss1),
         "PlayerSpawn" => None,
         "Checkpoint" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
@@ -114,6 +115,7 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
         "Player" => Some(textures.hero_m.clone()),
         "Zombie" => Some(textures.zombie_s.clone()),
         "DetectionPlatform" => Some(textures.platform.clone()),
+        "Boss1" => Some(textures.boss_1.clone()),
         _ => None,
     }
 }

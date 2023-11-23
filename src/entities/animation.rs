@@ -18,7 +18,7 @@ pub enum AnimationRule {
 
 pub enum AnimationEvent {}
 
-enum SeqPart {
+pub enum SeqPart {
     Frame(Index),
     Wait(Seconds),
     Event(AnimationEvent),
