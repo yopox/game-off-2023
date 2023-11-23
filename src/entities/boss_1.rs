@@ -91,9 +91,7 @@ pub fn update(
     if state.hp == 3 && !state.stun.is_zero() {
         state.stun -= time.delta_seconds();
         if state.stun.is_sign_negative() {
-            state.hp = 4;
-            state.right_eye = 2;
-            state.left_eye = 2;
+            *state = Boss1State::default();
         }
     }
 
@@ -135,7 +133,7 @@ pub fn update(
                 3 => pos.translation.y = 52.0,
                 2 => {
                     pos.translation.x += if eye.left { 2.0 } else { -2.0 };
-                    pos.translation.y = 5.0;
+                    pos.translation.y = 3.0;
                 },
                 _ => {}
             }
