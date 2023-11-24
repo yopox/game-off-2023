@@ -67,8 +67,8 @@ pub const ENEMY_HURT_TIME: f32 = 0.25;
 // --- Zombie
 pub const DEFAULT_ZOMBIE_SPEED: f32 = 0.35;
 pub const DEFAULT_ZOMBIE_LIVES: usize = 2;
-pub const ZOMBIE_AFRAID_SPEED_MUL: f32 = 4.0;
-pub const ZOMBIE_INITIAL_KNOCHBACK_SPEED: f32 = 8.0;
+pub const ZOMBIE_AFRAID_SPEED_MUL: f32 = 3.0;
+pub const ZOMBIE_INITIAL_KNOCKBACK_SPEED: f32 = 8.0;
 pub const ZOMBIE_KNOCKBACK_TIME: f32 = 0.3;
 pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.15;
 

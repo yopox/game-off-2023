@@ -129,7 +129,7 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
 pub fn get_enemy(id: &str) -> Option<Enemy> {
     match id {
         "Zombie" => Some(Enemy {
-            player_knockback_speed: 2.,
+            player_knockback_speed: 1.5,
             player_knockback_time: 0.3,
             player_hurt_time: 0.3,
         }),
