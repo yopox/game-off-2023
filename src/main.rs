@@ -1,7 +1,6 @@
 use bevy::ecs::schedule::{LogLevel, ScheduleBuildSettings};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSpawnBehavior, SetClearColor};
-use bevy_ecs_ldtk::prelude::LdtkIntCellAppExt;
 use bevy_particle_systems::ParticleSystemPlugin;
 use bevy_rapier2d::prelude::*;
 

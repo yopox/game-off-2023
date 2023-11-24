@@ -48,6 +48,7 @@ impl Plugin for EntitiesPlugin {
                     platform::move_platform,
                     zombie::patrol_zombie,
                     zombie::zombie_hit,
+                    zombie::zombie_die,
                     boss_1::init,
                     boss_1::update,
                 ).run_if(in_state(GameState::Game))

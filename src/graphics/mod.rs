@@ -22,8 +22,11 @@ impl Plugin for GraphicsPlugin {
             .insert_resource(ScreenTransition::default())
             .add_systems(Update, transition::update)
             .add_systems(Update, (
-                particles::update_spawners, particles::init_player_spawner,
+                particles::update_spawners,
+                particles::init_player_spawner,
                 hurt::process_hurt,
+                hurt::add_emitters,
+                hurt::on_hurt,
             ))
         ;
     }

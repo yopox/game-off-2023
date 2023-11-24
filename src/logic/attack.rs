@@ -108,11 +108,7 @@ pub fn update_sword(
         else {
             let Ok((EntityID::Player(size), pos, sprite)) = player.get_single() else { continue };
             commands
-                .spawn(ColliderBundle {
-                    collider: colliders::sword_collider(size, sprite.flip_x),
-                    rigid_body: RigidBody::Fixed,
-                    ..default()
-                })
+                .spawn(colliders::sword_collider(size, sprite.flip_x))
                 .insert(Sensor)
                 .insert(Transform::from_xyz(pos.translation.x, pos.translation.y, 0.0))
                 .insert(GlobalTransform::default())
