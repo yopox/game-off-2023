@@ -5,6 +5,7 @@ use bevy_rapier2d::geometry::Collider;
 use bevy_rapier2d::prelude::RigidBody;
 
 use crate::definitions::colliders;
+use crate::graphics::Hurt;
 use crate::logic::{ColliderBundle, Damaged, Hitbox};
 use crate::params;
 use crate::screens::Textures;
@@ -80,9 +81,10 @@ pub fn init(
 }
 
 pub fn update(
+    mut commands: Commands,
     mut boss: Query<(&mut TextureAtlasSprite, &mut Boss1State, &mut Collider), With<Boss1>>,
     mut damage: EventReader<Damaged>,
-    mut eyes: Query<(&Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
+    mut eyes: Query<(Entity, &Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
     time: Res<Time>,
 ) {
     let Ok((mut sprite, mut state, mut collider)) = boss.get_single_mut() else { return; };
@@ -98,11 +100,12 @@ pub fn update(
 
     // Damage
     for Damaged{ entity: e, .. } in damage.iter() {
-        let Ok((eye, _, _)) = eyes.get_mut(*e) else { continue };
+        let Ok((eye_e, eye, _, _)) = eyes.get_mut(*e) else { continue };
         match eye.left {
             true => {
                 if state.left_eye > 0 {
                     state.left_eye -= 1;
+                    commands.entity(eye_e).insert(Hurt::new(params::ENEMY_HURT_TIME));
                     if state.left_eye == 0 {
                         if state.hp > 0 { state.hp -= 1; } else { /* TODO: KILL ANIM */ }
                         if state.hp == 3 { state.stun = params::BOSS_STUN_DELAY; }
@@ -113,6 +116,7 @@ pub fn update(
             false => {
                 if state.right_eye > 0 {
                     state.right_eye -= 1;
+                    commands.entity(eye_e).insert(Hurt::new(params::ENEMY_HURT_TIME));
                     if state.right_eye == 0 {
                         if state.hp > 0 { state.hp -= 1; } else { /* TODO: KILL ANIM */ }
                         if state.hp == 3 { state.stun = params::BOSS_STUN_DELAY; }
@@ -123,7 +127,7 @@ pub fn update(
         }
     }
 
-    for ((eye, mut eye_sprite, mut pos)) in eyes.iter_mut() {
+    for ((_, eye, mut eye_sprite, mut pos)) in eyes.iter_mut() {
         eye_sprite.index = match eye.left {
             true => if state.left_eye > 0 { 0 } else { 1 }
             false => if state.right_eye > 0 { 0 } else { 1 }

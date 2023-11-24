@@ -2,13 +2,13 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::{KinematicCharacterController, KinematicCharacterControllerOutput};
-use bevy_rapier2d::geometry::{TOIStatus, Sensor};
+use bevy_rapier2d::geometry::{Sensor, TOIStatus};
 
 use crate::graphics::Hurt;
-use crate::logic::{ColliderBundle, Hitbox, Damaged, HitStop, Knockback};
-use crate::params::{DEFAULT_ZOMBIE_SPEED, DEFAULT_ZOMBIE_LIVES, ZOMBIE_HURT_TIME, ZOMBIE_HIT_STOP_DURATION, ZOMBIE_AFRAID_SPEED_MUL, ZOMBIE_INITIAL_KNOCHBACK_SPEED, ZOMBIE_KNOCKBACK_TIME};
+use crate::logic::{ColliderBundle, Damaged, Hitbox, HitStop, Knockback};
+use crate::params::{DEFAULT_ZOMBIE_LIVES, DEFAULT_ZOMBIE_SPEED, ENEMY_HURT_TIME, ZOMBIE_AFRAID_SPEED_MUL, ZOMBIE_HIT_STOP_DURATION, ZOMBIE_INITIAL_KNOCHBACK_SPEED};
 use crate::screens::Textures;
-use crate::util::{get_ldtk_field_float, get_ldtk_field_int};
+use crate::util::get_ldtk_field_float;
 
 #[derive(Copy, Clone, Eq, PartialEq, Default)]
 pub enum ZombieSize {
@@ -107,7 +107,7 @@ pub fn zombie_hit(
         if let Ok((_, mut zombie)) = zombies.get_mut(*entity) {
             let knockback_dir = if *right_dir { 1. } else { -1. };
             commands.entity(*entity)
-                .insert(Hurt::new(ZOMBIE_HURT_TIME))
+                .insert(Hurt::new(ENEMY_HURT_TIME))
                 .insert(Knockback::new(vec2(ZOMBIE_INITIAL_KNOCHBACK_SPEED * knockback_dir, 0.), ZOMBIE_KNOCKBACK_TIME));
             hit_stop.time_left = ZOMBIE_HIT_STOP_DURATION;
             if zombie.lives > 0 {

@@ -61,11 +61,13 @@ pub const PLATFORM_UP_SPEED: f32 = 80.0;
 pub const PLATFORM_DOWN_SPEED: f32 = -100.0;
 pub const PLATFORM_DEAD_TIME: f32 = 0.35; // [up -> down] transition time when the player leaves
 
+// --- Enemies
+pub const ENEMY_HURT_TIME: f32 = 0.25;
+
 // --- Zombie
 pub const DEFAULT_ZOMBIE_SPEED: f32 = 0.35;
 pub const DEFAULT_ZOMBIE_LIVES: usize = 2;
 pub const ZOMBIE_AFRAID_SPEED_MUL: f32 = 4.0;
-pub const ZOMBIE_HURT_TIME: f32 = 0.3;
 pub const ZOMBIE_INITIAL_KNOCHBACK_SPEED: f32 = 8.0;
 pub const ZOMBIE_KNOCKBACK_TIME: f32 = 0.3;
 pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.15;
