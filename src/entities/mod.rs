@@ -47,6 +47,7 @@ impl Plugin for EntitiesPlugin {
                     checkpoint::check_player_in_checkpoint,
                     platform::move_platform,
                     zombie::patrol_zombie,
+                    zombie::zombie_hit,
                     boss_1::init,
                     boss_1::update,
                 ).run_if(in_state(GameState::Game))

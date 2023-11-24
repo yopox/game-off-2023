@@ -96,7 +96,7 @@ pub fn update(
     }
 
     // Damage
-    for Damaged(e) in damage.iter() {
+    for Damaged{ entity: e, .. } in damage.iter() {
         let Ok((eye, _, _)) = eyes.get_mut(*e) else { continue };
         match eye.left {
             true => {

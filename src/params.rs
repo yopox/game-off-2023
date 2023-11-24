@@ -61,6 +61,11 @@ pub const PLATFORM_DEAD_TIME: f32 = 0.35; // [up -> down] transition time when t
 
 // --- Zombie
 pub const DEFAULT_ZOMBIE_SPEED: f32 = 0.5;
+pub const DEFAULT_ZOMBIE_LIVES: usize = 1;
+pub const INITIAL_ZOMBIE_KNOCKBACK_SPEED: f32 = 5.0;
+pub const ZOMBIE_KNOCKBACK_HALF_TIME: f32 = 0.2;
+pub const ZOMBIE_HURT_TIME: f32 = 0.3;
+pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.1;
 
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;

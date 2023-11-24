@@ -5,10 +5,12 @@ pub use palette::Palette;
 pub use text::text;
 pub use text::TextStyles;
 pub use transition::ScreenTransition;
+pub use hurt::Hurt;
 
 mod palette;
 mod text;
 mod transition;
+mod hurt;
 pub mod particles;
 
 pub struct GraphicsPlugin;
@@ -21,6 +23,7 @@ impl Plugin for GraphicsPlugin {
             .add_systems(Update, transition::update)
             .add_systems(Update, (
                 particles::update_spawners, particles::init_player_spawner,
+                hurt::process_hurt,
             ))
         ;
     }

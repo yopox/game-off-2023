@@ -6,7 +6,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::definitions::colliders;
 use crate::entities::platform::PlatformType;
-use crate::entities::player::PlayerSize;
+use crate::entities::player::{PlayerSize, Player};
 use crate::entities::zombie::ZombieSize;
 use crate::level_collision_data::{collision_data_from_image, LevelCollisionData};
 use crate::logic::attack::Sword;
@@ -91,20 +91,29 @@ impl From<&EntityInstance> for ColliderBundle {
 pub struct Hitbox;
 
 #[derive(Event)]
-pub struct Damaged(pub Entity);
+pub struct Damaged {
+    pub entity: Entity,
+    pub right_dir: bool,
+}
 
 pub fn collide_sword(
     mut sword: Query<(Entity, &mut Sword)>,
     collisions: Res<RapierContext>,
     hitbox: Query<Entity, With<Hitbox>>,
     mut damaged: EventWriter<Damaged>,
+    player: Query<&TextureAtlasSprite, With<Player>>,
 ) {
-    for (sword_e, mut s) in sword.iter_mut() {
+    let Ok(player_sprite) = player.get_single() else { return; };
+
+    for (sword_e, mut sword) in sword.iter_mut() {
         for e in &hitbox {
-            if s.0.contains(&e) { continue }
+            if sword.0.contains(&e) { continue }
             if collisions.intersection_pair(sword_e, e).is_some() {
-                s.0.push(e);
-                damaged.send(Damaged(e));
+                sword.0.push(e);
+                damaged.send(Damaged {
+                    entity: e,
+                    right_dir: !player_sprite.flip_x,
+                });
             }
         }
     }
