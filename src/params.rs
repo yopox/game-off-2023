@@ -64,7 +64,9 @@ pub const DEFAULT_ZOMBIE_SPEED: f32 = 0.35;
 pub const DEFAULT_ZOMBIE_LIVES: usize = 2;
 pub const ZOMBIE_AFRAID_SPEED_MUL: f32 = 4.0;
 pub const ZOMBIE_HURT_TIME: f32 = 0.3;
-pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.1;
+pub const ZOMBIE_INITIAL_KNOCHBACK_SPEED: f32 = 8.0;
+pub const ZOMBIE_KNOCKBACK_TIME: f32 = 0.3;
+pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.15;
 
 // --- Boss 1
 pub const BOSS_STUN_DELAY: f32 = 20.0;

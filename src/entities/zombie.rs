@@ -5,8 +5,8 @@ use bevy_rapier2d::control::{KinematicCharacterController, KinematicCharacterCon
 use bevy_rapier2d::geometry::{TOIStatus, Sensor};
 
 use crate::graphics::Hurt;
-use crate::logic::{ColliderBundle, Hitbox, Damaged, HitStop};
-use crate::params::{DEFAULT_ZOMBIE_SPEED, DEFAULT_ZOMBIE_LIVES, ZOMBIE_HURT_TIME, ZOMBIE_HIT_STOP_DURATION, ZOMBIE_AFRAID_SPEED_MUL};
+use crate::logic::{ColliderBundle, Hitbox, Damaged, HitStop, Knockback};
+use crate::params::{DEFAULT_ZOMBIE_SPEED, DEFAULT_ZOMBIE_LIVES, ZOMBIE_HURT_TIME, ZOMBIE_HIT_STOP_DURATION, ZOMBIE_AFRAID_SPEED_MUL, ZOMBIE_INITIAL_KNOCHBACK_SPEED, ZOMBIE_KNOCKBACK_TIME};
 use crate::screens::Textures;
 use crate::util::{get_ldtk_field_float, get_ldtk_field_int};
 
@@ -62,7 +62,7 @@ pub struct ZombieBundle {
 }
 
 pub fn patrol_zombie(
-    mut query: Query<(&mut Zombie, &mut KinematicCharacterController, Option<&KinematicCharacterControllerOutput>, &mut TextureAtlasSprite)>,
+    mut query: Query<(&mut Zombie, &mut KinematicCharacterController, Option<&KinematicCharacterControllerOutput>, &mut TextureAtlasSprite), Without<Knockback>>,
     is_sensor: Query<&Sensor>,
     time: Res<Time>,
 ) {
@@ -105,7 +105,10 @@ pub fn zombie_hit(
 ) {
     for Damaged { entity, right_dir} in damaged.iter() {
         if let Ok((_, mut zombie)) = zombies.get_mut(*entity) {
-            commands.entity(*entity).insert(Hurt::new(ZOMBIE_HURT_TIME));
+            let knockback_dir = if *right_dir { 1. } else { -1. };
+            commands.entity(*entity)
+                .insert(Hurt::new(ZOMBIE_HURT_TIME))
+                .insert(Knockback::new(vec2(ZOMBIE_INITIAL_KNOCHBACK_SPEED * knockback_dir, 0.), ZOMBIE_KNOCKBACK_TIME));
             hit_stop.time_left = ZOMBIE_HIT_STOP_DURATION;
             if zombie.lives > 0 {
                 zombie.lives -= 1;

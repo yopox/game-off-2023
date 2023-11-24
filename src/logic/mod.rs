@@ -5,14 +5,16 @@ pub use attack::AttackState;
 pub use collision::{ColliderBundle, Damaged, Hitbox};
 pub use level_loading::*;
 pub use hit_stop::HitStop;
+pub use knockback::Knockback;
 
-use crate::entities::{animation, player, zombie::patrol_zombie};
+use crate::{entities::{animation, player, zombie::patrol_zombie}, GameState};
 
 mod collision;
 mod movement;
 mod level_loading;
 mod attack;
 mod hit_stop;
+mod knockback;
 
 pub struct LogicPlugin;
 
@@ -29,9 +31,11 @@ impl Plugin for LogicPlugin {
                 .after(animation::update_index)
             )
             .add_systems(Update,
-                hit_stop::process_hit_stop
-                    .after(movement::move_player)
-                    .after(patrol_zombie)
+                (
+                    (knockback::process_knockback, hit_stop::process_hit_stop).chain()
+                        .after(movement::move_player)
+                        .after(patrol_zombie),
+                ).run_if(in_state(GameState::Game))
             )
         ;
     }
