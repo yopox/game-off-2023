@@ -1,11 +1,12 @@
 use bevy::app::App;
 use bevy::prelude::*;
 
+pub use game::ScreenShake;
 pub use loading::Fonts;
 pub use loading::Sounds;
 pub use loading::Textures;
-use crate::screens::game::GamePlugin;
 
+use crate::screens::game::GamePlugin;
 use crate::screens::loading::LoadingPlugin;
 use crate::screens::text::SimpleTextPlugin;
 use crate::screens::title::TitlePlugin;

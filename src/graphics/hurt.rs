@@ -1,11 +1,12 @@
 use bevy::prelude::*;
-use bevy_particle_systems::ColorOverTime::Gradient;
 use bevy_particle_systems::{
     Curve, CurvePoint, JitteredValue, ParticleSystem, ParticleSystemBundle, ParticleTexture,
 };
+use bevy_particle_systems::ColorOverTime::Gradient;
 
+use crate::{logic::Hitbox, params, screens::Textures};
 use crate::params::z_pos;
-use crate::{logic::Hitbox, screens::Textures};
+use crate::screens::ScreenShake;
 
 use super::particles::PlayFor;
 
@@ -36,6 +37,7 @@ pub fn process_hurt(
     time: Res<Time>
 ) {
     for (e, mut hurt, mut sprite) in query.iter_mut() {
+        if hurt.is_added() { commands.insert_resource(ScreenShake::new(params::SHAKE_LEN_S)) }
         hurt.time_left -= time.delta_seconds();
         if hurt.time_left <= 0.0 {
             sprite.color = Color::WHITE;

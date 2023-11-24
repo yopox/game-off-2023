@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use crate::entities::player::PlayerSize;
 
 pub const WIDTH: usize = 320;
@@ -75,6 +77,9 @@ pub const BOSS_EYES_DX: f32 = 27.0;
 
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
+pub const SHAKE_STEP: f32 = 0.05;
+pub const SHAKE_RANGE: Range<f32> = 1.0..2.0;
+pub const SHAKE_LEN_S: f32 = SHAKE_STEP * 6.0;
 
 // --- Level
 pub const INITIAL_LEVEL_NAME: &str = "Zone_1";

@@ -1,12 +1,11 @@
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterController;
-use bevy_rapier2d::prelude::{RigidBody, Sensor};
+use bevy_rapier2d::prelude::Sensor;
 
 use crate::definitions::colliders;
 use crate::entities::EntityID;
 use crate::entities::player::Player;
-use crate::logic::ColliderBundle;
 use crate::params;
 
 #[derive(Component)]
@@ -64,13 +63,12 @@ pub fn update_player(
     if state != attack.state {
         attack.state = state;
         match attack.state {
-            AttackStep::Prepare2 => { translation.x = -6.; }
-            AttackStep::Prepare3 => { translation.x = 1.; }
-            AttackStep::Swing => { translation.x = 11.; sword.send(SpawnSword(true)); }
-            AttackStep::Recoil => { translation.x = -6.; sword.send(SpawnSword(false)); }
+            AttackStep::Prepare2 => {  }
+            AttackStep::Prepare3 => {  }
+            AttackStep::Swing => { sword.send(SpawnSword(true)); }
+            AttackStep::Recoil => { sword.send(SpawnSword(false)); }
             _ => ()
         }
-        if sprite.flip_x { translation.x *= -1.; }
     }
 
     sprite.index = match attack.state {
