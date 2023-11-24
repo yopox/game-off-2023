@@ -31,7 +31,7 @@ impl Plugin for CollisionPlugin {
     }
 }
 
-#[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
+#[derive(Clone, Debug, Bundle, LdtkIntCell)]
 pub struct ColliderBundle {
     pub collider: Collider,
     pub rigid_body: RigidBody,
@@ -41,6 +41,24 @@ pub struct ColliderBundle {
     pub friction: Friction,
     pub density: ColliderMassProperties,
     pub controller: KinematicCharacterController,
+}
+
+impl Default for ColliderBundle {
+    fn default() -> Self {
+        ColliderBundle {
+            collider: Collider::cuboid(0.5, 0.5),
+            rigid_body: RigidBody::Dynamic,
+            velocity: Velocity::default(),
+            rotation_constraints: LockedAxes::default(),
+            gravity_scale: GravityScale::default(),
+            friction: Friction::default(),
+            density: ColliderMassProperties::default(),
+            controller: KinematicCharacterController {
+                filter_flags: QueryFilterFlags::EXCLUDE_SENSORS,
+                ..default()
+            },
+        }
+    }
 }
 
 impl From<&EntityInstance> for ColliderBundle {
@@ -62,6 +80,7 @@ impl From<&EntityInstance> for ColliderBundle {
                    //     max_height: CharacterLength::Relative(0.1),
                         ..default()
                     }),
+                    filter_flags: QueryFilterFlags::EXCLUDE_SENSORS,
                     ..default()
                 },
                 ..Default::default()
