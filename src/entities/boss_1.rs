@@ -6,6 +6,7 @@ use bevy_rapier2d::prelude::RigidBody;
 
 use crate::definitions::colliders;
 use crate::logic::{ColliderBundle, Damaged, Hitbox};
+use crate::params;
 use crate::screens::Textures;
 
 #[derive(Component, Clone)]
@@ -56,8 +57,8 @@ pub fn init(
 
     commands.entity(e).with_children(|builder| {
         for (dx, left) in [
-            (-27.0, true),
-            (27.0, false),
+            (-params::BOSS_EYES_DX, true),
+            (params::BOSS_EYES_DX, false),
         ] {
             builder
                 .spawn(SpriteSheetBundle {
@@ -104,7 +105,7 @@ pub fn update(
                     state.left_eye -= 1;
                     if state.left_eye == 0 {
                         if state.hp > 0 { state.hp -= 1; } else { /* TODO: KILL ANIM */ }
-                        if state.hp == 3 { state.stun = 30.0; }
+                        if state.hp == 3 { state.stun = params::BOSS_STUN_DELAY; }
                         if state.hp > 0 { state.right_eye = 2; }
                     }
                 }
@@ -114,7 +115,7 @@ pub fn update(
                     state.right_eye -= 1;
                     if state.right_eye == 0 {
                         if state.hp > 0 { state.hp -= 1; } else { /* TODO: KILL ANIM */ }
-                        if state.hp == 3 { state.stun = 30.0; }
+                        if state.hp == 3 { state.stun = params::BOSS_STUN_DELAY; }
                         if state.hp > 0 { state.left_eye = 2; }
                     }
                 }
@@ -129,11 +130,11 @@ pub fn update(
         };
         if old_hp != state.hp {
             match state.hp {
-                4 => pos.translation.y = 44.0,
-                3 => pos.translation.y = 52.0,
+                4 => pos.translation.y = params::BOSS_EYES_Y.0,
+                3 => pos.translation.y = params::BOSS_EYES_Y.1,
                 2 => {
                     pos.translation.x += if eye.left { 2.0 } else { -2.0 };
-                    pos.translation.y = 3.0;
+                    pos.translation.y = params::BOSS_EYES_Y.2;
                 },
                 _ => {}
             }
