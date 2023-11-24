@@ -1,14 +1,19 @@
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
+use bevy_rapier2d::control::KinematicCharacterControllerOutput;
+use bevy_rapier2d::geometry::TOIStatus;
 use bevy_rapier2d::prelude::Collider;
 
 use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
+use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{AttackState, ColliderBundle, LevelManager};
+use crate::logic::{AttackState, ColliderBundle, LevelManager, Knockback};
 use crate::params;
 use crate::screens::Textures;
+
+use super::Enemy;
 
 #[derive(Copy, Clone, Eq, PartialEq, Default, Debug, Hash)]
 pub enum PlayerSize {
@@ -175,6 +180,84 @@ pub fn spawn_player(
             });
             return;
         }
+    }
+}
+
+
+#[derive(Debug, Clone, Event)]
+pub struct PlayerHitEvent {
+    enemy_entity: Entity,
+    enemy: Enemy,
+    normal: Vec2,
+}
+
+
+pub fn player_touches_enemy(
+    mut player: Query<(&KinematicCharacterControllerOutput), With<Player>>,
+    enemies: Query<&Enemy>,
+    mut events: EventWriter<PlayerHitEvent>,
+) {
+    let Ok(output) = player.get_single_mut() else { return };
+    
+    for col in output.collisions.iter() {
+        if col.toi.status != TOIStatus::Converged {
+            continue;
+        }
+        if let Ok(enemy) = enemies.get(col.entity) {
+            /*commands
+                .entity(player_entity)
+                .insert(Knockback::new(col.toi.normal1 * 2., 0.3))
+                .insert(Hurt::new(0.3))
+            ;*/
+            events.send(PlayerHitEvent {
+                enemy_entity: col.entity,
+                enemy: enemy.clone(),
+                normal: col.toi.normal1,
+            });
+            break;
+        }
+    }
+}
+
+// we need this because when the enemy runs into the player, the player's KinematicCharacterControllerOutput doesn't have the enemy in its collisions
+pub fn enemy_touches_player(
+    enemies: Query<(Entity, &Enemy, &KinematicCharacterControllerOutput)>,
+    player: Query<Entity, With<Player>>,
+    mut events: EventWriter<PlayerHitEvent>,
+) {
+    let Ok(player) = player.get_single() else { return };
+    
+    for (enemy_entity, enemy, col) in &enemies {
+        for col in col.collisions.iter() {
+            if col.toi.status != TOIStatus::Converged {
+                continue;
+            }
+            if col.entity == player {
+                events.send(PlayerHitEvent {
+                    enemy_entity,
+                    enemy: enemy.clone(),
+                    normal: col.toi.normal2,
+                });
+                return;
+            }
+        }
+    }
+}
+
+pub fn player_hit(
+    mut commands: Commands,
+    mut player: Query<(Entity), With<Player>>,
+    mut events: EventReader<PlayerHitEvent>,
+) {
+    let Ok(player_entity) = player.get_single_mut() else { return };
+
+    for event in events.iter() {
+        let &PlayerHitEvent { normal, enemy, .. } = event;
+        commands
+            .entity(player_entity)
+            .insert(Knockback::new(normal * enemy.player_knockback_speed, enemy.player_knockback_time))
+            .insert(Hurt::new(enemy.player_hurt_time))
+        ;
     }
 }
 

@@ -10,6 +10,8 @@ use crate::entities::player::PlayerSize;
 use crate::screens::Textures;
 use crate::util::get_ldtk_field_int;
 
+use super::Enemy;
+
 #[derive(Clone, Bundle)]
 pub struct GameEntityBundle {
     pub id: EntityID,
@@ -58,6 +60,10 @@ pub fn entity_spawned(
                 );
             },
             _ => ()
+        }
+
+        if let Some(enemy) = get_enemy(&instance.identifier) {
+            e_c.insert(enemy);
         }
 
         // Add TextureAtlasSprite
@@ -116,6 +122,17 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
         "Zombie" => Some(textures.zombie_s.clone()),
         "DetectionPlatform" => Some(textures.platform.clone()),
         "Boss1" => Some(textures.boss_1.clone()),
+        _ => None,
+    }
+}
+
+pub fn get_enemy(id: &str) -> Option<Enemy> {
+    match id {
+        "Zombie" => Some(Enemy {
+            player_knockback_speed: 2.,
+            player_knockback_time: 0.3,
+            player_hurt_time: 0.3,
+        }),
         _ => None,
     }
 }

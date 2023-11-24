@@ -9,7 +9,7 @@ use crate::entities::zombie::ZombieBundle;
 use crate::GameState;
 
 use self::checkpoint::CheckpointBundle;
-use self::player::PlayerSpawnBundle;
+use self::player::{PlayerSpawnBundle, PlayerHitEvent};
 
 pub mod player;
 pub mod zombie;
@@ -29,9 +29,18 @@ pub enum EntityID {
     Boss1,
 }
 
+// KinematicCharacterController with this component will hurt the player
+#[derive(Component, Copy, Clone, Debug)]
+pub struct Enemy {
+    pub player_knockback_speed: f32,
+    pub player_knockback_time: f32,
+    pub player_hurt_time: f32,
+}
+
 impl Plugin for EntitiesPlugin {
     fn build(&self, app: &mut App) {
         app
+            .add_event::<PlayerHitEvent>()
             .register_ldtk_entity::<PlayerSpawnBundle>("PlayerSpawn")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
@@ -43,6 +52,9 @@ impl Plugin for EntitiesPlugin {
                 (
                     player::spawn_player,
                     player::change_size,
+                    player::player_touches_enemy,
+                    player::enemy_touches_player,
+                    player::player_hit,
                     // player::player_goes_out_of_screen,
                     checkpoint::check_player_in_checkpoint,
                     platform::move_platform,
