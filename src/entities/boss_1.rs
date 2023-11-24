@@ -5,6 +5,7 @@ use bevy_rapier2d::geometry::Collider;
 use bevy_rapier2d::prelude::RigidBody;
 
 use crate::definitions::colliders;
+use crate::entities::common::get_enemy;
 use crate::graphics::Hurt;
 use crate::logic::{ColliderBundle, Damaged, Hitbox};
 use crate::params;
@@ -55,6 +56,7 @@ pub fn init(
     boss: Query<Entity, Added<Boss1>>,
 ) {
     let Ok(e) = boss.get_single() else { return; };
+    commands.entity(e).insert(get_enemy("Boss1").expect("Couldn't find enemy"));
 
     commands.entity(e).with_children(|builder| {
         for (dx, left) in [
@@ -69,6 +71,7 @@ pub fn init(
                     ..default()
                 })
                 .insert(Eye { left })
+                .insert(get_enemy("Eye").expect("Couldn't find enemy"))
                 .insert(ColliderBundle {
                     collider: colliders::eye_collider(),
                     rigid_body: RigidBody::Fixed,
