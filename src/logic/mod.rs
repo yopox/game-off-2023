@@ -3,9 +3,10 @@ use bevy::prelude::*;
 
 pub use attack::AttackState;
 pub use collision::{ColliderBundle, Damaged, Hitbox};
-pub use level_loading::*;
 pub use hit_stop::HitStop;
 pub use knockback::Knockback;
+pub use level_loading::*;
+pub use movement::move_player;
 
 use crate::{entities::{animation, player, zombie::patrol_zombie}, GameState};
 
