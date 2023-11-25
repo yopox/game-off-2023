@@ -19,6 +19,7 @@ impl From<PlayerSize> for Collider {
         let (offset, size) = match value {
             PlayerSize::S => (vec2(-0.5, 5.0), PlayerSize::S.hitbox()),
             PlayerSize::M => (vec2(0.0, 8.0), PlayerSize::M.hitbox()),
+            PlayerSize::L => (vec2(0.0, 16.0), PlayerSize::L.hitbox()),
         };
 
         rectangle(offset, size)
@@ -54,6 +55,7 @@ pub fn sword_collider(player_size: &PlayerSize, flip: bool) -> Collider {
     let (offset, size) = match player_size {
         PlayerSize::S => (vec2(7.0 * flip_x, 7.5), vec2(8.0, 3.0)),
         PlayerSize::M => (vec2(14.0 * flip_x, 10.5), vec2(12.0, 5.0)),
+        PlayerSize::L => (vec2(25.5 * flip_x, 19.5), vec2(21.0, 5.0)),
     };
 
     rectangle(offset, size)

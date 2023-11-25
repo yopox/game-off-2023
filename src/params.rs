@@ -17,15 +17,19 @@ pub mod z_pos {
 pub struct SizeVal<T> where T: Copy {
     m: T,
     s: T,
+    l: T,
 }
 
 impl<T> SizeVal<T> where T: Copy {
-    pub const fn new(m: T, s: T) -> Self { SizeVal { m, s } }
+    pub const fn new(m: T, s: T, l: T) -> Self { SizeVal { m, s, l } }
+
+    pub const fn same(value: T) -> Self { SizeVal { m: value, s: value, l: value } }
 
     pub fn get(&self, size: &PlayerSize) -> T {
         match size {
             PlayerSize::M => self.m,
             PlayerSize::S => self.s,
+            PlayerSize::L => self.l,
         }
     }
 }
@@ -38,22 +42,23 @@ pub const COYOTE_TIME: f32 = 0.05;
 pub const JUMP: f32 = 190.;
 pub const JUMP_MIN: f32 = 0.15;
 
-pub const PLAYER_G: SizeVal<f32> = SizeVal::new(GRAVITY * 1.0, GRAVITY * 0.55);
-pub const PLAYER_J: SizeVal<f32> = SizeVal::new(JUMP * 1.0, JUMP * 0.55);
+pub const PLAYER_G: SizeVal<f32> = SizeVal::new(GRAVITY * 1.0, GRAVITY * 0.55, GRAVITY * 1.4);
+pub const PLAYER_J: SizeVal<f32> = SizeVal::new(JUMP * 1.0, JUMP * 0.55, JUMP * 1.5);
 
 // --- Jump
-pub const PREJUMP_T: SizeVal<f32> = SizeVal::new(0.12, 0.06);
-pub const JUMP_T: SizeVal<f32> = SizeVal::new(0.125, 0.125);
-pub const FALL_T: SizeVal<f32> = SizeVal::new(0.3, 0.3);
-pub const LAND_T: SizeVal<f32> = SizeVal::new(0.2, 0.2);
+pub const PREJUMP_T: SizeVal<f32> = SizeVal::new(0.12, 0.06, 0.24);
+pub const JUMP_T: SizeVal<f32> = SizeVal::same(0.125);
+pub const FALL_T: SizeVal<f32> = SizeVal::same(0.3);
+pub const LAND_T: SizeVal<f32> = SizeVal::same(0.2);
 
 // --- Size Transform
-pub const TRANSFORM_PARTICLES_TIMER: SizeVal<f32> = SizeVal::new(0.2, 0.1);
+pub const TRANSFORM_PARTICLES_TIMER: SizeVal<f32> = SizeVal::new(0.2, 0.1, 0.3);
 
 // --- Player
 pub const ATTACK_STEPS: SizeVal<(f32, f32, f32, f32, f32)> = SizeVal::new(
     (0.15, 0.2, 0.25, 0.5, 0.7),
     (0.15, 0.2, 0.25, 0.5, 0.7),
+    (0.1, 0.1, 0.35, 0.7, 0.9),
 );
 pub const PLAYER_IDLE_INTERFRAME: f32 = 0.8;
 pub const PLAYER_WALK_INTERFRAME: f32 = 0.1;

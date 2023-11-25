@@ -9,7 +9,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{AttackState, ColliderBundle, LevelManager, Knockback};
+use crate::logic::{AttackState, ColliderBundle, Knockback, LevelManager};
 use crate::params;
 use crate::screens::Textures;
 
@@ -21,7 +21,7 @@ pub enum PlayerSize {
     S,
     #[default]
     M,
-    // L,
+    L,
     // XL,
 }
 
@@ -30,6 +30,7 @@ impl PlayerSize {
         match self {
             PlayerSize::S => textures.hero_s.clone(),
             PlayerSize::M => textures.hero_m.clone(),
+            PlayerSize::L => textures.hero_l.clone(),
         }
     }
 
@@ -37,6 +38,7 @@ impl PlayerSize {
         match self {
             PlayerSize::S => vec2(5., 10.),
             PlayerSize::M => vec2(6., 17.),
+            PlayerSize::L => vec2(8., 32.),
         }
     }
 }
@@ -76,34 +78,42 @@ pub fn change_size(
     mut player: Query<(Entity, &mut EntityID, &AnimStep), (With<Player>, Without<Transformed>, Without<AttackState>)>,
     mut player_emitter: Query<(Entity, &mut Transform), With<PlayerSpawner>>,
 ) {
-    if input.just_pressed(KeyCode::X) {
-        let Ok((e, mut id, state)) = player.get_single_mut() else { return };
-        let EntityID::Player(ref mut size) = *id else { return };
+    if !input.just_pressed(KeyCode::Up) && !input.just_pressed(KeyCode::Down) { return; }
 
-        let new_size = match size {
+    let Ok((e, mut id, state)) = player.get_single_mut() else { return };
+    let EntityID::Player(ref mut size) = *id else { return };
+
+    let new_size =
+        if input.just_pressed(KeyCode::Up) { match *size {
             PlayerSize::S => PlayerSize::M,
+            PlayerSize::M => PlayerSize::L,
+            PlayerSize::L => PlayerSize::L,
+        }} else { match *size {
+            PlayerSize::S => PlayerSize::S,
             PlayerSize::M => PlayerSize::S,
-        };
-        *size = new_size;
+            PlayerSize::L => PlayerSize::M,
+        }};
+
+    if *size == new_size { return; }
+    *size = new_size;
+
+    commands
+        .entity(e)
+        .insert(new_size.atlas(&textures))
+        .insert(Collider::from(new_size))
+    ;
+
+    if state.is_jumping() {
+        commands.entity(e).insert(Transformed);
+    }
+
+    if let Ok((e, mut transform)) = player_emitter.get_single_mut() {
+        transform.translation.y = new_size.hitbox().y / 2.;
 
         commands
             .entity(e)
-            .insert(new_size.atlas(&textures))
-            .insert(Collider::from(new_size))
+            .insert(PlayFor(0.1))
         ;
-
-        if state.is_jumping() {
-            commands.entity(e).insert(Transformed);
-        }
-
-        if let Ok((e, mut transform)) = player_emitter.get_single_mut() {
-            transform.translation.y = new_size.hitbox().y / 2.;
-
-            commands
-                .entity(e)
-                .insert(PlayFor(0.1))
-            ;
-        }
     }
 }
 
