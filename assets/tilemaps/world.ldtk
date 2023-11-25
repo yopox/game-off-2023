@@ -11,7 +11,7 @@
 	"iid": "f044a4b0-6280-11ee-ae32-c162b57b0ec1",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 37,
+	"nextUid": 38,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -288,7 +288,7 @@
 					"uid": 32,
 					"type": "F_String",
 					"isArray": false,
-					"canBeNull": true,
+					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
@@ -547,25 +547,6 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "PlayerSpawn",
-							"__grid": [296,208],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#BE4A2F",
-							"__worldX": -576,
-							"__worldY": -64,
-							"iid": "dfd1dee0-6280-11ee-9d9b-87dafa468ea2",
-							"width": 16,
-							"height": 32,
-							"defUid": 14,
-							"px": [296,208],
-							"fieldInstances": [{ "__identifier": "pos_id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["start"]
-							}] }]
-						},
-						{
 							"__identifier": "Zombie",
 							"__grid": [896,343],
 							"__pivot": [0.5,1],
@@ -789,6 +770,75 @@
 				}
 			],
 			"__neighbours": [{ "levelIid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40", "dir": "s" }]
+		},
+		{
+			"identifier": "Intro",
+			"iid": "322c8bc0-8990-11ee-9921-37171ace967a",
+			"uid": 37,
+			"worldX": 1224,
+			"worldY": -472,
+			"worldDepth": 0,
+			"pxWid": 1873,
+			"pxHei": 605,
+			"__bgColor": "#040405",
+			"bgColor": null,
+			"useAutoIdentifier": false,
+			"bgRelPath": "../Intro.png",
+			"bgPos": "Cover",
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__smartColor": "#757576",
+			"__bgPos": { "topLeftPx": [0,0], "scale": [1,1], "cropRect": [0,0,1873,605] },
+			"externalRelPath": null,
+			"fieldInstances": [],
+			"layerInstances": [
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 1873,
+					"__cHei": 605,
+					"__gridSize": 1,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "322cb2d0-8990-11ee-9921-83025efb2aee",
+					"levelId": 37,
+					"layerDefUid": 3,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 1063873,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "PlayerSpawn",
+							"__grid": [554,517],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": 1778,
+							"__worldY": 45,
+							"iid": "5fc7f600-8990-11ee-9921-4347baca1290",
+							"width": 16,
+							"height": 32,
+							"defUid": 14,
+							"px": [554,517],
+							"fieldInstances": [{ "__identifier": "pos_id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["start"]
+							}] }]
+						}
+					]
+				}
+			],
+			"__neighbours": []
 		}
 	],
 	"worlds": [],
