@@ -41,6 +41,10 @@ pub fn move_player(
         let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
         let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };
         translation.x += delta * params::PLAYER_X * (right - left);
+        if !state.is_jumping() && *state != AnimStep::Fall {
+            if right == 1.0 || left == 1.0 { state.set_if_neq(AnimStep::Walk); }
+            else if *state == AnimStep::Walk { state.set_if_neq(AnimStep::Idle); }
+        }
     }
 
     let grounded = match output {
@@ -51,7 +55,7 @@ pub fn move_player(
     let mut player_commands = commands.entity(e);
     if !state.is_jumping() {
         if grounded {
-            if *state != AnimStep::Idle && *state != AnimStep::Land {
+            if *state != AnimStep::Idle && *state != AnimStep::Walk && *state != AnimStep::Land {
                 if *state == AnimStep::Fall {
                     state.set_if_neq(AnimStep::Land);
                 } else {

@@ -25,11 +25,11 @@ fn exit(mut play_bgm: EventWriter<PlayBGMEvent>) { play_bgm.send(PlayBGMEvent(BG
 
 #[derive(AssetCollection, Resource)]
 pub struct Textures {
-    #[asset(texture_atlas(tile_size_x = 24., tile_size_y = 16., columns = 12, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(texture_atlas(tile_size_x = 24., tile_size_y = 16., columns = 15, rows = 1, padding_x = 0., padding_y = 0.))]
     #[asset(path = "hero_S.png")]
     pub hero_s: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 48., tile_size_y = 32., columns = 12, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(texture_atlas(tile_size_x = 48., tile_size_y = 32., columns = 15, rows = 1, padding_x = 0., padding_y = 0.))]
     #[asset(path = "hero_M.png")]
     pub hero_m: Handle<TextureAtlas>,
 

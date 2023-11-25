@@ -144,7 +144,16 @@ pub fn get_player_rule(state: &AnimStep, size: &PlayerSize) -> AnimationRule {
             SeqPart::Frame(11),
             SeqPart::Wait(params::PLAYER_IDLE_INTERFRAME),
         ]),
-        AnimStep::Walk => AnimationRule::Still(0),
+        AnimStep::Walk => AnimationRule::Loop(vec![
+            SeqPart::Frame(13),
+            SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
+            SeqPart::Frame(12),
+            SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
+            SeqPart::Frame(14),
+            SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
+            SeqPart::Frame(12),
+            SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
+        ]),
         AnimStep::Prejump => AnimationRule::Still(5),
         AnimStep::Jump => AnimationRule::Sequence(vec![
             SeqPart::Frame(2),
