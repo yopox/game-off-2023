@@ -50,11 +50,12 @@ pub const LAND_T: SizeVal<f32> = SizeVal::new(0.2, 0.2);
 // --- Size Transform
 pub const TRANSFORM_PARTICLES_TIMER: SizeVal<f32> = SizeVal::new(0.2, 0.1);
 
-// --- Player Attack
+// --- Player
 pub const ATTACK_STEPS: SizeVal<(f32, f32, f32, f32, f32)> = SizeVal::new(
     (0.15, 0.2, 0.25, 0.5, 0.7),
     (0.15, 0.2, 0.25, 0.5, 0.7),
 );
+pub const PLAYER_IDLE_INTERFRAME: f32 = 0.8;
 
 // --- Platform
 pub const PLATFORM_UP_SPEED: f32 = 80.0;

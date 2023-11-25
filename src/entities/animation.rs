@@ -138,7 +138,12 @@ impl EntityID {
 
 pub fn get_player_rule(state: &AnimStep, size: &PlayerSize) -> AnimationRule {
     match state {
-        AnimStep::Idle => AnimationRule::Still(0),
+        AnimStep::Idle => AnimationRule::Loop(vec![
+            SeqPart::Frame(0),
+            SeqPart::Wait(params::PLAYER_IDLE_INTERFRAME),
+            SeqPart::Frame(11),
+            SeqPart::Wait(params::PLAYER_IDLE_INTERFRAME),
+        ]),
         AnimStep::Walk => AnimationRule::Still(0),
         AnimStep::Prejump => AnimationRule::Still(5),
         AnimStep::Jump => AnimationRule::Sequence(vec![
