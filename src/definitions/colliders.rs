@@ -18,7 +18,7 @@ impl From<PlayerSize> for Collider {
     fn from(value: PlayerSize) -> Self {
         let (offset, size) = match value {
             PlayerSize::S => (vec2(-0.5, 5.0), PlayerSize::S.hitbox()),
-            PlayerSize::M => (vec2(0.0, 8.0), PlayerSize::M.hitbox()),
+            PlayerSize::M => (vec2(0.0, 8.5), PlayerSize::M.hitbox()),
             PlayerSize::L => (vec2(0.0, 16.0), PlayerSize::L.hitbox()),
         };
 
