@@ -31,10 +31,7 @@ pub fn move_player(
 
     let delta = time.delta_seconds();
 
-    let mut translation = match controller.translation {
-        Some(v) => vec2(v.x, v.y),
-        None => vec2(0., -0.1),
-    };
+    let mut translation = vec2(0., -0.1);
 
     if *state != AnimStep::Prejump && attack.is_none() {
         // Side movement
@@ -81,6 +78,7 @@ pub fn move_player(
             _ => false
         };
         if grounded || coyote {
+            info!("Enter Prejump");
             state.set_if_neq(AnimStep::Prejump);
         }
     }
@@ -92,6 +90,7 @@ pub fn move_player(
         }
     } else if *state == AnimStep::Jump {
         let t_jump = time.elapsed_seconds() - timer.t_0;
+        // info!("{}", t_jump);
         let dy = delta * (j - g * (t_jump + delta / 2.));
 
         //info!("{dy}");

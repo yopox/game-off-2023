@@ -64,6 +64,7 @@ pub fn update_state(
     let EntityID::Player(size) = id else { return };
 
     if *state == AnimStep::Prejump && timer.time >= params::PREJUMP_T.get(size) {
+        info!("Enter Jump");
         state.set_if_neq(AnimStep::Jump);
     }
     if *state == AnimStep::Land && timer.time >= params::LAND_T.get(size) {

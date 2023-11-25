@@ -47,7 +47,6 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
             .add_systems(Update, (common::entity_spawned, common::add_initial_y))
-            .add_systems(Update, (player::update_state).after(logic::move_player))
             .add_systems(Update,
                 (
                     player::spawn_player,
@@ -65,9 +64,15 @@ impl Plugin for EntitiesPlugin {
                     boss_1::update,
                 ).run_if(in_state(GameState::Game))
             )
-            .add_systems(Update,
-                         (animation::update_timers, animation::reset_time, animation::update_index)
-                             .chain()
+            .add_systems(Update, (
+                animation::update_timers,
+                animation::reset_time,
+                animation::update_index,
+                player::update_state,
+                animation::reset_time,
+            )
+                .chain()
+                .after(logic::move_player)
             )
             // .add_plugins()
         ;

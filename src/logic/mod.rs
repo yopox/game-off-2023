@@ -8,7 +8,7 @@ pub use knockback::Knockback;
 pub use level_loading::*;
 pub use movement::move_player;
 
-use crate::{entities::{animation, player, zombie::patrol_zombie}, GameState};
+use crate::{entities::{animation, zombie::patrol_zombie}, GameState};
 
 mod collision;
 mod movement;
@@ -28,7 +28,6 @@ impl Plugin for LogicPlugin {
             .add_event::<attack::SpawnSword>()
             .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword))
             .add_systems(PostUpdate, (attack::update_player)
-                .after(player::update_state)
                 .after(animation::update_index)
             )
             .add_systems(Update,

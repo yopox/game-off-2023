@@ -2,8 +2,8 @@ use bevy::log::error;
 use bevy::prelude::{Changed, Component, Query, Res, Time};
 use bevy::sprite::TextureAtlasSprite;
 
-use crate::{params, util};
-use crate::entities::EntityID;
+use crate::{logic, params, util};
+use crate::entities::{animation, EntityID, player};
 use crate::entities::player::PlayerSize;
 
 pub type Index = usize;
@@ -30,6 +30,12 @@ pub struct EntityTimer {
     pub time: f32,
 }
 
+/// State of a character
+///
+/// [logic::move_player] - Movement
+/// [animation::reset_time] - Reset timer
+/// [player::update_state]
+///
 #[derive(Component, Copy, Clone, Default, Eq, PartialEq, Debug, Hash)]
 pub enum AnimStep {
     #[default]
