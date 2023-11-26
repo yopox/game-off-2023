@@ -102,7 +102,7 @@ impl From<&EntityInstance> for ColliderBundle {
                 ..default()
             },
             "DamageZone" => ColliderBundle {
-                collider: Collider::cuboid(value.width as f32 / 2., value.height as f32 / 2.),
+                collider: Collider::cuboid(5., 5.),
                 rigid_body: RigidBody::Fixed,
                 ..default()
             },
