@@ -90,6 +90,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
         "Boss1" => Some(EntityID::Boss1),
         "Spawner" => None,
         "Checkpoint" => None,
+        "DamageZone" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
     }
 }
@@ -132,6 +133,11 @@ pub fn get_enemy(id: &str) -> Option<Enemy> {
             player_knockback_speed: 1.5,
             player_knockback_time: 0.3,
             player_hurt_time: 0.3,
+        }),
+        "DamageZone" => Some(Enemy {
+            player_knockback_speed: 6.,
+            player_knockback_time: 0.5,
+            player_hurt_time: 0.5,
         }),
         _ => None,
     }

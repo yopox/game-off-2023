@@ -10,10 +10,12 @@ use crate::entities::spawner::SpawnerBundle;
 use crate::entities::zombie::ZombieBundle;
 
 use self::checkpoint::CheckpointBundle;
+use self::damage_zone::{DamageZone, DamageZoneBundle};
 use self::player::PlayerHitEvent;
 
 pub mod player;
 pub mod zombie;
+pub mod damage_zone;
 pub mod platform;
 mod common;
 pub mod animation;
@@ -48,6 +50,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
+            .register_ldtk_entity::<DamageZoneBundle>("DamageZone")
             .add_systems(Update, (common::entity_spawned, common::add_initial_y))
             .add_systems(Update, (spawner::init_spawners).run_if(not(resource_exists::<spawner::SpawnersInit>())))
             .add_systems(Update, (spawner::spawn_player).run_if(resource_exists::<spawner::SpawnPlayer>()))
