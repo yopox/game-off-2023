@@ -9,7 +9,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{AttackState, ColliderBundle, Knockback, LevelManager};
+use crate::logic::{AttackState, ColliderBundle, Knockback, LevelManager, PlayerLife};
 use crate::params;
 use crate::screens::Textures;
 
@@ -180,13 +180,15 @@ pub fn enemy_touches_player(
 
 pub fn player_hit(
     mut commands: Commands,
-    mut player: Query<(Entity), With<Player>>,
+    mut player: Query<(Entity), (With<Player>, Without<Hurt>)>,
     mut events: EventReader<PlayerHitEvent>,
+    mut player_life: ResMut<PlayerLife>,
 ) {
     let Ok(player_entity) = player.get_single_mut() else { return };
 
     for event in events.iter() {
         let &PlayerHitEvent { normal, enemy, .. } = event;
+        player_life.lose();
         commands
             .entity(player_entity)
             .insert(Knockback::new(normal * enemy.player_knockback_speed, enemy.player_knockback_time))

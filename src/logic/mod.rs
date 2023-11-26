@@ -7,9 +7,11 @@ pub use hit_stop::HitStop;
 pub use knockback::Knockback;
 pub use level_loading::*;
 pub use movement::move_player;
+pub use hearts::PlayerLife;
 
 use crate::{entities::{animation, zombie::patrol_zombie}, GameState};
 
+mod hearts;
 mod collision;
 mod movement;
 mod level_loading;
@@ -26,6 +28,7 @@ impl Plugin for LogicPlugin {
             .init_resource::<HitStop>()
             .add_plugins(level_loading::LevelLoadingPlugin)
             .add_plugins(collision::CollisionPlugin)
+            .add_plugins(hearts::HeartsPlugin)
             .add_event::<attack::SpawnSword>()
             .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword))
             .add_systems(PostUpdate, (attack::update_player)
