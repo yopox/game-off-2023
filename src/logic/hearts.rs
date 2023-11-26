@@ -60,6 +60,7 @@ fn init_hearts_holder(
                 display: Display::Flex,
                 width: Val::Percent(100.),
                 height: Val::Percent(30.0),
+                padding: UiRect::all(Val::Px(10.0)),
                 ..default()
             },
             ..default()
@@ -90,6 +91,7 @@ fn update_hearts(
             style: Style {
                 width: Val::Px(20.0),
                 height: Val::Px(20.0),
+                margin: UiRect::all(Val::Px(5.0)),
                 ..default()
             },
             background_color: Color::WHITE.into(),
