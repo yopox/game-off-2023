@@ -25,8 +25,9 @@ pub fn process_knockback(
 ) {
     for (entity, mut character, mut knockback) in query.iter_mut() {
         if knockback.time_left > 0.0 {
+            let prev = character.translation.unwrap_or_default();
             let inv_progress = knockback.time_left / knockback.duration;
-            character.translation = Some(inv_progress * knockback.velocity);
+            character.translation = Some(prev + inv_progress * knockback.velocity);
             knockback.time_left -= time.delta_seconds();
         } else {
             commands.entity(entity).remove::<Knockback>();
