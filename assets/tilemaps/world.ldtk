@@ -710,18 +710,18 @@
 						},
 						{
 							"__identifier": "DamageZone",
-							"__grid": [767,344],
+							"__grid": [760,339],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#514143",
-							"__worldX": -105,
-							"__worldY": 72,
+							"__worldX": -106,
+							"__worldY": 66,
 							"iid": "33674f70-8990-11ee-a39d-83464a28deff",
-							"width": 28,
+							"width": 40,
 							"height": 5,
 							"defUid": 38,
-							"px": [767,344],
+							"px": [760,339],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
 						}
 					]
@@ -773,7 +773,56 @@
 					"seed": 5235622,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "DamageZone",
+							"__grid": [1476,589],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#514143",
+							"__worldX": -492,
+							"__worldY": -339,
+							"iid": "b7afe000-8990-11ee-a06c-8562a33e26e6",
+							"width": 49,
+							"height": 5,
+							"defUid": 38,
+							"px": [1476,589],
+							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "DamageZone",
+							"__grid": [1544,589],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#514143",
+							"__worldX": -424,
+							"__worldY": -339,
+							"iid": "bf2a8c40-8990-11ee-a06c-b7469cf38a91",
+							"width": 49,
+							"height": 5,
+							"defUid": 38,
+							"px": [1544,589],
+							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "DamageZone",
+							"__grid": [1726,575],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#514143",
+							"__worldX": -242,
+							"__worldY": -353,
+							"iid": "ccd4c720-8990-11ee-a06c-0d4e5f1e8e1d",
+							"width": 240,
+							"height": 5,
+							"defUid": 38,
+							"px": [1726,575],
+							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
+						}
+					]
 				}
 			],
 			"__neighbours": [{ "levelIid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40", "dir": "o" }]
