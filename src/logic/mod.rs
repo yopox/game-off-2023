@@ -3,11 +3,11 @@ use bevy::prelude::*;
 
 pub use attack::AttackState;
 pub use collision::{ColliderBundle, Damaged, Hitbox};
+pub use hearts::PlayerLife;
 pub use hit_stop::HitStop;
 pub use knockback::Knockback;
 pub use level_loading::*;
 pub use movement::move_player;
-pub use hearts::PlayerLife;
 
 use crate::{entities::{animation, zombie::patrol_zombie}, GameState};
 
@@ -42,7 +42,7 @@ impl Plugin for LogicPlugin {
                 ).run_if(in_state(GameState::Game))
             )
             .add_systems(OnEnter(GameState::Game), (cutscene::init))
-            .add_systems(Update, (cutscene::update))
+            .add_systems(Update, (cutscene::update).run_if(in_state(GameState::Game)))
         ;
     }
 }

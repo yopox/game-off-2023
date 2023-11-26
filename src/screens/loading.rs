@@ -68,8 +68,8 @@ pub struct Textures {
 
 #[derive(AssetCollection, Resource)]
 pub struct Fonts {
-    #[asset(path = "fonts/Absolute 10 Basic.ttf")]
-    pub absolute: Handle<Font>,
+    #[asset(path = "fonts/NotJamChunky8.ttf")]
+    pub chunky: Handle<Font>,
 }
 
 #[derive(AssetCollection, Resource)]

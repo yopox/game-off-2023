@@ -1,20 +1,20 @@
 use std::collections::VecDeque;
 
 use bevy::prelude::*;
-use bevy::ui::Val::Px;
 use bevy_ecs_ldtk::EntityInstance;
 
 use crate::entities::animation::AnimStep;
+use crate::graphics::TextStyles;
 use crate::logic::LevelManager;
 use crate::music::{BGM, PlayBGMEvent};
 use crate::params;
-use crate::screens::Textures;
+use crate::screens::{Fonts, Textures};
 
 enum Event {
     /// Do nothing for the given amount of seconds
     Wait(f32),
-    /// Show a text
-    Text(String, f32),
+    /// Show a text (top dy / left dx / timer)
+    Text(String, f32, f32, f32),
     /// Fade to black
     FadeOut(f32),
     /// Fade from black
@@ -33,6 +33,8 @@ impl Event {
     fn fade_in() -> Self { Event::FadeIn(1.0) }
     fn fade_out() -> Self { Event::FadeOut(0.0) }
     fn instant_fade_out() -> Self { Event::FadeOut(1.0) }
+    fn text_centered(text: String) -> Self { Event::Text(text, 0.0, 0.0, 0.0) }
+    fn text_offset(text: String, top: f32, left: f32) -> Self { Event::Text(text, top, left, 0.0) }
 
     fn is_over(&self) -> bool {
         match self {
@@ -40,9 +42,9 @@ impl Event {
             Event::FadeOut(t) => *t >= 1.0,
             Event::FadeIn(t) => *t <= 0.0,
             Event::Teleport(_)
-            // | Event::SetLevel(_)
             | Event::BGM(_)
             | Event::Anim(_, _) => true,
+            Event::Text(txt, _, _, timer) => *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
             _ => false
         }
     }
@@ -57,14 +59,18 @@ pub struct Cinema;
 #[derive(Component)]
 pub struct Frame;
 
+#[derive(Component)]
+pub struct CutsceneText;
+
 pub fn init(
     mut commands: Commands,
     textures: Res<Textures>,
+    fonts: Res<Fonts>,
 ) {
     let absolute = Style {
         position_type: PositionType::Absolute,
-        width: Px(params::WIDTH as f32 * params::SCALE),
-        height: Px(params::HEIGHT as f32 * params::SCALE),
+        width: Val::Percent(100.0),
+        height: Val::Percent(100.0),
         ..default()
     };
 
@@ -90,8 +96,24 @@ pub fn init(
         .insert(Frame)
     ;
 
+    commands
+        .spawn(TextBundle {
+            style: Style {
+                position_type: PositionType::Absolute,
+                margin: UiRect::all(Val::Auto),
+                ..default()
+            },
+            text: Text::from_section("", TextStyles::Basic.style(&fonts)).with_alignment(TextAlignment::Center),
+            z_index: ZIndex::Global(params::ui_z::TEXT),
+            ..default()
+        })
+        .insert(CutsceneText)
+    ;
+
     commands.insert_resource(Cutscene(
         VecDeque::from([
+            Event::Wait(1.0),
+            Event::text_centered("Example text\nsecond line".to_string()),
             Event::Wait(1.0),
             Event::fade_in(),
             Event::Wait(2.0),
@@ -118,6 +140,8 @@ pub fn update(
     mut entities: Query<(&EntityInstance, &mut AnimStep)>,
     mut frame: Query<&mut BackgroundColor, With<Frame>>,
     mut level_manager: ResMut<LevelManager>,
+    mut text: Query<(&mut Text, &mut Style), With<CutsceneText>>,
+    fonts: Res<Fonts>,
 ) {
     let Some(mut cutscene) = cutscene else { return };
 
@@ -145,7 +169,27 @@ pub fn update(
                 error!("Couldn't find entity with identifier {}", e);
             }
         }
-        Event::Text(_, _) => {}
+        Event::Text(txt, top, left, timer) => {
+            let t_max = txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0;
+
+            if let Ok((mut t, mut s)) = text.get_single_mut() {
+                if *timer == 0.0 {
+                    s.top = Val::Px(*top);
+                    s.left = Val::Px(*left);
+                    t.sections[0].value = txt.to_string();
+                }
+
+                *timer += time.delta_seconds();
+
+                let t_fade_out = params::TEXT_FADE_TIME + txt.len() as f32 * params::CHAR_DISPLAY_TIME;
+                t.sections[0].style = TextStyles::Basic.style_with_alpha(
+                    &fonts,
+                    if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
+                    else if *timer >= t_fade_out { (1.0 - (*timer - t_fade_out) / params::TEXT_FADE_TIME).max(0.0) }
+                    else { 1.0 }
+                );
+            }
+        }
         Event::FadeOut(t) => {
             *t += time.delta_seconds();
             // TODO: Cool interpolation

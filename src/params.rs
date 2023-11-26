@@ -18,6 +18,7 @@ pub mod z_pos {
 pub mod ui_z {
     pub const CINEMA: i32 = 90;
     pub const FRAME: i32 = 100;
+    pub const TEXT: i32 = 110;
 }
 
 pub struct SizeVal<T> where T: Copy {
@@ -49,7 +50,7 @@ pub const JUMP: f32 = 190.;
 pub const JUMP_MIN: f32 = 0.15;
 
 pub const PLAYER_G: SizeVal<f32> = SizeVal::new(GRAVITY * 1.0, GRAVITY * 0.55, GRAVITY * 1.4);
-pub const PLAYER_J: SizeVal<f32> = SizeVal::new(JUMP * 1.0, JUMP * 0.55, JUMP * 1.5);
+pub const PLAYER_J: SizeVal<f32> = SizeVal::new(JUMP * 0.95, JUMP * 0.55, JUMP * 1.5);
 
 // --- Jump
 pub const PREJUMP_T: SizeVal<f32> = SizeVal::new(0.12, 0.06, 0.24);
@@ -95,6 +96,10 @@ pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
 pub const SHAKE_STEP: f32 = 0.05;
 pub const SHAKE_RANGE: Range<f32> = 1.0..2.0;
 pub const SHAKE_LEN_S: f32 = SHAKE_STEP * 6.0;
+
+// --- Cutscenes
+pub const TEXT_FADE_TIME: f32 = 0.4;
+pub const CHAR_DISPLAY_TIME: f32 = 0.06;
 
 // --- Level
 pub const INITIAL_SPAWNER_ID: &str = "start";

@@ -13,11 +13,17 @@ impl TextStyles {
     pub fn style(&self, fonts: &Fonts) -> TextStyle {
         match self {
             TextStyles::Basic => TextStyle {
-                font: fonts.absolute.clone(),
-                font_size: 18.0,
+                font: fonts.chunky.clone(),
+                font_size: 8.0 * 4.0,
                 color: Color::WHITE,
             },
         }
+    }
+
+    pub fn style_with_alpha(&self, fonts: &Fonts, alpha: f32) -> TextStyle {
+        let mut style = self.style(fonts);
+        style.color.set_a(alpha);
+        style
     }
 }
 
