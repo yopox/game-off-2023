@@ -15,6 +15,11 @@ pub mod z_pos {
     pub const GUI: f32 = 100.;
 }
 
+pub mod ui_z {
+    pub const CINEMA: i32 = 90;
+    pub const FRAME: i32 = 100;
+}
+
 pub struct SizeVal<T> where T: Copy {
     m: T,
     s: T,
