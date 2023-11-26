@@ -74,7 +74,7 @@
 		}
 	], "entities": [
 		{
-			"identifier": "PlayerSpawn",
+			"identifier": "Spawner",
 			"uid": 14,
 			"tags": [],
 			"exportToToc": false,
@@ -107,16 +107,16 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "pos_id",
+					"identifier": "id",
 					"doc": null,
 					"__type": "String",
 					"uid": 29,
 					"type": "F_String",
 					"isArray": false,
-					"canBeNull": true,
+					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
@@ -618,6 +618,25 @@
 							"defUid": 36,
 							"px": [112,200],
 							"fieldInstances": []
+						},
+						{
+							"__identifier": "Spawner",
+							"__grid": [993,327],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": 121,
+							"__worldY": 55,
+							"iid": "228b2770-8990-11ee-9921-9baf8b139d25",
+							"width": 16,
+							"height": 32,
+							"defUid": 14,
+							"px": [993,327],
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "cave_start", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cave_start"]
+							}] }]
 						}
 					]
 				}
@@ -817,7 +836,7 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "PlayerSpawn",
+							"__identifier": "Spawner",
 							"__grid": [554,517],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
@@ -830,9 +849,52 @@
 							"height": 32,
 							"defUid": 14,
 							"px": [554,517],
-							"fieldInstances": [{ "__identifier": "pos_id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "start", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["start"]
+							}] }]
+						},
+						{
+							"__identifier": "Checkpoint",
+							"__grid": [923,513],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#C0CBDC",
+							"__worldX": 2147,
+							"__worldY": 41,
+							"iid": "047bce50-8990-11ee-9921-e3d322204a2b",
+							"width": 5,
+							"height": 5,
+							"defUid": 30,
+							"px": [923,513],
+							"fieldInstances": [{ "__identifier": "spawner", "__type": "EntityRef", "__value": {
+								"entityIid": "0e1710a0-8990-11ee-9921-3964a26facfb",
+								"layerIid": "322cb2d0-8990-11ee-9921-83025efb2aee",
+								"levelIid": "322c8bc0-8990-11ee-9921-37171ace967a",
+								"worldIid": "f044a4b1-6280-11ee-ae32-670d53449d63"
+							}, "__tile": null, "defUid": 31, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["0e1710a0-8990-11ee-9921-3964a26facfb"]
+							}] }]
+						},
+						{
+							"__identifier": "Spawner",
+							"__grid": [956,516],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": 2180,
+							"__worldY": 44,
+							"iid": "0e1710a0-8990-11ee-9921-3964a26facfb",
+							"width": 16,
+							"height": 32,
+							"defUid": 14,
+							"px": [956,516],
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "intro_ship", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["intro_ship"]
 							}] }]
 						}
 					]

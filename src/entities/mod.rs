@@ -6,10 +6,11 @@ use crate::{GameState, logic};
 use crate::entities::boss_1::Boss1Bundle;
 use crate::entities::platform::DetectionPlatformBundle;
 use crate::entities::player::PlayerSize;
+use crate::entities::spawner::SpawnerBundle;
 use crate::entities::zombie::ZombieBundle;
 
 use self::checkpoint::CheckpointBundle;
-use self::player::{PlayerHitEvent, PlayerSpawnBundle};
+use self::player::PlayerHitEvent;
 
 pub mod player;
 pub mod zombie;
@@ -18,6 +19,7 @@ mod common;
 pub mod animation;
 mod checkpoint;
 mod boss_1;
+pub(crate) mod spawner;
 
 pub struct EntitiesPlugin;
 
@@ -41,15 +43,16 @@ impl Plugin for EntitiesPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_event::<PlayerHitEvent>()
-            .register_ldtk_entity::<PlayerSpawnBundle>("PlayerSpawn")
+            .register_ldtk_entity::<SpawnerBundle>("Spawner")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
             .add_systems(Update, (common::entity_spawned, common::add_initial_y))
+            .add_systems(Update, (spawner::init_spawners).run_if(not(resource_exists::<spawner::SpawnersInit>())))
+            .add_systems(Update, (spawner::spawn_player).run_if(resource_exists::<spawner::SpawnPlayer>()))
             .add_systems(Update,
                 (
-                    player::spawn_player,
                     player::change_size,
                     player::player_touches_enemy,
                     player::enemy_touches_player,

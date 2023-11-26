@@ -88,7 +88,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
             get_platform_size(&instance.field_instances),
         )),
         "Boss1" => Some(EntityID::Boss1),
-        "PlayerSpawn" => None,
+        "Spawner" => None,
         "Checkpoint" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
     }

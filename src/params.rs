@@ -10,6 +10,7 @@ pub const HALF_HEIGHT: f32 = HEIGHT as f32 / 2.;
 pub const SCALE: f32 = 4.;
 
 pub mod z_pos {
+    pub const PLAYER: f32 = 10.0;
     pub const PARTICLES: f32 = 60.0;
     pub const GUI: f32 = 100.;
 }
@@ -91,5 +92,4 @@ pub const SHAKE_RANGE: Range<f32> = 1.0..2.0;
 pub const SHAKE_LEN_S: f32 = SHAKE_STEP * 6.0;
 
 // --- Level
-pub const INITIAL_LEVEL_NAME: &str = "Zone_1";
-pub const INITIAL_SPAWNER_POS_ID: &str = "start";
+pub const INITIAL_SPAWNER_ID: &str = "start";

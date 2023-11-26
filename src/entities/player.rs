@@ -118,83 +118,6 @@ pub fn change_size(
     }
 }
 
-
-
-#[derive(Debug, Component, Default)]
-pub struct PlayerEntitySpawn {
-    pub pos_id: String,
-}
-
-fn get_pos_id(entity_instance: &EntityInstance) -> Option<String> {
-    entity_instance
-        .field_instances
-        .iter()
-        .find(|field| field.identifier == "pos_id")
-        .and_then(|field| match &field.value {
-            FieldValue::String(value) => value.clone(),
-            _ => panic!("pos_id field must be a string"),
-        })
-}
-
-impl From<&EntityInstance> for PlayerEntitySpawn {
-    fn from(entity_instance: &EntityInstance) -> Self {
-        PlayerEntitySpawn {
-            pos_id: get_pos_id(entity_instance).unwrap_or_else(|| entity_instance.iid.clone())
-        }
-    }
-}
-
-
-#[derive(Debug, Bundle, Default, LdtkEntity)]
-pub struct PlayerSpawnBundle {
-    #[from_entity_instance]
-    player_spawn: PlayerEntitySpawn,
-    #[from_entity_instance]
-    entity_instance: EntityInstance,
-}
-
-pub fn spawn_player(
-    mut commands: Commands,
-    players: Query<Entity, With<Player>>,
-    spawns: Query<(&EntityInstance, &PlayerEntitySpawn, &GlobalTransform)>,
-    level_manager: Option<Res<LevelManager>>,
-    mut camera: Query<&mut Transform, (With<Camera2d>, Without<Player>, Without<PlayerEntitySpawn>)>,
-) {
-    if !players.is_empty() {
-        return;
-    }
-
-    let Some(level_manager) = level_manager else {
-        return;
-    };
-
-    let current = level_manager.checkpoint();
-    for (entity_instance, spawner, transform) in spawns.iter() {
-        let has_global_transform_been_set = transform.compute_transform().translation != Vec3::ZERO;
-        if has_global_transform_been_set && spawner.pos_id == current.spawner_pos_id {
-            info!("Spawning player at spawn {}", spawner.pos_id);
-            let instance = EntityInstance {
-                identifier: "Player".to_string(),
-                iid: "991397e0-7318-22ab-a85b-3a208cfe03d3".to_string(),
-                ..entity_instance.clone()
-            };
-            info!("Spawning player at transform {:?}", transform);
-            let mut transform = transform.compute_transform();
-            transform.translation.z = 1.1;
-            camera.single_mut().translation = transform.translation;
-            info!("Spawning player at transform {:?}", transform);
-            commands.spawn(PlayerBundle {
-                player: Player,
-                collider_bundle: ColliderBundle::from(&instance),
-                instance,
-                spatial: SpatialBundle::from_transform(transform),
-            });
-            return;
-        }
-    }
-}
-
-
 #[derive(Debug, Clone, Event)]
 pub struct PlayerHitEvent {
     enemy_entity: Entity,
@@ -272,9 +195,11 @@ pub fn player_hit(
     }
 }
 
-pub fn player_goes_out_of_screen(player: Query<&GlobalTransform, With<Player>>, level_manager: Option<ResMut<LevelManager>>) {
-    let Ok(transform) = player.get_single() else { return };
-    let Some(mut level_manager) = level_manager else { return };
+pub fn player_goes_out_of_screen(
+    player: Query<&GlobalTransform, With<Player>>,
+    mut level_manager: ResMut<LevelManager>,
+) {
+    let Ok(transform) = player.get_single() else { return; };
 
     let pos = transform.translation().truncate();
 

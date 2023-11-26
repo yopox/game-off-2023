@@ -1,10 +1,9 @@
 use bevy::prelude::*;
-use bevy_ecs_ldtk::{EntityInstance, LdtkEntity, ldtk::{FieldValue, ReferenceToAnEntityInstance}};
+use bevy_ecs_ldtk::{EntityInstance, ldtk::FieldValue, LdtkEntity};
 
 use crate::logic::LevelManager;
 
 use super::player::Player;
-
 
 #[derive(Debug, Bundle, Default, LdtkEntity)]
 pub struct CheckpointBundle {
@@ -15,13 +14,12 @@ pub struct CheckpointBundle {
 }
 
 #[derive(Debug, Component, Default)]
-pub struct Checkpoint { 
-    pub spawner_ref: ReferenceToAnEntityInstance
+pub struct Checkpoint {
+    spawner_iid: String,
 }
 
 impl From<&EntityInstance> for Checkpoint {
     fn from(entity_instance: &EntityInstance) -> Self {
-
         let field = entity_instance
             .field_instances
             .iter()
@@ -31,21 +29,17 @@ impl From<&EntityInstance> for Checkpoint {
             FieldValue::EntityRef(value) => value.clone().expect("pos_id field must not be empty"),
             _ => panic!("pos_id field must be a string"),
         };
-        Checkpoint { spawner_ref }
+        Checkpoint { spawner_iid: spawner_ref.entity_iid }
     }
 }
 
 pub fn check_player_in_checkpoint(
     player: Query<&GlobalTransform, With<Player>>,
-    level_manager: Option<ResMut<LevelManager>>,
+    mut level_manager: ResMut<LevelManager>,
     checkpoints: Query<(&GlobalTransform, &Checkpoint, &EntityInstance)>,
 ) {
     let Ok(transform) = player.get_single() else { return }; 
-    let mut level_manager = match level_manager {
-        Some(level_manager) => level_manager,
-        None => return,
-    };
-    
+
     for (checkpoint_transform, checkpoint, entity_instance) in checkpoints.iter() {
         let checkpoint_pos = checkpoint_transform.translation().truncate();
         let player_pos = transform.translation().truncate();
@@ -56,9 +50,9 @@ pub fn check_player_in_checkpoint(
             checkpoint_pos.y + entity_instance.height as f32 / 2.,
         );
         
-        if checkpoint_rect.contains(player_pos) && level_manager.checkpoint().spawner_pos_id != checkpoint.spawner_ref.entity_iid {
-            info!("Set checkpoint to {}", checkpoint.spawner_ref.entity_iid);
-            level_manager.set_checkpoint(checkpoint.spawner_ref.level_iid.clone(), checkpoint.spawner_ref.entity_iid.clone());
+        if checkpoint_rect.contains(player_pos) && *level_manager.spawner_uuid() != checkpoint.spawner_iid {
+            info!("Set checkpoint to {}", checkpoint.spawner_iid);
+            level_manager.set_spawner_iid(checkpoint.spawner_iid.clone());
         }
     }
 }

@@ -16,6 +16,7 @@ mod level_loading;
 mod attack;
 mod hit_stop;
 mod knockback;
+mod cutscene;
 
 pub struct LogicPlugin;
 
@@ -37,6 +38,8 @@ impl Plugin for LogicPlugin {
                         .after(patrol_zombie),
                 ).run_if(in_state(GameState::Game))
             )
+            .add_systems(OnEnter(GameState::Game), (cutscene::init))
+            .add_systems(Update, (cutscene::update))
         ;
     }
 }

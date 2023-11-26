@@ -5,7 +5,7 @@ use bevy_ecs_ldtk::{Respawn, Worldly};
 
 use crate::GameState;
 use crate::entities::player::Player;
-use crate::params::{INITIAL_LEVEL_NAME, INITIAL_SPAWNER_POS_ID};
+use crate::entities::spawner::{SpawnerInfo, SpawnPlayer};
 
 #[derive(Debug, Event)]
 pub struct LevelUnloadedEvent(pub LevelIid);
@@ -16,14 +16,14 @@ impl Plugin for LevelLoadingPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_event::<LevelUnloadedEvent>()
-            .add_systems(Update, init_level_manager)
-            .add_systems(
-                PreUpdate, 
-                (
-                    reload_world,
-                    determine_loaded_levels,
-                ).chain()
-                    .run_if(in_state(GameState::Game)))
+            .insert_resource(LevelManager::default())
+            .add_systems(Update, init_level_outlines)
+            .add_systems(PreUpdate, (
+                reload_world,
+                determine_loaded_levels,
+            )
+                .chain()
+                .run_if(in_state(GameState::Game)))
         ;
     }
 }
@@ -32,8 +32,7 @@ impl Plugin for LevelLoadingPlugin {
 pub struct LevelOutline {
     pos: Vec2,
     size: Vec2,
-    id: String,
-    name: String,
+    iid: String,
 }
 
 impl LevelOutline {
@@ -42,51 +41,52 @@ impl LevelOutline {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct CheckpointInfo {
-    pub level_name: String,
-    // the id of the player entity in the level
-    pub spawner_pos_id: String,
-}
-
-impl Default for CheckpointInfo {
-    fn default() -> Self {
-        Self {
-            level_name: INITIAL_LEVEL_NAME.to_string(),
-            spawner_pos_id: INITIAL_SPAWNER_POS_ID.to_string(),
-        }
-    }
-
-}
-
-#[derive(Default, Resource)]
+#[derive(Default, Resource, Debug)]
 pub struct LevelManager {
     // TODO: replace with a better data structure like a grid, quadtree, etc.
     levels: Vec<LevelOutline>,
-    checkpoint: CheckpointInfo,
+    spawner_uuid: String,
+    spawners: Vec<SpawnerInfo>,
     reload: bool,
 }
 
 impl LevelManager {
-    pub fn determine_level(&self, player_pos_id: &str) -> Option<&LevelOutline> {
-        self.levels.iter().find(|level| {
-            level.name == player_pos_id || level.id == player_pos_id
-        })
+    pub fn register_spawner(&mut self, id: String, iid: String, level_iid: String) {
+        if self.spawners.iter().find(|s| s.id == id).is_some() { return; }
+        self.spawners.push(SpawnerInfo { id, iid, level_iid, });
     }
 
-    pub fn checkpoint(&self) -> &CheckpointInfo {
-        &self.checkpoint
+    pub fn determine_level(&self, spawner_iid: &String) -> Option<&LevelOutline> {
+        let level = self.spawners.iter().find(|s| s.iid == *spawner_iid);
+        if let Some(level) = level {
+            self.levels.iter().find(|l| l.iid == level.level_iid)
+        } else {
+            None
+        }
     }
 
-    pub fn set_checkpoint(&mut self, level_name: String, spawner_pos_id: String) {
-        self.checkpoint = CheckpointInfo {
-            level_name,
-            spawner_pos_id,
-        };
+    pub fn spawner_uuid(&self) -> &String {
+        &self.spawner_uuid
+    }
+
+    pub fn set_spawner_id(&mut self, spawner_id: String) {
+        self.spawner_uuid = self.spawners.iter()
+            .find(|s| s.id == spawner_id)
+            .expect(&format!("Spawner not registered: {}", spawner_id))
+            .iid
+            .clone();
+    }
+
+    pub fn set_spawner_iid(&mut self, spawner_iid: String) {
+        self.spawner_uuid = self.spawners.iter()
+            .find(|s| s.iid == spawner_iid)
+            .expect(&format!("Spawner not registered: {}", spawner_iid))
+            .iid
+            .clone();
     }
 
     pub fn current_checkpoint_level(&self) -> Option<&LevelOutline> {
-        self.determine_level(&self.checkpoint.level_name)
+        self.determine_level(&self.spawner_uuid)
     }
 
     pub fn is_vec_inside_any_level(&self, pos: Vec2) -> bool {
@@ -100,44 +100,33 @@ impl LevelManager {
     }
 }
 
-fn init_level_manager(
-    mut commands: Commands,
+fn init_level_outlines(
     ldtk_projects: Query<&Handle<LdtkProject>>,
     ldtk_project_assets: Res<Assets<LdtkProject>>,
-    level_manager: Option<Res<LevelManager>>,
+    mut level_manager: ResMut<LevelManager>,
 ) {
-    if level_manager.is_some() {
-        return;
-    }
+    if !level_manager.levels.is_empty() { return; }
     let Ok(ldtk_project_handle) = ldtk_projects.get_single() else { return };
-    let Some(ldtk_project): Option<&LdtkProject> = ldtk_project_assets
-        .get(ldtk_project_handle) else { return };
+    let Some(ldtk_project) = ldtk_project_assets.get(ldtk_project_handle) else { return };
 
-    let levels = ldtk_project.as_standalone().iter_loaded_levels().map(|ll| LevelOutline {
-        pos: Vec2::new(*ll.world_x() as f32, -*ll.world_y() as f32),
-        size: Vec2::new(*ll.px_wid() as f32, -*ll.px_hei() as f32),
-        id: ll.iid().clone(),
-        name: ll.identifier().clone(),
-    }).collect::<Vec<_>>();
-
-    info!("Loaded levels: {:?}", levels);
-
-    commands.insert_resource(LevelManager {
-        levels,
-        checkpoint: CheckpointInfo::default(),
-        reload: false,
-    });
+    ldtk_project.as_standalone()
+        .iter_loaded_levels()
+        .map(|ll| LevelOutline {
+            pos: Vec2::new(*ll.world_x() as f32, -*ll.world_y() as f32),
+            size: Vec2::new(*ll.px_wid() as f32, -*ll.px_hei() as f32),
+            iid: ll.iid().clone(),
+        })
+        .for_each(|lo| level_manager.levels.push(lo));
 }
 
 fn reload_world(
     mut commands: Commands,
-    level_manager: Option<ResMut<LevelManager>>,
+    mut level_manager: ResMut<LevelManager>,
     mut level_set: Query<&mut LevelSet>,
     levels: Query<Entity, With<LevelIid>>,
     worldly_entities: Query<Entity, With<Worldly>>,
     player: Query<Entity, With<Player>>,
 ) {
-    let Some(mut level_manager) = level_manager else { return; };
     if level_manager.reload {
         level_manager.reload = false;
         for mut level in level_set.iter_mut() {
@@ -155,22 +144,23 @@ fn reload_world(
         for entity in player.iter() {
             commands.entity(entity).despawn_recursive();
         }
+
+        commands.insert_resource(SpawnPlayer);
     }
 }
 
 fn determine_loaded_levels(
     mut level_set: Query<&mut LevelSet>,
-    level_manager: Option<ResMut<LevelManager>>,
+    level_manager: ResMut<LevelManager>,
     player_pos: Query<&Transform, With<Player>>,
     camera: Query<(&Camera, &GlobalTransform)>,
     mut unload_event_sink: EventWriter<LevelUnloadedEvent>,
 ) {
-    let Some(level_manager) = level_manager else { return; };
-    let Ok(mut current_level_set) = level_set.get_single_mut() else { return; };
+    let Ok(mut current_level_set) = level_set.get_single_mut() else { return };
 
     if player_pos.is_empty() {
-        let current_level = level_manager.current_checkpoint_level().unwrap();
-        current_level_set.iids.insert(LevelIid::new(current_level.id.clone()));
+        let Some(current_level) = level_manager.current_checkpoint_level() else { return };
+        current_level_set.iids.insert(LevelIid::new(current_level.iid.clone()));
         return;
     }
     let (camera, camera_transform) = camera.single();
@@ -191,7 +181,7 @@ fn determine_loaded_levels(
     let visible_levels = level_manager.levels.iter().filter(|level| {
         //println!("level rect: {:?}", level_rect);
         !camera_rect.intersect(level.rect()).is_empty()
-    }).map(|level| LevelIid::new(level.id.clone())).collect::<HashSet<_>>();
+    }).map(|level| LevelIid::new(level.iid.clone())).collect::<HashSet<_>>();
 
     if visible_levels.is_empty() {
         // if nothing at all is visible, don't unload anything

@@ -4,7 +4,7 @@ use std::sync::Mutex;
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
-use bevy_ecs_ldtk::ldtk::{FieldValue, FieldInstance};
+use bevy_ecs_ldtk::ldtk::{FieldInstance, FieldValue};
 use lazy_static::lazy_static;
 
 use crate::entities::animation::AnimStep;
@@ -33,6 +33,17 @@ impl Angle {
 
 pub fn in_states<S: States>(states: Vec<S>) -> impl FnMut(Res<State<S>>) -> bool + Clone {
     move |current_state: Res<State<S>>| states.contains(current_state.get())
+}
+
+pub fn get_ldtk_field_string(fields: &Vec<FieldInstance>, name: &str) -> Option<String> {
+    for field in fields {
+        if field.identifier == name {
+            if let FieldValue::String(Some(i)) = &field.value {
+                return Some(i.clone());
+            }
+        }
+    }
+    return None
 }
 
 pub fn get_ldtk_field_int(fields: &Vec<FieldInstance>, name: &str) -> Option<usize> {
