@@ -194,6 +194,21 @@ pub fn get_player_rule(state: &AnimStep, size: &PlayerSize) -> AnimationRule {
             SeqPart::Frame(2),
         ]),
         AnimStep::Land => AnimationRule::Still(1),
+        AnimStep::Attack => {
+            let steps = params::ATTACK_STEPS.get(size);
+            AnimationRule::Sequence(vec![
+                SeqPart::Frame(6),
+                SeqPart::Wait(steps.0),
+                SeqPart::Frame(7),
+                SeqPart::Wait(steps.1),
+                SeqPart::Frame(8),
+                SeqPart::WaitAnd(steps.2, AnimationEvent::AttackSwing),
+                SeqPart::Frame(9),
+                SeqPart::WaitAnd(steps.3, AnimationEvent::AttackRecoil),
+                SeqPart::Frame(10),
+                SeqPart::WaitAnd(steps.4, AnimationEvent::AttackOver),
+            ])
+        },
         _ => AnimationRule::Missing,
     }
 }

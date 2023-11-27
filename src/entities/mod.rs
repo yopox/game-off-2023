@@ -10,7 +10,7 @@ use crate::entities::spawner::SpawnerBundle;
 use crate::entities::zombie::ZombieBundle;
 
 use self::checkpoint::CheckpointBundle;
-use self::damage_zone::{DamageZone, DamageZoneBundle};
+use self::damage_zone::DamageZoneBundle;
 use self::player::PlayerHitEvent;
 
 pub mod player;
@@ -45,6 +45,7 @@ impl Plugin for EntitiesPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_event::<PlayerHitEvent>()
+            .add_event::<animation::AnimationEvent>()
             .register_ldtk_entity::<SpawnerBundle>("Spawner")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")

@@ -9,7 +9,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{AttackState, ColliderBundle, Knockback, LevelManager, PlayerLife};
+use crate::logic::{ColliderBundle, Knockback, LevelManager, PlayerLife};
 use crate::params;
 use crate::screens::Textures;
 
@@ -76,13 +76,14 @@ pub fn change_size(
     mut commands: Commands,
     input: Res<Input<KeyCode>>,
     textures: Res<Textures>,
-    mut player: Query<(Entity, &mut EntityID, &AnimStep), (With<Player>, Without<Transformed>, Without<AttackState>)>,
+    mut player: Query<(Entity, &mut EntityID, &AnimStep), (With<Player>, Without<Transformed>)>,
     mut player_emitter: Query<(Entity, &mut Transform), With<PlayerSpawner>>,
 ) {
     if !input.just_pressed(KeyCode::Up) && !input.just_pressed(KeyCode::Down) { return; }
 
     let Ok((e, mut id, state)) = player.get_single_mut() else { return };
     let EntityID::Player(ref mut size) = *id else { return };
+    if *state == AnimStep::Attack { return; }
 
     let new_size =
         if input.just_pressed(KeyCode::Up) { match *size {

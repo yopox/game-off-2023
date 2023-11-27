@@ -4,8 +4,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
-use crate::entities::player::{Player, Transformed};
-use crate::logic::AttackState;
+use crate::entities::player::{Dash, Player, Transformed};
 use crate::params;
 
 pub fn move_player(
@@ -15,25 +14,24 @@ pub fn move_player(
     mut query: Query<(
         Entity, &mut AnimStep, &EntityID, &EntityTimer,
         &mut KinematicCharacterController, &mut TextureAtlasSprite,
-        Option<&KinematicCharacterControllerOutput>, Option<&AttackState>,
+        Option<&KinematicCharacterControllerOutput>,
     ), With<Player>>,
 ) {
     let Ok((
                e, mut state, id, timer,
                mut controller, mut sprite,
-               output, attack
+               output,
            )) = query.get_single_mut() else { return };
 
     let EntityID::Player(size) = id else { return };
 
-    // TODO: Find a way to not use this hack (it makes delta time stable???)
-    //info!("step");
+    if *state == AnimStep::Attack { return; }
 
     let delta = time.delta_seconds();
 
     let mut translation = vec2(0., -0.1);
 
-    if *state != AnimStep::Prejump && attack.is_none() {
+    if *state != AnimStep::Prejump {
         // Side movement
         let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
         let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };

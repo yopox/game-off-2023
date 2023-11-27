@@ -11,7 +11,6 @@ use rand::{Rng, thread_rng};
 use crate::{GameState, params};
 use crate::entities::player::Player;
 use crate::graphics::ScreenTransition;
-use crate::logic::AttackState;
 use crate::screens::{Fonts, Textures};
 
 pub struct GamePlugin;
@@ -76,12 +75,12 @@ impl ScreenShake {
 
 fn sync_camera(
     mut commands: Commands,
-    player: Query<(&Transform, Option<&AttackState>), With<Player>>,
+    player: Query<&Transform, With<Player>>,
     mut camera: Query<&mut Transform, (With<Camera2d>, Without<Player>)>,
     mut shake: Option<ResMut<ScreenShake>>,
     time: Res<Time>,
 ) {
-    let Some((player, attack)) = player.iter().next() else { return };
+    let Some(player) = player.iter().next() else { return };
     let Some(mut camera) = camera.iter_mut().next() else { return };
 
     if let Some(mut shake) = shake {
