@@ -38,9 +38,9 @@ impl Event {
 
     fn is_over(&self, input: &Input<KeyCode>) -> bool {
         match self {
-            Event::Wait(t) => *t <= 0.0,
-            Event::FadeOut(t) => *t >= 1.0,
-            Event::FadeIn(t) => *t <= 0.0,
+            Event::Wait(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
+            Event::FadeOut(t) => input.just_pressed(KeyCode::Space) || *t >= 1.0,
+            Event::FadeIn(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
             Event::Teleport(_)
             | Event::BGM(_)
             | Event::Anim(_, _) => true,
@@ -184,12 +184,16 @@ pub fn update(
         Event::FadeOut(t) => {
             *t += time.delta_seconds();
             // TODO: Cool interpolation
-            if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(t.min(1.0)); }
+            if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
+                if input.just_pressed(KeyCode::Space) { 0.0 } else { t.min(1.0) }
+            ); }
         }
         Event::FadeIn(t) => {
             *t -= time.delta_seconds();
             // TODO: Cool interpolation
-            if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(t.max(0.0)); }
+            if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
+                if input.just_pressed(KeyCode::Space) { 1.0 } else { t.max(0.0) }
+            ); }
         }
         Event::Teleport(spawner_id) => {
             level_manager.set_spawner_id(spawner_id.clone());
