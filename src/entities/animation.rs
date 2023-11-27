@@ -1,5 +1,5 @@
 use bevy::log::error;
-use bevy::prelude::{Changed, Component, Query, Res, Time};
+use bevy::prelude::{Changed, Component, Event, EventWriter, Query, Res, Time};
 use bevy::sprite::TextureAtlasSprite;
 
 use crate::{logic, params, util};
@@ -16,12 +16,17 @@ pub enum AnimationRule {
     Missing,
 }
 
-pub enum AnimationEvent {}
+#[derive(Event, Copy, Clone, Debug)]
+pub enum AnimationEvent {
+    AttackSwing,
+    AttackRecoil,
+    AttackOver,
+}
 
 pub enum SeqPart {
     Frame(Index),
     Wait(Seconds),
-    Event(AnimationEvent),
+    WaitAnd(Seconds, AnimationEvent),
 }
 
 #[derive(Component, Clone, Default, Debug)]
@@ -75,13 +80,15 @@ pub fn update_timers(
 
 pub fn update_index(
     mut query: Query<(&mut TextureAtlasSprite, &EntityID, &AnimStep, &EntityTimer)>,
+    time: Res<Time>,
+    mut events: EventWriter<AnimationEvent>,
 ) {
     for (mut sprite, id, state, timer) in query.iter_mut() {
         let rule = id.get_rule(state);
         let index = match rule {
             AnimationRule::Still(i) => Some(i),
             AnimationRule::Sequence(seq) => {
-                let index = get_index_for_sequence(timer.time, seq);
+                let index = get_index_for_sequence(timer.time, time.delta_seconds(), seq, &mut events);
                 match index {
                     None => panic!("No frame set for animation sequence. ({:?} / {:?})", id, state),
                     Some(i) => Some(i)
@@ -91,7 +98,7 @@ pub fn update_index(
                 let duration: Seconds = seq.iter()
                     .map(|part| if let SeqPart::Wait(t) = part { *t } else { 0.0 })
                     .sum();
-                let index = get_index_for_sequence(timer.time % duration, seq);
+                let index = get_index_for_sequence(timer.time % duration, time.delta_seconds(), seq, &mut events);
                 match index {
                     None => panic!("No frame set for animation loop. ({:?} / {:?})", id, state),
                     Some(i) => Some(i)
@@ -113,21 +120,36 @@ pub fn update_index(
     }
 }
 
-fn get_index_for_sequence(time: Seconds, seq: Vec<SeqPart>) -> Option<Index> {
+fn get_index_for_sequence(
+    time: Seconds,
+    delta: Seconds,
+    seq: Vec<SeqPart>,
+    events: &mut EventWriter<AnimationEvent>,
+) -> Option<Index> {
     let mut t = 0.0;
     let mut index = None;
+    let mut event = None;
     for part in seq {
         match part {
-            SeqPart::Frame(i) => { index = Some(i); }
+            SeqPart::Frame(i) => {
+                index = Some(i);
+            }
             SeqPart::Wait(dt) => {
+                if let Some(event) = event { if time - delta < t { events.send(event); } }
+                event = None;
                 t += dt;
                 if time < t { break }
             }
-            SeqPart::Event(_) => {
-                // TODO: Send event
+            SeqPart::WaitAnd(dt, e) => {
+                if let Some(event) = event { if time - delta < t { events.send(event); } }
+                event = None;
+                t += dt;
+                if time < t { break }
+                event = Some(e);
             }
         }
     }
+    if let Some(event) = event { events.send(event); }
     index
 }
 
