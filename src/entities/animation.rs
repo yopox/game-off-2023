@@ -49,13 +49,14 @@ pub enum AnimStep {
     Prejump,
     Jump,
     Fall,
+    Dash,
     Land,
     Attack,
 }
 
 impl AnimStep {
     pub fn is_jumping(&self) -> bool {
-        *self == AnimStep::Prejump || *self == AnimStep::Jump
+        *self == AnimStep::Prejump || *self == AnimStep::Jump || *self == AnimStep::Dash
     }
 }
 

@@ -52,6 +52,13 @@ pub struct PlayerBundle {
     pub instance: EntityInstance,
     pub collider_bundle: ColliderBundle,
     pub spatial: SpatialBundle,
+    pub dash: Dash,
+}
+
+#[derive(Component, Default)]
+pub struct Dash {
+    pub last_dir: (bool, f32),
+    pub can_dash: bool,
 }
 
 #[derive(Component)]

@@ -50,13 +50,18 @@ pub const JUMP: f32 = 190.;
 pub const JUMP_MIN: f32 = 0.15;
 
 pub const PLAYER_G: SizeVal<f32> = SizeVal::new(GRAVITY * 1.0, GRAVITY * 0.55, GRAVITY * 1.4);
-pub const PLAYER_J: SizeVal<f32> = SizeVal::new(JUMP * 0.95, JUMP * 0.55, JUMP * 1.5);
+pub const PLAYER_J: SizeVal<f32> = SizeVal::new(JUMP * 0.95, JUMP * 0.55, JUMP * 1.42);
 
 // --- Jump
 pub const PREJUMP_T: SizeVal<f32> = SizeVal::new(0.12, 0.06, 0.24);
 pub const JUMP_T: SizeVal<f32> = SizeVal::same(0.125);
 pub const FALL_T: SizeVal<f32> = SizeVal::same(0.3);
 pub const LAND_T: SizeVal<f32> = SizeVal::same(0.2);
+
+// --- Dash
+pub const DASH_DETECTION: f32 = 0.2;
+pub const DASH_DURATION: SizeVal<f32> = SizeVal::new(0.12, 0.1, 0.15);
+pub const DASH_S: f32 = 6.0;
 
 // --- Size Transform
 pub const TRANSFORM_PARTICLES_TIMER: SizeVal<f32> = SizeVal::new(0.2, 0.1, 0.3);

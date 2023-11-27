@@ -12,33 +12,57 @@ pub fn move_player(
     time: Res<Time>,
     input: Res<Input<KeyCode>>,
     mut query: Query<(
-        Entity, &mut AnimStep, &EntityID, &EntityTimer,
+        Entity, &mut AnimStep, &mut Dash, &EntityID, &EntityTimer,
         &mut KinematicCharacterController, &mut TextureAtlasSprite,
         Option<&KinematicCharacterControllerOutput>,
     ), With<Player>>,
 ) {
     let Ok((
-               e, mut state, id, timer,
+               e, mut step, mut dash, id, timer,
                mut controller, mut sprite,
                output,
            )) = query.get_single_mut() else { return };
 
     let EntityID::Player(size) = id else { return };
 
-    if *state == AnimStep::Attack { return; }
+    if *step == AnimStep::Attack { return; }
 
     let delta = time.delta_seconds();
 
-    let mut translation = vec2(0., -0.1);
+    let mut translation = vec2(0., match step.as_ref() {
+        AnimStep::Dash | AnimStep::Prejump => 0.0,
+        _ => -0.1,
+    });
 
-    if *state != AnimStep::Prejump {
+    // Side movement
+    if *step != AnimStep::Dash && dash.can_dash {
+        if input.just_pressed(KeyCode::Left) {
+            if !dash.last_dir.0 && time.elapsed_seconds() - dash.last_dir.1 <= params::DASH_DETECTION {
+                step.set_if_neq(AnimStep::Dash);
+                dash.can_dash = false;
+            } else {
+                dash.last_dir = (false, time.elapsed_seconds());
+            }
+        } else if input.just_pressed(KeyCode::Right) {
+            if dash.last_dir.0 && time.elapsed_seconds() - dash.last_dir.1 <= params::DASH_DETECTION {
+                step.set_if_neq(AnimStep::Dash);
+                dash.can_dash = false;
+            } else {
+                dash.last_dir = (true, time.elapsed_seconds());
+            }
+        }
+    } else if *step == AnimStep::Dash {
+        translation.x += delta * params::PLAYER_X * params::DASH_S * if dash.last_dir.0 { 1.0 } else { -1.0 };
+        if timer.time > params::DASH_DURATION.get(size) { step.set_if_neq(AnimStep::Fall); }
+    }
+    if *step != AnimStep::Prejump && *step != AnimStep::Dash {
         // Side movement
         let right = if input.pressed(KeyCode::Right) { sprite.flip_x = false; 1. } else { 0. };
         let left = if input.pressed(KeyCode::Left) { sprite.flip_x = true; 1. } else { 0. };
         translation.x += delta * params::PLAYER_X * (right - left);
-        if !state.is_jumping() && *state != AnimStep::Fall {
-            if right == 1.0 || left == 1.0 { state.set_if_neq(AnimStep::Walk); }
-            else if *state == AnimStep::Walk { state.set_if_neq(AnimStep::Idle); }
+        if !step.is_jumping() && *step != AnimStep::Fall {
+            if right == 1.0 || left == 1.0 { step.set_if_neq(AnimStep::Walk); }
+            else if *step == AnimStep::Walk { step.set_if_neq(AnimStep::Idle); }
         }
     }
 
@@ -48,19 +72,20 @@ pub fn move_player(
     };
 
     let mut player_commands = commands.entity(e);
-    if !state.is_jumping() {
+    if !step.is_jumping() {
         if grounded {
-            if *state != AnimStep::Idle && *state != AnimStep::Walk && *state != AnimStep::Land {
-                if *state == AnimStep::Fall {
-                    state.set_if_neq(AnimStep::Land);
+            if *step != AnimStep::Idle && *step != AnimStep::Walk && *step != AnimStep::Land {
+                if *step == AnimStep::Fall {
+                    step.set_if_neq(AnimStep::Land);
                 } else {
-                    state.set_if_neq(AnimStep::Idle);
+                    step.set_if_neq(AnimStep::Idle);
                 }
             }
             player_commands.remove::<Transformed>();
+            dash.can_dash = true;
         } else {
             translation.y = 0.;
-            state.set_if_neq(AnimStep::Fall);
+            step.set_if_neq(AnimStep::Fall);
         }
     }
 
@@ -68,8 +93,8 @@ pub fn move_player(
     let j = params::PLAYER_J.get(size);
 
     // Jump
-    if input.just_pressed(KeyCode::Space) && !state.is_jumping() {
-        let coyote = match *state {
+    if input.just_pressed(KeyCode::Space) && !step.is_jumping() {
+        let coyote = match *step {
             AnimStep::Fall => {
                 time.elapsed_seconds() - timer.t_0 < params::COYOTE_TIME
             }
@@ -77,16 +102,16 @@ pub fn move_player(
         };
         if grounded || coyote {
             info!("Enter Prejump");
-            state.set_if_neq(AnimStep::Prejump);
+            step.set_if_neq(AnimStep::Prejump);
         }
     }
 
-    if *state == AnimStep::Prejump {
+    if *step == AnimStep::Prejump {
         if !input.pressed(KeyCode::Space) {
             // Leave prejump for small jumps
-            state.set_if_neq(AnimStep::Jump);
+            step.set_if_neq(AnimStep::Jump);
         }
-    } else if *state == AnimStep::Jump {
+    } else if *step == AnimStep::Jump {
         let t_jump = time.elapsed_seconds() - timer.t_0;
         // info!("{}", t_jump);
         let dy = delta * (j - g * (t_jump + delta / 2.));
@@ -98,7 +123,7 @@ pub fn move_player(
 
         if dy <= 0. || mid_jump_stop || landed {
             // Jump ended
-            state.set_if_neq(AnimStep::Fall);
+            step.set_if_neq(AnimStep::Fall);
         } else {
             if let Some(output) = output {
                 for collision in &output.collisions {
@@ -106,14 +131,14 @@ pub fn move_player(
                     if toi.status == TOIStatus::Converged && toi.normal1.y < -0.5 {
                         // Jump ended
                         info!("Jumped against ceiling");
-                        state.set_if_neq(AnimStep::Fall);
+                        step.set_if_neq(AnimStep::Fall);
                     }
                 }
             }
             // Jumping
             translation.y += dy;
         }
-    } else if *state == AnimStep::Fall {
+    } else if *step == AnimStep::Fall {
         let t_fall = time.elapsed_seconds() - timer.t_0;
         let dy = -g * delta * (t_fall + delta / 2.);
         translation.y += dy;

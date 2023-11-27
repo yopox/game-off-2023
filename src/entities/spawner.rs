@@ -3,7 +3,7 @@ use bevy_ecs_ldtk::{EntityInstance, LdtkEntity};
 use bevy_ecs_ldtk::prelude::{LdtkProject, RawLevelAccessor};
 
 use crate::{params, util};
-use crate::entities::player::{Player, PlayerBundle};
+use crate::entities::player::{Dash, Player, PlayerBundle};
 use crate::logic::{ColliderBundle, LevelManager};
 
 #[derive(Resource)]
@@ -102,6 +102,7 @@ pub fn spawn_player(
         collider_bundle: ColliderBundle::from(&instance),
         instance,
         spatial: SpatialBundle::from_transform(transform),
+        dash: Dash::default(),
     });
 
     commands.remove_resource::<SpawnPlayer>();
