@@ -3,14 +3,16 @@ use std::collections::VecDeque;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::EntityInstance;
 
+use crate::{definitions, params};
 use crate::entities::animation::AnimStep;
 use crate::graphics::TextStyles;
-use crate::logic::LevelManager;
+use crate::logic::{GameData, LevelManager};
+use crate::logic::data::Flags;
 use crate::music::{BGM, PlayBGMEvent};
-use crate::params;
 use crate::screens::{Fonts, Textures};
 
-enum Event {
+#[derive(Clone)]
+pub enum CSEvent {
     /// Do nothing for the given amount of seconds
     Wait(f32),
     /// Show a text (top dy / left dx / timer)
@@ -27,31 +29,37 @@ enum Event {
     Walk(String, f32, f32),
     /// Set the [AnimStep] of an entity to play an animation
     Anim(String, AnimStep),
+    /// Set the corresponding flag to true
+    AddFlag(Flags),
+    /// Set the corresponding flag to false
+    RemoveFlag(Flags),
 }
 
-impl Event {
-    fn fade_in() -> Self { Event::FadeIn(1.0) }
-    fn fade_out() -> Self { Event::FadeOut(0.0) }
-    fn instant_fade_out() -> Self { Event::FadeOut(1.0) }
-    fn text_centered(text: String) -> Self { Event::Text(text, 0.0, 0.0, 0.0) }
-    fn text_offset(text: String, top: f32, left: f32) -> Self { Event::Text(text, top, left, 0.0) }
+impl CSEvent {
+    pub fn fade_in() -> Self { CSEvent::FadeIn(1.0) }
+    pub fn fade_out() -> Self { CSEvent::FadeOut(0.0) }
+    pub fn instant_fade_out() -> Self { CSEvent::FadeOut(1.0) }
+    pub fn text_centered(text: String) -> Self { CSEvent::Text(text, 0.0, 0.0, 0.0) }
+    pub fn text_offset(text: String, top: f32, left: f32) -> Self { CSEvent::Text(text, top, left, 0.0) }
 
     fn is_over(&self, input: &Input<KeyCode>) -> bool {
         match self {
-            Event::Wait(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
-            Event::FadeOut(t) => input.just_pressed(KeyCode::Space) || *t >= 1.0,
-            Event::FadeIn(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
-            Event::Teleport(_)
-            | Event::BGM(_)
-            | Event::Anim(_, _) => true,
-            Event::Text(txt, _, _, timer) => input.just_pressed(KeyCode::Space) || *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
+            CSEvent::Wait(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
+            CSEvent::FadeOut(t) => input.just_pressed(KeyCode::Space) || *t >= 1.0,
+            CSEvent::FadeIn(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
+            CSEvent::Teleport(_)
+            | CSEvent::BGM(_)
+            | CSEvent::Anim(_, _)
+            | CSEvent::AddFlag(_)
+            | CSEvent::RemoveFlag(_) => true,
+            CSEvent::Text(txt, _, _, timer) => input.just_pressed(KeyCode::Space) || *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
             _ => false
         }
     }
 }
 
-#[derive(Resource)]
-pub struct Cutscene(VecDeque<Event>);
+#[derive(Resource, Clone)]
+pub struct Cutscene(VecDeque<CSEvent>);
 
 #[derive(Component)]
 pub struct Cinema;
@@ -66,6 +74,7 @@ pub fn init(
     mut commands: Commands,
     textures: Res<Textures>,
     fonts: Res<Fonts>,
+    data: Res<GameData>,
 ) {
     let absolute = Style {
         position_type: PositionType::Absolute,
@@ -86,17 +95,6 @@ pub fn init(
     ;
 
     commands
-        .spawn(ImageBundle {
-            image: UiImage::new(textures.frame.clone()),
-            style: absolute.clone(),
-            background_color: BackgroundColor(Color::rgba(1.0, 1.0, 1.0, 1.0)),
-            z_index: ZIndex::Global(params::ui_z::FRAME),
-            ..default()
-        })
-        .insert(Frame)
-    ;
-
-    commands
         .spawn(TextBundle {
             style: Style {
                 position_type: PositionType::Absolute,
@@ -110,14 +108,22 @@ pub fn init(
         .insert(CutsceneText)
     ;
 
-    commands.insert_resource(Cutscene(
-        VecDeque::from([
-            Event::Wait(1.0),
-            Event::text_centered("Example text\nsecond line".to_string()),
-            Event::Teleport("after_dash".into()),
-            Event::fade_in(),
-        ])
-    ));
+    let initial_cutscene = !data.has_flag(Flags::Intro);
+
+    if initial_cutscene {
+        commands.insert_resource(Cutscene(definitions::cutscenes::INTRO.clone()));
+    }
+
+    commands
+        .spawn(ImageBundle {
+            image: UiImage::new(textures.frame.clone()),
+            style: absolute.clone(),
+            background_color: BackgroundColor(Color::rgba(1.0, 1.0, 1.0, if initial_cutscene { 1.0 } else { 0.0 })),
+            z_index: ZIndex::Global(params::ui_z::FRAME),
+            ..default()
+        })
+        .insert(Frame)
+    ;
 }
 
 pub fn update(
@@ -132,6 +138,7 @@ pub fn update(
     mut text: Query<(&mut Text, &mut Style), With<CutsceneText>>,
     fonts: Res<Fonts>,
     input: Res<Input<KeyCode>>,
+    mut data: ResMut<GameData>,
 ) {
     let Some(mut cutscene) = cutscene else { return };
 
@@ -150,16 +157,16 @@ pub fn update(
 
     // Play event
     match event {
-        Event::Wait(t) => { *t -= time.delta_seconds(); }
-        Event::BGM(music) => { bgm.send(PlayBGMEvent(*music)); }
-        Event::Anim(e, s) => {
+        CSEvent::Wait(t) => { *t -= time.delta_seconds(); }
+        CSEvent::BGM(music) => { bgm.send(PlayBGMEvent(*music)); }
+        CSEvent::Anim(e, s) => {
             if let Some((_, mut step)) = entities.iter_mut().find(|((e_i, _))| e_i.identifier == *e) {
                 *step = *s;
             } else {
                 error!("Couldn't find entity with identifier {}", e);
             }
         }
-        Event::Text(txt, top, left, timer) => {
+        CSEvent::Text(txt, top, left, timer) => {
             let t_max = txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0;
 
             if let Ok((mut t, mut s)) = text.get_single_mut() {
@@ -181,25 +188,27 @@ pub fn update(
                 );
             }
         }
-        Event::FadeOut(t) => {
+        CSEvent::FadeOut(t) => {
             *t += time.delta_seconds();
             // TODO: Cool interpolation
             if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
                 if input.just_pressed(KeyCode::Space) { 0.0 } else { t.min(1.0) }
             ); }
         }
-        Event::FadeIn(t) => {
+        CSEvent::FadeIn(t) => {
             *t -= time.delta_seconds();
             // TODO: Cool interpolation
             if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
                 if input.just_pressed(KeyCode::Space) { 1.0 } else { t.max(0.0) }
             ); }
         }
-        Event::Teleport(spawner_id) => {
+        CSEvent::Teleport(spawner_id) => {
             level_manager.set_spawner_id(spawner_id.clone());
             level_manager.reload();
         }
-        Event::Walk(_, _, _) => {}
+        CSEvent::Walk(_, _, _) => {}
+        CSEvent::AddFlag(flag) => data.set_flag(*flag),
+        CSEvent::RemoveFlag(flag) => data.remove_flag(*flag),
     }
 
     // Go to next event

@@ -2,6 +2,7 @@ use bevy::ecs::schedule::{LogLevel, ScheduleBuildSettings};
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{LdtkPlugin, LdtkSettings, LevelSpawnBehavior, SetClearColor};
 use bevy_particle_systems::ParticleSystemPlugin;
+use bevy_pkv::PkvStore;
 use bevy_rapier2d::prelude::*;
 
 use crate::entities::EntitiesPlugin;
@@ -73,6 +74,7 @@ fn main() {
             enabled: false,
             ..Default::default()
         })
+        .insert_resource(PkvStore::new("yopox", "game_off_2023"))
         .add_plugins(ParticleSystemPlugin)
         // Resources
         .insert_resource(Msaa::Off)

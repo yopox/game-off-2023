@@ -108,3 +108,6 @@ pub const CHAR_DISPLAY_TIME: f32 = 0.06;
 
 // --- Level
 pub const INITIAL_SPAWNER_ID: &str = "start";
+
+// --- Flags
+pub const GAME_DATA_KEY: &str = "game_data";

@@ -42,7 +42,7 @@ pub fn entity_spawned(
     for (e, instance, pos) in &entity {
         let mut e_c = commands.entity(e);
 
-        info!("Entity spawned: {:?}", instance.identifier);
+        // info!("Entity spawned: {:?}", instance.identifier);
         // Add EntityBundle
         if let Some(id) = get_entity_id(&instance) {
             e_c.insert(GameEntityBundle {

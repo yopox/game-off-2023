@@ -3,9 +3,9 @@ use bevy::prelude::*;
 use bevy_ecs_ldtk::{LevelIid, LevelSet, prelude::LdtkProject};
 use bevy_ecs_ldtk::{Respawn, Worldly};
 
-use crate::GameState;
 use crate::entities::player::Player;
 use crate::entities::spawner::{SpawnerInfo, SpawnPlayer};
+use crate::GameState;
 
 #[derive(Debug, Event)]
 pub struct LevelUnloadedEvent(pub LevelIid);
@@ -16,7 +16,6 @@ impl Plugin for LevelLoadingPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_event::<LevelUnloadedEvent>()
-            .insert_resource(LevelManager::default())
             .add_systems(Update, init_level_outlines)
             .add_systems(PreUpdate, (
                 reload_world,
@@ -45,18 +44,27 @@ impl LevelOutline {
 pub struct LevelManager {
     // TODO: replace with a better data structure like a grid, quadtree, etc.
     levels: Vec<LevelOutline>,
-    spawner_uuid: String,
+    spawner_id: String,
     spawners: Vec<SpawnerInfo>,
     reload: bool,
 }
 
 impl LevelManager {
+    pub fn from_spawner(s: String) -> Self {
+        Self {
+            levels: vec![],
+            spawner_id: s,
+            spawners: vec![],
+            reload: false,
+        }
+    }
+
     pub fn register_spawner(&mut self, id: String, iid: String, level_iid: String) {
         if self.spawners.iter().find(|s| s.id == id).is_some() { return; }
         self.spawners.push(SpawnerInfo { id, iid, level_iid, });
     }
 
-    pub fn determine_level(&self, spawner_iid: &String) -> Option<&LevelOutline> {
+    pub fn determine_level_by_iid(&self, spawner_iid: &String) -> Option<&LevelOutline> {
         let level = self.spawners.iter().find(|s| s.iid == *spawner_iid);
         if let Some(level) = level {
             self.levels.iter().find(|l| l.iid == level.level_iid)
@@ -65,28 +73,40 @@ impl LevelManager {
         }
     }
 
+    pub fn determine_level(&self, spawner_id: &String) -> Option<&LevelOutline> {
+        let level = self.spawners.iter().find(|s| s.id == *spawner_id);
+        if let Some(level) = level {
+            self.levels.iter().find(|l| l.iid == level.level_iid)
+        } else {
+            None
+        }
+    }
+
     pub fn spawner_uuid(&self) -> &String {
-        &self.spawner_uuid
+        &self.spawners.iter()
+            .find(|s| s.id == self.spawner_id)
+            .expect("Couldn't find spawner")
+            .iid
+    }
+
+    pub fn spawner_id(&self) -> &String {
+        &self.spawner_id
     }
 
     pub fn set_spawner_id(&mut self, spawner_id: String) {
-        self.spawner_uuid = self.spawners.iter()
-            .find(|s| s.id == spawner_id)
-            .expect(&format!("Spawner not registered: {}", spawner_id))
-            .iid
-            .clone();
+        self.spawner_id = spawner_id;
     }
 
     pub fn set_spawner_iid(&mut self, spawner_iid: String) {
-        self.spawner_uuid = self.spawners.iter()
+        self.spawner_id = self.spawners.iter()
             .find(|s| s.iid == spawner_iid)
             .expect(&format!("Spawner not registered: {}", spawner_iid))
-            .iid
+            .id
             .clone();
     }
 
     pub fn current_checkpoint_level(&self) -> Option<&LevelOutline> {
-        self.determine_level(&self.spawner_uuid)
+        self.determine_level(&self.spawner_id)
     }
 
     pub fn is_vec_inside_any_level(&self, pos: Vec2) -> bool {

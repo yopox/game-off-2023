@@ -55,8 +55,7 @@ pub fn init_spawners(
                             level.iid.clone(),
                         );
 
-                        if id == params::INITIAL_SPAWNER_ID {
-                            level_manager.set_spawner_iid(entity_instance.iid.clone());
+                        if id == *level_manager.spawner_id() {
                             level_manager.reload();
                             commands.insert_resource(SpawnPlayer);
                         }
@@ -93,7 +92,7 @@ pub fn spawn_player(
         ..entity_instance.clone()
     };
 
-    info!("Spawning player at transform {:?}", transform);
+    // info!("Spawning player at transform {:?}", transform);
     let mut transform = transform.compute_transform();
     transform.translation.z = params::z_pos::PLAYER;
 

@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::{view::NoFrustumCulling, camera::CameraRenderGraph}};
+use bevy::{prelude::*};
 
 use crate::{GameState, screens::Textures};
 
@@ -101,7 +101,7 @@ fn update_hearts(
             .insert(Heart(current_hearts))
             .set_parent(hearts_holder)
         ;
-        info!("Spawned heart {}", current_hearts);
+        // info!("Spawned heart {}", current_hearts);
         current_hearts += 1;
     }
 }
