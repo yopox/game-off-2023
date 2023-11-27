@@ -466,8 +466,8 @@
 			"tags": [],
 			"exportToToc": false,
 			"doc": null,
-			"width": 10,
-			"height": 10,
+			"width": 20,
+			"height": 5,
 			"resizableX": true,
 			"resizableY": true,
 			"minWidth": 1,
@@ -776,34 +776,34 @@
 					"entityInstances": [
 						{
 							"__identifier": "DamageZone",
-							"__grid": [1476,589],
+							"__grid": [1476,591],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#514143",
 							"__worldX": -492,
-							"__worldY": -339,
+							"__worldY": -337,
 							"iid": "b7afe000-8990-11ee-a06c-8562a33e26e6",
 							"width": 49,
 							"height": 5,
 							"defUid": 38,
-							"px": [1476,589],
+							"px": [1476,591],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "DamageZone",
-							"__grid": [1544,589],
+							"__grid": [1544,591],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#514143",
 							"__worldX": -424,
-							"__worldY": -339,
+							"__worldY": -337,
 							"iid": "bf2a8c40-8990-11ee-a06c-b7469cf38a91",
 							"width": 49,
 							"height": 5,
 							"defUid": 38,
-							"px": [1544,589],
+							"px": [1544,591],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
 						},
 						{
@@ -821,6 +821,25 @@
 							"defUid": 38,
 							"px": [1726,575],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "Spawner",
+							"__grid": [1667,560],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": -301,
+							"__worldY": -368,
+							"iid": "a1aa16b0-8990-11ee-a06c-fb3902c76a51",
+							"width": 16,
+							"height": 32,
+							"defUid": 14,
+							"px": [1667,560],
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "after_dash", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["after_dash"]
+							}] }]
 						}
 					]
 				}
