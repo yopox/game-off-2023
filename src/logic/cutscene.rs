@@ -36,7 +36,7 @@ impl Event {
     fn text_centered(text: String) -> Self { Event::Text(text, 0.0, 0.0, 0.0) }
     fn text_offset(text: String, top: f32, left: f32) -> Self { Event::Text(text, top, left, 0.0) }
 
-    fn is_over(&self) -> bool {
+    fn is_over(&self, input: &Input<KeyCode>) -> bool {
         match self {
             Event::Wait(t) => *t <= 0.0,
             Event::FadeOut(t) => *t >= 1.0,
@@ -44,7 +44,7 @@ impl Event {
             Event::Teleport(_)
             | Event::BGM(_)
             | Event::Anim(_, _) => true,
-            Event::Text(txt, _, _, timer) => *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
+            Event::Text(txt, _, _, timer) => input.just_pressed(KeyCode::Space) || *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
             _ => false
         }
     }
@@ -114,19 +114,8 @@ pub fn init(
         VecDeque::from([
             Event::Wait(1.0),
             Event::text_centered("Example text\nsecond line".to_string()),
-            Event::Wait(1.0),
+            Event::Teleport("after_dash".into()),
             Event::fade_in(),
-            Event::Wait(2.0),
-            Event::fade_out(),
-            Event::Teleport("intro_ship".into()),
-            Event::Wait(1.0),
-            Event::fade_in(),
-            Event::Wait(1.0),
-            Event::fade_out(),
-            Event::Teleport("cave_start".into()),
-            Event::Wait(1.0),
-            Event::fade_in(),
-            Event::Wait(1.0),
         ])
     ));
 }
@@ -142,6 +131,7 @@ pub fn update(
     mut level_manager: ResMut<LevelManager>,
     mut text: Query<(&mut Text, &mut Style), With<CutsceneText>>,
     fonts: Res<Fonts>,
+    input: Res<Input<KeyCode>>,
 ) {
     let Some(mut cutscene) = cutscene else { return };
 
@@ -184,7 +174,8 @@ pub fn update(
                 let t_fade_out = params::TEXT_FADE_TIME + txt.len() as f32 * params::CHAR_DISPLAY_TIME;
                 t.sections[0].style = TextStyles::Basic.style_with_alpha(
                     &fonts,
-                    if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
+                    if input.just_pressed(KeyCode::Space) { 0.0 }
+                    else if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
                     else if *timer >= t_fade_out { (1.0 - (*timer - t_fade_out) / params::TEXT_FADE_TIME).max(0.0) }
                     else { 1.0 }
                 );
@@ -208,7 +199,7 @@ pub fn update(
     }
 
     // Go to next event
-    if event.is_over() {
+    if event.is_over(&input) {
         cutscene.0.pop_front();
     }
 }
