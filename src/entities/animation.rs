@@ -97,7 +97,11 @@ pub fn update_index(
             }
             AnimationRule::Loop(seq) => {
                 let duration: Seconds = seq.iter()
-                    .map(|part| if let SeqPart::Wait(t) = part { *t } else { 0.0 })
+                    .map(|part| match part {
+                        SeqPart::Wait(t)
+                        | SeqPart::WaitAnd(t, _) => *t,
+                        _ => 0.0
+                    })
                     .sum();
                 let index = get_index_for_sequence(timer.time % duration, time.delta_seconds(), seq, &mut events);
                 match index {
