@@ -101,7 +101,6 @@ pub fn move_player(
             _ => false
         };
         if grounded || coyote {
-            info!("Enter Prejump");
             step.set_if_neq(AnimStep::Prejump);
         }
     }
