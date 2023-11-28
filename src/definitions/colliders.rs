@@ -65,10 +65,10 @@ pub fn eye_collider() -> Collider {
     rectangle(Vec2::ZERO, vec2(8.0, 8.0))
 }
 
-pub(crate) fn boss1(index: usize) -> Collider {
-    match index {
-        1 => rectangle(vec2(0.0, 42.5), vec2(50.0, 59.0)),
-        2 => rectangle(vec2(0.0, 3.5), vec2(50.0, 7.0)),
+pub(crate) fn boss1(hp: u8) -> Collider {
+    match hp {
+        3 => rectangle(vec2(0.0, 42.5), vec2(50.0, 59.0)),
+        2 | 1 => rectangle(vec2(0.0, 3.5), vec2(50.0, 7.0)),
         _ => rectangle(vec2(0.0, 32.5), vec2(50.0, 65.0)),
     }
 }

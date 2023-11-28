@@ -159,11 +159,12 @@ fn get_index_for_sequence(
 }
 
 impl EntityID {
-    fn get_rule(&self, state: &AnimStep) -> AnimationRule {
+    fn get_rule(&self, step: &AnimStep) -> AnimationRule {
         match self {
-            EntityID::Player(size) => get_player_rule(state, size),
-            EntityID::Zombie(_) => get_zombie_rule(state),
-            EntityID::DetectionPlatform(_) => get_platform_rule(state),
+            EntityID::Player(size) => get_player_rule(step, size),
+            EntityID::Zombie(_) => get_zombie_rule(step),
+            EntityID::DetectionPlatform(_) => get_platform_rule(step),
+            EntityID::Boss1 => get_boss_1_rule(step),
             _ => AnimationRule::Missing,
         }
     }
@@ -235,6 +236,31 @@ pub fn get_platform_rule(state: &AnimStep) -> AnimationRule {
     match state {
         AnimStep::Idle => AnimationRule::Still(0),
         AnimStep::Jump => AnimationRule::Still(1),
+        _ => AnimationRule::Missing,
+    }
+}
+
+pub fn get_boss_1_rule(state: &AnimStep) -> AnimationRule {
+    match state {
+        AnimStep::Idle => AnimationRule::Sequence(vec![
+            SeqPart::Frame(1),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(0),
+        ]),
+        AnimStep::Jump => AnimationRule::Sequence(vec![
+            SeqPart::Frame(1),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(2),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(4),
+        ]),
+        AnimStep::Prejump => AnimationRule::Loop(vec![
+            SeqPart::Frame(5),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(6),
+            SeqPart::Wait(0.35),
+        ]),
+        AnimStep::Fall => AnimationRule::Still(3),
         _ => AnimationRule::Missing,
     }
 }

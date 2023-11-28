@@ -5,6 +5,7 @@ use bevy_rapier2d::geometry::Collider;
 use bevy_rapier2d::prelude::RigidBody;
 
 use crate::definitions::colliders;
+use crate::entities::animation::AnimStep;
 use crate::entities::common::get_enemy;
 use crate::graphics::Hurt;
 use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
@@ -104,14 +105,14 @@ pub fn init(
 
 pub fn update(
     mut commands: Commands,
-    mut boss: Query<(&mut TextureAtlasSprite, &mut Boss1State, &mut Collider), With<Boss1>>,
+    mut boss: Query<(&mut Boss1State, &mut Collider, &mut AnimStep), With<Boss1>>,
     mut damage: EventReader<Damaged>,
     mut eyes: Query<(Entity, &Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
     mut data: ResMut<GameData>,
     parts: Query<Entity, With<Boss1Part>>,
     time: Res<Time>,
 ) {
-    let Ok((mut sprite, mut state, mut collider)) = boss.get_single_mut() else { return; };
+    let Ok((mut state, mut collider, mut step)) = boss.get_single_mut() else { return; };
 
     let old_hp = state.hp;
 
@@ -169,21 +170,13 @@ pub fn update(
         }
     }
 
-    // Update sprite
-    sprite.index = match *state {
-        Boss1State { hp: 2, .. } | Boss1State { hp: 1, .. } => 2,
-        Boss1State { hp: 0, .. } => 1,
-        Boss1State { stun: 0.0, .. } => 0,
-        _ => 1,
-    };
-
     // Boss killed
     if state.hp == 0 || data.has_flag(Flags::Boss1Defeated) {
         // Kill animation
         if !data.has_flag(Flags::Boss1Defeated) {
             data.set_flag(Flags::Boss1Defeated);
         } else {
-            sprite.index = 1;
+            step.set_if_neq(AnimStep::Fall);
         }
         // Remove colliders
         parts.for_each(|p_e| { commands.entity(p_e).remove::<Collider>(); });
@@ -191,7 +184,14 @@ pub fn update(
         // Boss HP updated
         if old_hp != state.hp {
             // Update collider
-            *collider = colliders::boss1(sprite.index);
+            *collider = colliders::boss1(state.hp);
+
+            step.set_if_neq(match state.hp {
+                3 => AnimStep::Jump,
+                2 | 1 => AnimStep::Prejump,
+                0 => AnimStep::Fall,
+                _ => AnimStep::Idle,
+            });
         }
     }
 }
