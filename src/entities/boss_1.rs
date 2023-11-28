@@ -7,7 +7,7 @@ use bevy_rapier2d::prelude::RigidBody;
 use crate::definitions::colliders;
 use crate::entities::common::get_enemy;
 use crate::graphics::Hurt;
-use crate::logic::{ColliderBundle, Damaged, Hitbox};
+use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
 use crate::params;
 use crate::screens::Textures;
 
@@ -46,6 +46,9 @@ pub struct Boss1Bundle {
 pub struct Boss1;
 
 #[derive(Component)]
+pub struct Boss1Part;
+
+#[derive(Component)]
 pub struct Eye {
     left: bool,
 }
@@ -54,9 +57,16 @@ pub fn init(
     mut commands: Commands,
     textures: Res<Textures>,
     boss: Query<Entity, Added<Boss1>>,
+    data: Res<GameData>,
 ) {
     let Ok(e) = boss.get_single() else { return; };
-    commands.entity(e).insert(get_enemy("Boss1").expect("Couldn't find enemy"));
+    commands
+        .entity(e)
+        .insert(get_enemy("Boss1").expect("Couldn't find enemy"))
+        .insert(Boss1Part)
+    ;
+
+    let dead = data.has_flag(Flags::Boss1Defeated);
 
     commands.entity(e).with_children(|builder| {
         for (dx, left) in [
@@ -67,7 +77,11 @@ pub fn init(
                 .spawn(SpriteSheetBundle {
                     sprite: TextureAtlasSprite { flip_x: !left, ..default() },
                     texture_atlas: textures.boss_1_eye.clone(),
-                    transform: Transform::from_xyz(dx, 44.0, 1.0),
+                    transform: Transform::from_xyz(
+                        dx,
+                        if !dead { params::BOSS_EYES_Y.0 } else { params::BOSS_EYES_Y.2 },
+                        1.0
+                    ),
                     ..default()
                 })
                 .insert(Eye { left })
@@ -77,6 +91,7 @@ pub fn init(
                     rigid_body: RigidBody::Fixed,
                     ..default()
                 })
+                .insert(Boss1Part)
                 .insert(Hitbox)
             ;
         }
@@ -88,6 +103,8 @@ pub fn update(
     mut boss: Query<(&mut TextureAtlasSprite, &mut Boss1State, &mut Collider), With<Boss1>>,
     mut damage: EventReader<Damaged>,
     mut eyes: Query<(Entity, &Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
+    mut data: ResMut<GameData>,
+    parts: Query<Entity, With<Boss1Part>>,
     time: Res<Time>,
 ) {
     let Ok((mut sprite, mut state, mut collider)) = boss.get_single_mut() else { return; };
@@ -151,12 +168,23 @@ pub fn update(
     // Update sprite
     sprite.index = match *state {
         Boss1State { hp: 2, .. } | Boss1State { hp: 1, .. } => 2,
+        Boss1State { hp: 0, .. } => 1,
         Boss1State { stun: 0.0, .. } => 0,
         _ => 1,
     };
 
-    // Update collider
+    // Boss HP updated
     if old_hp != state.hp {
-        *collider = colliders::boss1(sprite.index);
+        if state.hp == 0 {
+            // Kill animation
+            if !data.has_flag(Flags::Boss1Defeated) {
+                data.set_flag(Flags::Boss1Defeated);
+            }
+            // Remove colliders
+            parts.for_each(|p_e| { commands.entity(p_e).remove::<Collider>(); });
+        } else {
+            // Update collider
+            *collider = colliders::boss1(sprite.index);
+        }
     }
 }

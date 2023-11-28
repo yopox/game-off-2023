@@ -46,7 +46,7 @@ pub enum Flags {
     /// If the player can dash
     Dash,
     /// If the 1st boss is defeated
-    Boss1,
+    Boss1Defeated,
     /// If the 2nd boss is defeated
     Boss2,
 }
