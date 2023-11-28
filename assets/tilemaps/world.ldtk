@@ -466,8 +466,8 @@
 			"tags": [],
 			"exportToToc": false,
 			"doc": null,
-			"width": 20,
-			"height": 5,
+			"width": 10,
+			"height": 10,
 			"resizableX": true,
 			"resizableY": true,
 			"minWidth": 1,
@@ -719,7 +719,7 @@
 							"__worldY": 66,
 							"iid": "33674f70-8990-11ee-a39d-83464a28deff",
 							"width": 40,
-							"height": 5,
+							"height": 10,
 							"defUid": 38,
 							"px": [760,339],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
@@ -785,7 +785,7 @@
 							"__worldY": -337,
 							"iid": "b7afe000-8990-11ee-a06c-8562a33e26e6",
 							"width": 49,
-							"height": 5,
+							"height": 10,
 							"defUid": 38,
 							"px": [1476,591],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
@@ -801,7 +801,7 @@
 							"__worldY": -337,
 							"iid": "bf2a8c40-8990-11ee-a06c-b7469cf38a91",
 							"width": 49,
-							"height": 5,
+							"height": 10,
 							"defUid": 38,
 							"px": [1544,591],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
@@ -817,7 +817,7 @@
 							"__worldY": -353,
 							"iid": "ccd4c720-8990-11ee-a06c-0d4e5f1e8e1d",
 							"width": 240,
-							"height": 5,
+							"height": 10,
 							"defUid": 38,
 							"px": [1726,575],
 							"fieldInstances": [{ "__identifier": "Damage", "__type": "Int", "__value": 1, "__tile": null, "defUid": 39, "realEditorValues": [] }]
