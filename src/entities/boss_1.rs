@@ -75,7 +75,11 @@ pub fn init(
         ] {
             builder
                 .spawn(SpriteSheetBundle {
-                    sprite: TextureAtlasSprite { flip_x: !left, ..default() },
+                    sprite: TextureAtlasSprite {
+                        flip_x: !left,
+                        index: if dead { 1 } else { 0 },
+                        ..default()
+                    },
                     texture_atlas: textures.boss_1_eye.clone(),
                     transform: Transform::from_xyz(
                         dx,
@@ -173,16 +177,19 @@ pub fn update(
         _ => 1,
     };
 
-    // Boss HP updated
-    if old_hp != state.hp {
-        if state.hp == 0 {
-            // Kill animation
-            if !data.has_flag(Flags::Boss1Defeated) {
-                data.set_flag(Flags::Boss1Defeated);
-            }
-            // Remove colliders
-            parts.for_each(|p_e| { commands.entity(p_e).remove::<Collider>(); });
+    // Boss killed
+    if state.hp == 0 || data.has_flag(Flags::Boss1Defeated) {
+        // Kill animation
+        if !data.has_flag(Flags::Boss1Defeated) {
+            data.set_flag(Flags::Boss1Defeated);
         } else {
+            sprite.index = 1;
+        }
+        // Remove colliders
+        parts.for_each(|p_e| { commands.entity(p_e).remove::<Collider>(); });
+    } else {
+        // Boss HP updated
+        if old_hp != state.hp {
             // Update collider
             *collider = colliders::boss1(sprite.index);
         }
