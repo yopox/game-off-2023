@@ -22,6 +22,7 @@ mod common;
 pub mod animation;
 mod checkpoint;
 mod boss_1;
+pub mod player_sensor;
 pub(crate) mod spawner;
 
 pub struct EntitiesPlugin;
@@ -47,12 +48,15 @@ impl Plugin for EntitiesPlugin {
         app
             .add_event::<PlayerHitEvent>()
             .add_event::<animation::AnimationEvent>()
+            .add_event::<player_sensor::PlayerEnteredSensorEvent>()
+            .add_event::<player_sensor::PlayerExitedSensorEvent>()
             .register_ldtk_entity::<SpawnerBundle>("Spawner")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
             .register_ldtk_entity::<DamageZoneBundle>("DamageZone")
+            .register_ldtk_entity::<player_sensor::PlayerSensorBundle>("PlayerSensor")
             .add_systems(Update, (common::entity_spawned, common::add_initial_y))
             .add_systems(Update, (spawner::init_spawners).run_if(not(resource_exists::<spawner::SpawnersInit>())))
             .add_systems(Update, (spawner::spawn_player).run_if(resource_exists::<spawner::SpawnPlayer>()))
@@ -70,6 +74,7 @@ impl Plugin for EntitiesPlugin {
                     zombie::zombie_die,
                     boss_1::init,
                     boss_1::update,
+                    player_sensor::update_player_sensors,
                 ).run_if(in_state(GameState::Game))
             )
             .add_systems(Update, (
