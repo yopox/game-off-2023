@@ -2,7 +2,7 @@ use bevy::app::App;
 use bevy::prelude::*;
 use bevy_pkv::PkvStore;
 
-pub use collision::{ColliderBundle, Damaged, Hitbox};
+pub use collision::{ColliderBundle, Damaged, Hitbox, LevelColliderGroup};
 pub use cutscene::CSEvent;
 pub use data::{Flags, GameData};
 pub use hearts::PlayerLife;

@@ -1,10 +1,13 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{EntityInstance, LdtkEntity};
 use bevy_ecs_ldtk::prelude::{LdtkProject, RawLevelAccessor};
+use bevy_rapier2d::geometry::{Sensor, Collider};
 
 use crate::{params, util};
 use crate::entities::player::{Dash, Player, PlayerBundle};
 use crate::logic::{ColliderBundle, LevelManager};
+
+use super::player::{PlayerSizeChangeSensorL, PlayerSizeChangeSensorM, PlayerSize};
 
 #[derive(Resource)]
 pub struct SpawnPlayer;
@@ -97,12 +100,32 @@ pub fn spawn_player(
     transform.translation.z = params::z_pos::PLAYER;
     transform.translation.y -= 8.5;
 
+    let a_little_smaller_transform = Transform {
+        translation: Vec3::new(0.0, 0.05, 0.0),
+        scale: Vec3::new(0.95, 1.0, 1.0),
+        ..default()
+    };
+
     commands.spawn(PlayerBundle {
         player: Player,
         collider_bundle: ColliderBundle::from(&instance),
         instance,
         spatial: SpatialBundle::from_transform(transform),
         dash: Dash::default(),
+    })
+    .with_children(|cb| {
+        cb.spawn((
+            PlayerSizeChangeSensorM,
+            SpatialBundle::from_transform(a_little_smaller_transform),
+            Collider::from(PlayerSize::M),
+            Sensor
+        ));
+        cb.spawn((
+            PlayerSizeChangeSensorL,
+            SpatialBundle::from_transform(a_little_smaller_transform),
+            Collider::from(PlayerSize::L),
+            Sensor
+        ));
     });
 
     commands.remove_resource::<SpawnPlayer>();
