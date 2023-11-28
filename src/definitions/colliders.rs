@@ -43,7 +43,7 @@ impl From<ZombieSize> for Collider {
 impl From<PlatformType> for Collider {
     fn from(value: PlatformType) -> Self {
         let (offset, size) = match value {
-            PlatformType::Detection(_) => (Vec2::ZERO, vec2(16., 3.)),
+            PlatformType::Detection(_) => (Vec2::new(0., 1.5), vec2(16., 3.)),
         };
 
         rectangle(offset, size)
