@@ -95,6 +95,7 @@ pub fn spawn_player(
     // info!("Spawning player at transform {:?}", transform);
     let mut transform = transform.compute_transform();
     transform.translation.z = params::z_pos::PLAYER;
+    transform.translation.y -= 8.5;
 
     commands.spawn(PlayerBundle {
         player: Player,
