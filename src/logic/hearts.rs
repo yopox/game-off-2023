@@ -1,20 +1,15 @@
 use bevy::{prelude::*};
 
-use crate::{GameState, screens::Textures};
+use crate::{GameState, params, screens::Textures};
 
 pub struct HeartsPlugin;
 
 impl Plugin for HeartsPlugin {
     fn build(&self, app: &mut App) {
         app
-            .insert_resource(PlayerLife { max: 3, current: 3 })
+            .insert_resource(PlayerLife { max: 6, current: 6 })
             .add_systems(OnEnter(GameState::Game), init_hearts_holder)
-            .add_systems(Update, 
-                (
-                    update_hearts,
-                    fadeout_lost_hearts,
-                )
-                    .run_if(in_state(GameState::Game))
+            .add_systems(Update, (update_hearts).run_if(in_state(GameState::Game))
             )
         ;
     }
@@ -46,9 +41,6 @@ impl PlayerLife {
 struct Heart(usize);
 
 #[derive(Component)]
-struct LostHeart;
-
-#[derive(Component)]
 struct HeartsHolder;
 
 fn init_hearts_holder(
@@ -57,10 +49,7 @@ fn init_hearts_holder(
     commands
         .spawn(NodeBundle {
             style: Style {
-                display: Display::Flex,
-                width: Val::Percent(100.),
-                height: Val::Percent(30.0),
-                padding: UiRect::all(Val::Px(10.0)),
+                padding: UiRect::px(48.0, 0.0, 32.0, 0.0),
                 ..default()
             },
             ..default()
@@ -73,50 +62,39 @@ fn update_hearts(
     mut commands: Commands,
     textures: Res<Textures>,
     player_life: Res<PlayerLife>,
-    mut hearts: Query<(Entity, &Heart), Without<LostHeart>>,
     hearts_holder: Query<Entity, With<HeartsHolder>>,
+    mut hearts: Query<(&Heart, &mut UiTextureAtlasImage)>,
 ) {
     let hearts_holder = hearts_holder.single();
     let mut current_hearts = 0;
-    for (heart, &Heart(idx)) in hearts.iter_mut() {
-        if idx >= player_life.current {
-            commands.entity(heart).insert(LostHeart);
-            info!("Lost heart {}", idx);
-        }
+    for (&Heart(idx), mut image) in hearts.iter_mut() {
+        image.index =
+            if player_life.current <= 2 * idx { 2 }
+            else { match player_life.current - 2 * idx {
+                0 => 2,
+                1 => 1,
+                _ => 0,
+            } };
         current_hearts += 1;
     }
 
-    while current_hearts < player_life.current {
-        commands.spawn(NodeBundle {
-            style: Style {
-                width: Val::Px(20.0),
-                height: Val::Px(20.0),
-                margin: UiRect::all(Val::Px(5.0)),
+    while current_hearts < player_life.current / 2 {
+        commands
+            .spawn(AtlasImageBundle {
+                node: Default::default(),
+                style: Style {
+                    width: Val::Px(18.0),
+                    height: Val::Px(16.0),
+                    margin: UiRect::all(Val::Px(4.0)),
+                    ..default()
+                },
+                texture_atlas: textures.heart.clone(),
+                z_index: ZIndex::Global(params::ui_z::HEARTS),
                 ..default()
-            },
-            background_color: Color::WHITE.into(),
-            ..default()
-        })
-            .insert(UiImage::new(textures.heart.clone()))
+            })
             .insert(Heart(current_hearts))
             .set_parent(hearts_holder)
         ;
-        // info!("Spawned heart {}", current_hearts);
         current_hearts += 1;
-    }
-}
-
-fn fadeout_lost_hearts(
-    mut commands: Commands,
-    time: Res<Time>,
-    mut hearts: Query<(Entity, &mut BackgroundColor, &mut LostHeart)>,
-) {
-    for (heart, mut background_color, _) in hearts.iter_mut() {
-        let new_alpha = background_color.0.a() - time.delta_seconds() * 2.0;
-        if new_alpha <= 0.0 {
-            commands.entity(heart).despawn_recursive();
-        } else {
-            background_color.0.set_a(new_alpha);
-        }
     }
 }

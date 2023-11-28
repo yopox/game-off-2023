@@ -53,6 +53,10 @@ pub struct Textures {
     #[asset(path = "boss_1_eye.png")]
     pub boss_1_eye: Handle<TextureAtlas>,
 
+    #[asset(texture_atlas(tile_size_x = 9., tile_size_y = 8., columns = 3, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(path = "heart.png")]
+    pub heart: Handle<TextureAtlas>,
+
     #[asset(path = "pixel.png")]
     pub pixel: Handle<Image>,
 
@@ -61,9 +65,6 @@ pub struct Textures {
 
     #[asset(path = "frame.png")]
     pub frame: Handle<Image>,
-
-    #[asset(path = "heart.png")]
-    pub heart: Handle<Image>,
 }
 
 #[derive(AssetCollection, Resource)]

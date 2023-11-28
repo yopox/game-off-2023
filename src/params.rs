@@ -19,6 +19,7 @@ pub mod ui_z {
     pub const CINEMA: i32 = 90;
     pub const FRAME: i32 = 100;
     pub const TEXT: i32 = 110;
+    pub const HEARTS: i32 = 120;
 }
 
 pub struct SizeVal<T> where T: Copy {
