@@ -45,7 +45,7 @@ pub struct Textures {
     #[asset(path = "platform.png")]
     pub platform: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 96., tile_size_y = 80., columns = 3, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(texture_atlas(tile_size_x = 96., tile_size_y = 80., columns = 7, rows = 1, padding_x = 0., padding_y = 0.))]
     #[asset(path = "boss_1.png")]
     pub boss_1: Handle<TextureAtlas>,
 

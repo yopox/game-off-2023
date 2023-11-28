@@ -1,11 +1,11 @@
 use bevy::app::App;
 use bevy::prelude::*;
 
+pub use hurt::Hurt;
 pub use palette::Palette;
 pub use text::text;
 pub use text::TextStyles;
 pub use transition::ScreenTransition;
-pub use hurt::Hurt;
 
 mod palette;
 mod text;
@@ -24,6 +24,8 @@ impl Plugin for GraphicsPlugin {
             .add_systems(Update, (
                 particles::update_spawners,
                 particles::init_player_spawner,
+                particles::init_boss_spawner,
+                particles::update_boss_spawner,
                 hurt::process_hurt,
                 hurt::add_emitters,
                 hurt::on_hurt,

@@ -8,9 +8,10 @@ use crate::definitions::colliders;
 use crate::entities::animation::AnimStep;
 use crate::entities::common::get_enemy;
 use crate::graphics::Hurt;
+use crate::graphics::particles::{Boss, BossKilled};
 use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
 use crate::params;
-use crate::screens::Textures;
+use crate::screens::{ScreenShake, Textures};
 
 #[derive(Component, Clone)]
 pub struct Boss1State {
@@ -64,6 +65,7 @@ pub fn init(
     commands
         .entity(e)
         .insert(get_enemy("Boss1").expect("Couldn't find enemy"))
+        .insert(Boss(1))
         .insert(Boss1Part)
     ;
 
@@ -110,7 +112,7 @@ pub fn update(
     mut eyes: Query<(Entity, &Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
     mut data: ResMut<GameData>,
     parts: Query<Entity, With<Boss1Part>>,
-    time: Res<Time>,
+    mut time: ResMut<Time>,
 ) {
     let Ok((mut state, mut collider, mut step)) = boss.get_single_mut() else { return; };
 
@@ -175,9 +177,10 @@ pub fn update(
         // Kill animation
         if !data.has_flag(Flags::Boss1Defeated) {
             data.set_flag(Flags::Boss1Defeated);
-        } else {
-            step.set_if_neq(AnimStep::Fall);
+            commands.insert_resource(BossKilled::new(1));
+            commands.insert_resource(ScreenShake::new(params::BOSS_EMITTER_DELAY * 3.0));
         }
+        step.set_if_neq(AnimStep::Fall);
         // Remove colliders
         parts.for_each(|p_e| { commands.entity(p_e).remove::<Collider>(); });
     } else {

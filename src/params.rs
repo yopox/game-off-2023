@@ -92,10 +92,15 @@ pub const ZOMBIE_INITIAL_KNOCKBACK_SPEED: f32 = 8.0;
 pub const ZOMBIE_KNOCKBACK_TIME: f32 = 0.3;
 pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.15;
 
+// --- Bosses
+pub const BOSS_EMITTER_DELAY: f32 = 0.25;
+pub const BOSS_EMITTER_ON: f32 = 0.075;
+
 // --- Boss 1
 pub const BOSS_STUN_DELAY: f32 = 20.0;
 pub const BOSS_EYES_Y: (f32, f32, f32) = (44.0, 52.0, 4.0);
-pub const BOSS_EYES_DX: f32 = 27.0;
+pub const BOSS_EYES_DX: f32 = 26.0;
+pub const BOSS1_EMITTER_OFFSET: (f32, f32) = (0.0, 42.0);
 
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
