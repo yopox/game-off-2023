@@ -214,6 +214,7 @@ pub fn get_player_rule(state: &AnimStep, size: &PlayerSize) -> AnimationRule {
                 SeqPart::WaitAnd(steps.4, AnimationEvent::AttackOver),
             ])
         },
+        AnimStep::Dash => AnimationRule::Still(8),
         _ => AnimationRule::Missing,
     }
 }
