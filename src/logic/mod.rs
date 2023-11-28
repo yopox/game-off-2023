@@ -10,6 +10,7 @@ pub use hit_stop::HitStop;
 pub use knockback::Knockback;
 pub use level_loading::*;
 pub use movement::move_player;
+pub use cutscene::Cutscene;
 
 use crate::{entities::zombie::patrol_zombie, GameState, params};
 
@@ -35,7 +36,7 @@ impl Plugin for LogicPlugin {
             .add_event::<attack::SpawnSword>()
             .add_systems(Startup, (init_logic))
             .add_systems(Update, (data::save, data::reset))
-            .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword))
+            .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword).run_if(not(resource_exists::<Cutscene>())))
             .add_systems(Update,
                 (
                     (knockback::process_knockback, hit_stop::process_hit_stop).chain()

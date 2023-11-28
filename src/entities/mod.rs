@@ -2,6 +2,7 @@ use bevy::app::App;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::LdtkEntityAppExt;
 
+use crate::logic::Cutscene;
 use crate::{GameState, logic};
 use crate::entities::boss_1::Boss1Bundle;
 use crate::entities::platform::DetectionPlatformBundle;
@@ -57,7 +58,7 @@ impl Plugin for EntitiesPlugin {
             .add_systems(Update, (spawner::spawn_player).run_if(resource_exists::<spawner::SpawnPlayer>()))
             .add_systems(Update,
                 (
-                    player::change_size,
+                    player::change_size.run_if(not(resource_exists::<Cutscene>())),
                     player::player_touches_enemy,
                     player::enemy_touches_player,
                     player::player_hit,
