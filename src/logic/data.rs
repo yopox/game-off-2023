@@ -21,7 +21,7 @@ impl Default for GameData {
         GameData {
             flags: HashSet::new(),
             last_spawner: params::INITIAL_SPAWNER_ID.to_string(),
-            max_life: 6,
+            max_life: params::STARTING_LIFE,
         }
     }
 }
@@ -69,7 +69,7 @@ pub fn save(
 
     if data.is_changed() {
         match pkv.set(params::GAME_DATA_KEY, data.as_ref()) {
-            Ok(_) => info!("Saved game data"),
+            Ok(_) => { /*info!("Saved game data")*/ },
             Err(_) => error!("Couldn't persist game data."),
         }
     }

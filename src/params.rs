@@ -68,6 +68,7 @@ pub const DASH_S: f32 = 6.0;
 pub const TRANSFORM_PARTICLES_TIMER: SizeVal<f32> = SizeVal::new(0.2, 0.1, 0.3);
 
 // --- Player
+pub const STARTING_LIFE: usize = 6;
 pub const ATTACK_STEPS: SizeVal<(f32, f32, f32, f32, f32)> = SizeVal::new(
     (0.15, 0.05, 0.05, 0.25, 0.2),
     (0.15, 0.05, 0.05, 0.25, 0.2),

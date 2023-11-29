@@ -54,7 +54,7 @@ fn die(
     mut life: ResMut<PlayerLife>,
 ) {
     if life.is_changed() && life.current == 0 {
-        commands.insert_resource(ScreenShake::new(1.0));
+        commands.insert_resource(ScreenShake::new(params::DEATH_SHAKE_TIME));
         commands.insert_resource(Cutscene::from(&cutscenes::DEATH));
     }
 }
