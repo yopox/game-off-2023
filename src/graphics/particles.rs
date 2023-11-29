@@ -9,7 +9,7 @@ use rand::{Rng, thread_rng};
 use crate::entities::player::Player;
 use crate::params;
 use crate::params::z_pos;
-use crate::screens::Textures;
+use crate::screens::{ScreenShake, Textures};
 
 #[derive(Component)]
 pub struct PlayFor(pub f32);
@@ -116,14 +116,14 @@ pub fn init_boss_spawner(
                     builder
                         .spawn(ParticleSystemBundle {
                             particle_system: ParticleSystem {
-                                max_particles: 512,
+                                max_particles: 1300,
                                 texture: ParticleTexture::Sprite(textures.pixel.clone()),
-                                spawn_rate_per_second: 512.0.into(),
-                                initial_speed: JitteredValue::jittered(22.0, -4.0..8.0),
-                                lifetime: JitteredValue::jittered(0.75, -0.1..0.1),
+                                spawn_rate_per_second: 1300.0.into(),
+                                initial_speed: JitteredValue::jittered(180.0, 0.0..10.0),
+                                lifetime: JitteredValue::jittered(0.08, 0.0..0.01),
                                 color: Gradient(Curve::new(vec![
-                                    CurvePoint::new(Color::RED, 0.0),
-                                    CurvePoint::new(Color::rgba(1.0, 0.0, 0.0, 0.0), 1.0),
+                                    CurvePoint::new(Color::rgba(0.957, 0.137, 0.208, 1.0), 0.0),
+                                    CurvePoint::new(Color::rgba(0.957, 0.137, 0.208, 0.0), 1.0),
                                 ])),
                                 z_value_override: Some(JitteredValue::new(z_pos::PARTICLES)),
                                 ..ParticleSystem::default()
@@ -150,7 +150,10 @@ pub fn update_boss_spawner(
     boss_emitters: Query<(Entity, &BossSpawner)>,
 ) {
     let Some(mut boss_killed) = boss_killed else { return };
-    if boss_killed.is_added() { time.set_relative_speed(0.25); }
+    if boss_killed.is_added() {
+        time.set_relative_speed(0.25);
+        commands.insert_resource(ScreenShake::new(params::BOSS_EMITTER_DELAY * 3.5));
+    }
     let i1 = (boss_killed.timer / params::BOSS_EMITTER_DELAY) as usize;
     let i2 = ((boss_killed.timer + time.delta_seconds()) / params::BOSS_EMITTER_DELAY) as usize;
     if i1 != i2 || boss_killed.timer < time.delta_seconds() {
@@ -161,7 +164,7 @@ pub fn update_boss_spawner(
         }
     }
     boss_killed.timer += time.delta_seconds();
-    if boss_killed.timer >= params::BOSS_EMITTER_DELAY * 3.0 {
+    if boss_killed.timer >= params::BOSS_EMITTER_DELAY * 3.5 {
         commands.remove_resource::<BossKilled>();
         time.set_relative_speed(1.0);
     }

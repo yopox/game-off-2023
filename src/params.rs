@@ -93,8 +93,8 @@ pub const ZOMBIE_KNOCKBACK_TIME: f32 = 0.3;
 pub const ZOMBIE_HIT_STOP_DURATION: f32 = 0.15;
 
 // --- Bosses
-pub const BOSS_EMITTER_DELAY: f32 = 0.25;
-pub const BOSS_EMITTER_ON: f32 = 0.075;
+pub const BOSS_EMITTER_DELAY: f32 = 0.15;
+pub const BOSS_EMITTER_ON: f32 = 0.045;
 
 // --- Boss 1
 pub const BOSS_STUN_DELAY: f32 = 20.0;
