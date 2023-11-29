@@ -192,14 +192,14 @@ pub fn update(
             *t += time.delta_seconds();
             // TODO: Cool interpolation
             if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
-                if input.just_pressed(KeyCode::Space) { 0.0 } else { t.min(1.0) }
+                if input.just_pressed(KeyCode::Space) { 1.0 } else { t.min(1.0) }
             ); }
         }
         CSEvent::FadeIn(t) => {
             *t -= time.delta_seconds();
             // TODO: Cool interpolation
             if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
-                if input.just_pressed(KeyCode::Space) { 1.0 } else { t.max(0.0) }
+                if input.just_pressed(KeyCode::Space) { 0.0 } else { t.max(0.0) }
             ); }
         }
         CSEvent::Teleport(spawner_id) => {
