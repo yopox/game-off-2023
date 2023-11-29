@@ -1,15 +1,18 @@
 use bevy::{prelude::*};
 
 use crate::{GameState, params, screens::Textures};
+use crate::logic::GameData;
 
 pub struct HeartsPlugin;
 
 impl Plugin for HeartsPlugin {
     fn build(&self, app: &mut App) {
         app
-            .insert_resource(PlayerLife { max: 6, current: 6 })
+            .add_systems(PostStartup, (init_life))
             .add_systems(OnEnter(GameState::Game), init_hearts_holder)
-            .add_systems(Update, (update_hearts).run_if(in_state(GameState::Game))
+            .add_systems(Update,
+                         (update_hearts)
+                             .run_if(in_state(GameState::Game))
             )
         ;
     }
@@ -24,6 +27,8 @@ pub struct PlayerLife {
 }
 
 impl PlayerLife {
+    pub fn max_life(&self) -> usize { self.max }
+
     pub fn lose(&mut self) {
         self.current = self.current.saturating_sub(1);
     }
@@ -31,10 +36,13 @@ impl PlayerLife {
     pub fn gain(&mut self) {
         self.current = (self.current + 1).min(self.max);
     }
+}
 
-    pub fn is_dead(&self) -> bool {
-        self.current == 0
-    }
+fn init_life(
+    mut commands: Commands,
+    game_data: Res<GameData>,
+) {
+    commands.insert_resource(PlayerLife { max: game_data.max_life, current: 6 })
 }
 
 #[derive(Component)]

@@ -5,7 +5,7 @@ use bevy_pkv::PkvStore;
 use log::{error, info, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::logic::LevelManager;
+use crate::logic::{LevelManager, PlayerLife};
 use crate::params;
 
 /// Contain persisted game data.
@@ -13,6 +13,7 @@ use crate::params;
 pub struct GameData {
     flags: HashSet<Flags>,
     pub last_spawner: String,
+    pub max_life: usize,
 }
 
 impl Default for GameData {
@@ -20,6 +21,7 @@ impl Default for GameData {
         GameData {
             flags: HashSet::new(),
             last_spawner: params::INITIAL_SPAWNER_ID.to_string(),
+            max_life: 6,
         }
     }
 }
@@ -54,10 +56,15 @@ pub enum Flags {
 pub fn save(
     mut data: ResMut<GameData>,
     mut pkv: ResMut<PkvStore>,
+    player_life: Res<PlayerLife>,
     level_manager: Res<LevelManager>,
 ) {
     if level_manager.is_changed() {
         data.last_spawner = level_manager.spawner_id().clone();
+    }
+
+    if player_life.is_changed() {
+        data.max_life = player_life.max_life();
     }
 
     if data.is_changed() {
@@ -74,6 +81,6 @@ pub fn reset(
 ) {
     if input.just_pressed(KeyCode::R) {
         warn!("GameData reset");
-        data.flags.clear();
+        *data = GameData::default();
     }
 }
