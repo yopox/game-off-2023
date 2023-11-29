@@ -18,6 +18,7 @@ pub mod player;
 pub mod zombie;
 pub mod damage_zone;
 pub mod platform;
+mod image_entity;
 mod common;
 pub mod animation;
 mod checkpoint;
@@ -57,6 +58,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
             .register_ldtk_entity::<DamageZoneBundle>("DamageZone")
             .register_ldtk_entity::<player_sensor::PlayerSensorBundle>("PlayerSensor")
+            .register_ldtk_entity::<image_entity::ImageEntityBundle>("ImageEntity")
             .add_systems(Update, (common::entity_spawned, common::add_initial_y))
             .add_systems(Update, (spawner::init_spawners).run_if(not(resource_exists::<spawner::SpawnersInit>())))
             .add_systems(Update, (spawner::spawn_player).run_if(resource_exists::<spawner::SpawnPlayer>()))
@@ -75,6 +77,7 @@ impl Plugin for EntitiesPlugin {
                     boss_1::init,
                     boss_1::update,
                     player_sensor::update_player_sensors,
+                    image_entity::set_image_for_image_entity,
                 ).run_if(in_state(GameState::Game))
             )
             .add_systems(Update, (
