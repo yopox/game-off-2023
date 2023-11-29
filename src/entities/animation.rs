@@ -244,7 +244,7 @@ pub fn get_boss_1_rule(state: &AnimStep) -> AnimationRule {
     match state {
         AnimStep::Idle => AnimationRule::Sequence(vec![
             SeqPart::Frame(1),
-            SeqPart::Wait(0.35),
+            SeqPart::Wait(0.2),
             SeqPart::Frame(0),
         ]),
         AnimStep::Jump => AnimationRule::Sequence(vec![

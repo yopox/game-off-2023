@@ -104,7 +104,7 @@ pub const BOSS_EMITTER_ON: f32 = 0.045;
 
 // --- Boss 1
 pub const BOSS_STUN_DELAY: f32 = 20.0;
-pub const BOSS_EYES_Y: (f32, f32, f32) = (44.0, 52.0, 4.0);
+pub const BOSS_EYES_Y: (f32, f32, f32) = (44.0, 52.0, 3.0);
 pub const BOSS_EYES_DX: f32 = 26.0;
 pub const BOSS1_EMITTER_OFFSET: (f32, f32) = (0.0, 42.0);
 

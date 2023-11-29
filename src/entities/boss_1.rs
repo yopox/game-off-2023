@@ -154,10 +154,12 @@ pub fn update(
         }
     }
 
+    let dead = state.hp == 0 || data.has_flag(Flags::Boss1Defeated);
+
     for ((_, eye, mut eye_sprite, mut pos)) in eyes.iter_mut() {
         eye_sprite.index = match eye.left {
-            true => if state.left_eye > 0 { 0 } else { 1 }
-            false => if state.right_eye > 0 { 0 } else { 1 }
+            true => if state.left_eye > 0 && !dead { 0 } else { 1 }
+            false => if state.right_eye > 0 && !dead  { 0 } else { 1 }
         };
         if old_hp != state.hp {
             match state.hp {
@@ -173,7 +175,7 @@ pub fn update(
     }
 
     // Boss killed
-    if state.hp == 0 || data.has_flag(Flags::Boss1Defeated) {
+    if dead {
         // Kill animation
         if !data.has_flag(Flags::Boss1Defeated) {
             data.set_flag(Flags::Boss1Defeated);
