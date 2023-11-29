@@ -78,7 +78,7 @@ fn update_hearts(
         current_hearts += 1;
     }
 
-    while current_hearts < player_life.current / 2 {
+    while current_hearts < player_life.max / 2 {
         commands
             .spawn(AtlasImageBundle {
                 node: Default::default(),
