@@ -10,7 +10,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{ColliderBundle, Knockback, LevelManager, PlayerLife, LevelColliderGroup};
+use crate::logic::{ColliderBundle, Knockback, LevelColliderGroup, LevelManager, PlayerLife};
 use crate::params;
 use crate::screens::Textures;
 
@@ -234,7 +234,9 @@ pub fn player_hit(
             .insert(Knockback::new(normal * enemy.player_knockback_speed, enemy.player_knockback_time))
             .insert(Hurt::new(enemy.player_hurt_time))
         ;
+        break;
     }
+    events.clear();
 }
 
 pub fn player_goes_out_of_screen(
