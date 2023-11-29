@@ -7,6 +7,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::entities::platform::Range;
 use crate::entities::player::PlayerSize;
+use crate::params;
 use crate::screens::Textures;
 use crate::util::get_ldtk_field_int;
 
@@ -131,14 +132,14 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
 pub fn get_enemy(id: &str) -> Option<Enemy> {
     match id {
         "Zombie" | "Eye" | "Boss1" => Some(Enemy {
-            player_knockback_speed: 1.5,
-            player_knockback_time: 0.3,
-            player_hurt_time: 0.3,
+            player_knockback_speed: params::ENEMIES_KNOCKBACK_SPEED,
+            player_knockback_time: params::ENEMIES_KNOCKBACK_TIME,
+            player_hurt_time: params::ENEMIES_KNOCKBACK_TIME,
         }),
         "DamageZone" => Some(Enemy {
-            player_knockback_speed: 6.,
-            player_knockback_time: 0.5,
-            player_hurt_time: 0.5,
+            player_knockback_speed: params::SPIKES_KNOCKBACK_SPEED,
+            player_knockback_time: params::SPIKES_KNOCKBACK_TIME,
+            player_hurt_time: params::SPIKES_KNOCKBACK_TIME,
         }),
         _ => None,
     }

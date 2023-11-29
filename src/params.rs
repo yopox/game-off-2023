@@ -83,6 +83,11 @@ pub const PLATFORM_DEAD_TIME: f32 = 0.35; // [up -> down] transition time when t
 
 // --- Enemies
 pub const ENEMY_HURT_TIME: f32 = 0.25;
+pub const ENEMIES_KNOCKBACK_SPEED: f32 = 300.0;
+pub const ENEMIES_KNOCKBACK_TIME: f32 = 0.3;
+pub const SPIKES_KNOCKBACK_SPEED: f32 = 400.0;
+pub const SPIKES_KNOCKBACK_TIME: f32 = 0.5;
+pub const DEATH_SHAKE_TIME: f32 = 0.5;
 
 // --- Zombie
 pub const DEFAULT_ZOMBIE_SPEED: f32 = 0.35;
