@@ -18,7 +18,7 @@ lazy_static! {
     pub static ref DEATH: VecDeque<CSEvent> = VecDeque::from([
         CSEvent::ToggleCinema(false),
         CSEvent::SetRelativeTime(0.25),
-        CSEvent::Wait(0.5),
+        CSEvent::Wait(0.4),
         CSEvent::fade_out_with_speed(8.0),
         CSEvent::SetLife(params::STARTING_LIFE),
         CSEvent::Wait(1.0),
