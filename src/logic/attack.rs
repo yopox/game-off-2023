@@ -45,7 +45,6 @@ pub fn update_sword(
     }
 
     for event in events.iter() {
-        info!("{:?}", event);
         match event {
             AnimationEvent::AttackSwing => {
                 let Ok((EntityID::Player(size), pos, sprite)) = player.get_single() else { continue };
