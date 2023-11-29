@@ -3,24 +3,25 @@ use std::collections::VecDeque;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::EntityInstance;
 
-use crate::{definitions, params};
+use crate::params;
+use crate::definitions::cutscenes;
 use crate::entities::animation::AnimStep;
 use crate::graphics::TextStyles;
-use crate::logic::{GameData, LevelManager};
+use crate::logic::{GameData, LevelManager, PlayerLife};
 use crate::logic::data::Flags;
 use crate::music::{BGM, PlayBGMEvent};
 use crate::screens::{Fonts, Textures};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum CSEvent {
-    /// Do nothing for the given amount of seconds
+    /// Do nothing for the given amount of raw seconds
     Wait(f32),
     /// Show a text (top dy / left dx / timer)
     Text(String, f32, f32, f32),
     /// Fade to black
-    FadeOut(f32),
+    FadeOut(f32, f32),
     /// Fade from black
-    FadeIn(f32),
+    FadeIn(f32, f32),
     /// Move the player to the given PlayerSpawner pos_id
     Teleport(String),
     /// Play a BGM
@@ -33,33 +34,41 @@ pub enum CSEvent {
     AddFlag(Flags),
     /// Set the corresponding flag to false
     RemoveFlag(Flags),
+    /// Tells [LevelManager] to respawn
+    Reload,
+    /// Show or hide cinema bars
+    ToggleCinema(bool),
+    /// Update player hp
+    SetLife(usize),
+    /// Update relative time
+    SetRelativeTime(f32),
 }
 
 impl CSEvent {
-    pub fn fade_in() -> Self { CSEvent::FadeIn(1.0) }
-    pub fn fade_out() -> Self { CSEvent::FadeOut(0.0) }
-    pub fn instant_fade_out() -> Self { CSEvent::FadeOut(1.0) }
+    pub fn fade_in() -> Self { CSEvent::FadeIn(0.0, 1.0) }
+    pub fn fade_in_with_speed(speed: f32) -> Self { CSEvent::FadeIn(0.0, speed) }
+    pub fn fade_out() -> Self { CSEvent::FadeOut(0.0, 1.0) }
+    pub fn fade_out_with_speed(speed: f32) -> Self { CSEvent::FadeOut(0.0, speed) }
     pub fn text_centered(text: String) -> Self { CSEvent::Text(text, 0.0, 0.0, 0.0) }
     pub fn text_offset(text: String, top: f32, left: f32) -> Self { CSEvent::Text(text, top, left, 0.0) }
 
     fn is_over(&self, input: &Input<KeyCode>) -> bool {
         match self {
             CSEvent::Wait(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
-            CSEvent::FadeOut(t) => input.just_pressed(KeyCode::Space) || *t >= 1.0,
-            CSEvent::FadeIn(t) => input.just_pressed(KeyCode::Space) || *t <= 0.0,
-            CSEvent::Teleport(_)
-            | CSEvent::BGM(_)
-            | CSEvent::Anim(_, _)
-            | CSEvent::AddFlag(_)
-            | CSEvent::RemoveFlag(_) => true,
+            CSEvent::FadeOut(t, speed) => input.just_pressed(KeyCode::Space) || *t * *speed >= 1.0,
+            CSEvent::FadeIn(t, speed) => input.just_pressed(KeyCode::Space) || *t * *speed >= 1.0,
             CSEvent::Text(txt, _, _, timer) => input.just_pressed(KeyCode::Space) || *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
-            _ => false
+            _ => true
         }
     }
 }
 
 #[derive(Resource, Clone)]
 pub struct Cutscene(VecDeque<CSEvent>);
+
+impl Cutscene {
+    pub fn from(cutscene: &VecDeque<CSEvent>) -> Self { Cutscene(cutscene.clone()) }
+}
 
 #[derive(Component)]
 pub struct Cinema;
@@ -111,7 +120,7 @@ pub fn init(
     let initial_cutscene = !data.has_flag(Flags::Intro);
 
     if initial_cutscene {
-        commands.insert_resource(Cutscene(definitions::cutscenes::INTRO.clone()));
+        commands.insert_resource(Cutscene::from(&cutscenes::INTRO));
     }
 
     commands
@@ -129,35 +138,34 @@ pub fn init(
 pub fn update(
     mut commands: Commands,
     mut cutscene: Option<ResMut<Cutscene>>,
-    mut cinema: Query<&mut Visibility, With<Cinema>>,
-    time: Res<Time>,
+    mut cinema: Query<(&mut Visibility, &mut BackgroundColor), With<Cinema>>,
+    mut time: ResMut<Time>,
     mut bgm: EventWriter<PlayBGMEvent>,
     mut entities: Query<(&EntityInstance, &mut AnimStep)>,
-    mut frame: Query<&mut BackgroundColor, With<Frame>>,
+    mut frame: Query<&mut BackgroundColor, (With<Frame>, Without<Cinema>)>,
     mut level_manager: ResMut<LevelManager>,
     mut text: Query<(&mut Text, &mut Style), With<CutsceneText>>,
     fonts: Res<Fonts>,
     input: Res<Input<KeyCode>>,
     mut data: ResMut<GameData>,
+    mut player_life: ResMut<PlayerLife>,
 ) {
-    let Some(mut cutscene) = cutscene else { return };
-
-    // Cutscene added
-    if cutscene.is_added() {
-        if let Ok(mut vis) = cinema.get_single_mut() { vis.set_if_neq(Visibility::Inherited); }
-    }
-
-    // Cutscene over
-    if cutscene.0.is_empty() {
-        commands.remove_resource::<Cutscene>();
-        if let Ok(mut vis) = cinema.get_single_mut() { vis.set_if_neq(Visibility::Hidden); }
+    let Ok((mut cin_vis, mut cin_col)) = cinema.get_single_mut() else { return };
+    let Some(mut cutscene) = cutscene else {
+        let a = cin_col.0.a();
+        if a > 0.0 { cin_col.0.set_a((a - time.delta_seconds()).max(0.0)); }
+        return
+    };
+    if cin_col.0.a() < 1.0 {
+        let a = cin_col.0.a();
+        cin_col.0.set_a((a + time.delta_seconds()).min(1.0));
     }
 
     let Some(event) = cutscene.0.get_mut(0) else { return };
 
     // Play event
     match event {
-        CSEvent::Wait(t) => { *t -= time.delta_seconds(); }
+        CSEvent::Wait(t) => { *t -= time.raw_delta_seconds(); }
         CSEvent::BGM(music) => { bgm.send(PlayBGMEvent(*music)); }
         CSEvent::Anim(e, s) => {
             if let Some((_, mut step)) = entities.iter_mut().find(|((e_i, _))| e_i.identifier == *e) {
@@ -167,8 +175,6 @@ pub fn update(
             }
         }
         CSEvent::Text(txt, top, left, timer) => {
-            let t_max = txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0;
-
             if let Ok((mut t, mut s)) = text.get_single_mut() {
                 if *timer == 0.0 {
                     s.top = Val::Px(*top);
@@ -188,19 +194,20 @@ pub fn update(
                 );
             }
         }
-        CSEvent::FadeOut(t) => {
+        CSEvent::FadeOut(t, speed) => {
             *t += time.delta_seconds();
-            // TODO: Cool interpolation
             if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
-                if input.just_pressed(KeyCode::Space) { 1.0 } else { t.min(1.0) }
+                if input.just_pressed(KeyCode::Space) { 1.0 } else { (*t * *speed).powi(3).min(1.0) }
             ); }
         }
-        CSEvent::FadeIn(t) => {
-            *t -= time.delta_seconds();
-            // TODO: Cool interpolation
+        CSEvent::FadeIn(t, speed) => {
+            *t += time.delta_seconds();
             if let Ok(mut bg) = frame.get_single_mut() { bg.0.set_a(
-                if input.just_pressed(KeyCode::Space) { 0.0 } else { t.max(0.0) }
+                if input.just_pressed(KeyCode::Space) { 0.0 } else { (1.0 - (*t * *speed).powi(3)).max(0.0) }
             ); }
+        }
+        CSEvent::ToggleCinema(show) => {
+            cin_vis.set_if_neq(if *show { Visibility::Inherited } else { Visibility::Hidden });
         }
         CSEvent::Teleport(spawner_id) => {
             level_manager.set_spawner_id(spawner_id.clone());
@@ -209,10 +216,17 @@ pub fn update(
         CSEvent::Walk(_, _, _) => {}
         CSEvent::AddFlag(flag) => data.set_flag(*flag),
         CSEvent::RemoveFlag(flag) => data.remove_flag(*flag),
+        CSEvent::Reload => level_manager.reload(),
+        CSEvent::SetLife(life) => { player_life.set_current(*life); }
+        CSEvent::SetRelativeTime(factor) => { time.set_relative_speed(*factor); }
     }
 
     // Go to next event
     if event.is_over(&input) {
         cutscene.0.pop_front();
+        if cutscene.0.is_empty() {
+            commands.remove_resource::<Cutscene>();
+        } else {
+        }
     }
 }

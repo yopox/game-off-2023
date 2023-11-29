@@ -1,7 +1,9 @@
 use bevy::{prelude::*};
 
 use crate::{GameState, params, screens::Textures};
-use crate::logic::GameData;
+use crate::definitions::cutscenes;
+use crate::logic::{Cutscene, GameData};
+use crate::screens::ScreenShake;
 
 pub struct HeartsPlugin;
 
@@ -11,7 +13,7 @@ impl Plugin for HeartsPlugin {
             .add_systems(PostStartup, (init_life))
             .add_systems(OnEnter(GameState::Game), init_hearts_holder)
             .add_systems(Update,
-                         (update_hearts)
+                         (update_hearts, die)
                              .run_if(in_state(GameState::Game))
             )
         ;
@@ -36,6 +38,8 @@ impl PlayerLife {
     pub fn gain(&mut self) {
         self.current = (self.current + 1).min(self.max);
     }
+
+    pub fn set_current(&mut self, to: usize) { self.current = to; }
 }
 
 fn init_life(
@@ -43,6 +47,16 @@ fn init_life(
     game_data: Res<GameData>,
 ) {
     commands.insert_resource(PlayerLife { max: game_data.max_life, current: 6 })
+}
+
+fn die(
+    mut commands: Commands,
+    mut life: ResMut<PlayerLife>,
+) {
+    if life.is_changed() && life.current == 0 {
+        commands.insert_resource(ScreenShake::new(1.0));
+        commands.insert_resource(Cutscene::from(&cutscenes::DEATH));
+    }
 }
 
 #[derive(Component)]
