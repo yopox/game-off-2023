@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{EntityInstance, LdtkEntity};
 
-use crate::{util::get_ldtk_field_string, screens::Textures};
+use crate::util::get_ldtk_field_string;
 
 #[derive(Debug, Clone, Component, Default)]
 pub struct ImageEntity {
@@ -31,7 +31,7 @@ pub fn set_image_for_image_entity(
 ) {
     for (image, image_entity) in new_image_entities.iter_mut() {
         let texture: Handle<Image> = textures.load(&image_entity.image_name);
-        info!("Setting image for image entity: {:?}", image_entity.image_name);
+        // info!("Setting image for image entity: {:?}", image_entity.image_name);
         commands.entity(image)
             .insert((
                 texture,
