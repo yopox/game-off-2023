@@ -129,7 +129,7 @@ pub fn move_player(
                     let toi = &collision.toi;
                     if toi.status == TOIStatus::Converged && toi.normal1.y < -0.5 {
                         // Jump ended
-                        info!("Jumped against ceiling");
+                        // info!("Jumped against ceiling");
                         step.set_if_neq(AnimStep::Fall);
                     }
                 }
