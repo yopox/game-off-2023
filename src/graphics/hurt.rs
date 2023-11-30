@@ -14,6 +14,7 @@ use super::particles::PlayFor;
 pub struct Hurt {
     pub time_left: f32,
     pub hurt_color: Color,
+    override_shake: Option<f32>,
 }
 
 impl Default for Hurt {
@@ -27,6 +28,15 @@ impl Hurt {
         Self {
             time_left,
             hurt_color: Color::RED,
+            override_shake: None,
+        }
+    }
+
+    pub fn new_with_shake(time_left: f32, shake: f32) -> Self {
+        Self {
+            time_left,
+            hurt_color: Color::RED,
+            override_shake: Some(shake),
         }
     }
 }
@@ -37,7 +47,12 @@ pub fn process_hurt(
     time: Res<Time>
 ) {
     for (e, mut hurt, mut sprite) in query.iter_mut() {
-        if hurt.is_added() { commands.insert_resource(ScreenShake::new(params::SHAKE_LEN_S)) }
+        if hurt.is_added() { commands.insert_resource(ScreenShake::new(
+            match hurt.override_shake {
+                None => params::SHAKE_LEN_S,
+                Some(shake_time) => shake_time,
+            }
+        )) }
         hurt.time_left -= time.delta_seconds();
         if hurt.time_left <= 0.0 {
             sprite.color = Color::WHITE;

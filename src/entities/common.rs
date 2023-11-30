@@ -63,6 +63,8 @@ pub fn entity_spawned(
             _ => ()
         }
 
+
+
         if let Some(enemy) = get_enemy(&instance.identifier) {
             e_c.insert(enemy);
         }
@@ -89,6 +91,8 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
             get_platform_size(&instance.field_instances),
         )),
         "Boss1" => Some(EntityID::Boss1),
+        "Boss2" => Some(EntityID::Boss2),
+        "Boss3" => Some(EntityID::Boss3),
         "Spawner" => None,
         "Checkpoint" => None,
         "DamageZone" => None,
@@ -126,13 +130,14 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
         "Zombie" => Some(textures.zombie_s.clone()),
         "DetectionPlatform" => Some(textures.platform.clone()),
         "Boss1" => Some(textures.boss_1.clone()),
+        "Boss2" => Some(textures.boss_2.clone()),
         _ => None,
     }
 }
 
 pub fn get_enemy(id: &str) -> Option<Enemy> {
     match id {
-        "Zombie" | "Eye" | "Boss1" => Some(Enemy {
+        "Zombie" | "Eye1" | "Boss1" | "Boss2" | "Eye2" | "Boss3" => Some(Enemy {
             player_knockback_speed: params::ENEMIES_KNOCKBACK_SPEED,
             player_knockback_time: params::ENEMIES_KNOCKBACK_TIME,
             player_hurt_time: params::ENEMIES_KNOCKBACK_TIME,

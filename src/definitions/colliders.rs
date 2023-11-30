@@ -61,7 +61,7 @@ pub fn sword_collider(player_size: &PlayerSize, flip: bool) -> Collider {
     rectangle(offset, size)
 }
 
-pub fn eye_collider() -> Collider {
+pub fn eye_1_collider() -> Collider {
     rectangle(Vec2::ZERO, vec2(8.0, 8.0))
 }
 
@@ -70,5 +70,16 @@ pub(crate) fn boss1(hp: u8) -> Collider {
         3 => rectangle(vec2(0.0, 42.5), vec2(50.0, 59.0)),
         2 | 1 => rectangle(vec2(0.0, 3.5), vec2(50.0, 7.0)),
         _ => rectangle(vec2(0.0, 32.5), vec2(50.0, 65.0)),
+    }
+}
+
+pub fn eye_2_collider() -> Collider {
+    rectangle(Vec2::ZERO, vec2(9.0, 8.0))
+}
+
+pub(crate) fn boss2(hp: u8) -> Collider {
+    match hp {
+        6..=8 => rectangle(vec2(3.0, 15.0), vec2(14.0, 21.0)),
+        _ => rectangle(vec2(-1.0, 32.0), vec2(8.0, 62.0)),
     }
 }

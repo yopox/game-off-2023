@@ -50,7 +50,7 @@ pub enum Flags {
     /// If the 1st boss is defeated
     Boss1Defeated,
     /// If the 2nd boss is defeated
-    Boss2,
+    Boss2Defeated,
 }
 
 pub fn save(

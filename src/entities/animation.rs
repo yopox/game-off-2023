@@ -165,6 +165,7 @@ impl EntityID {
             EntityID::Zombie(_) => get_zombie_rule(step),
             EntityID::DetectionPlatform(_) => get_platform_rule(step),
             EntityID::Boss1 => get_boss_1_rule(step),
+            EntityID::Boss2 => get_boss_2_rule(step),
             _ => AnimationRule::Missing,
         }
     }
@@ -261,6 +262,26 @@ pub fn get_boss_1_rule(state: &AnimStep) -> AnimationRule {
             SeqPart::Wait(0.35),
         ]),
         AnimStep::Fall => AnimationRule::Still(3),
+        _ => AnimationRule::Missing,
+    }
+}
+
+pub fn get_boss_2_rule(state: &AnimStep) -> AnimationRule {
+    match state {
+        AnimStep::Idle => AnimationRule::Still(0),
+        AnimStep::Walk => AnimationRule::Sequence(vec![
+           SeqPart::Frame(1),
+           SeqPart::Wait(1.5),
+           SeqPart::Frame(2),
+           SeqPart::Wait(0.15),
+           SeqPart::Frame(3),
+           SeqPart::Wait(0.15),
+           SeqPart::Frame(4),
+        ]),
+        AnimStep::Jump => AnimationRule::Still(4),
+        AnimStep::Attack => AnimationRule::Still(5),
+        AnimStep::Dash => AnimationRule::Still(7),
+        AnimStep::Fall => AnimationRule::Still(1),
         _ => AnimationRule::Missing,
     }
 }

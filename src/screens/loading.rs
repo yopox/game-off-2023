@@ -49,9 +49,17 @@ pub struct Textures {
     #[asset(path = "boss_1.png")]
     pub boss_1: Handle<TextureAtlas>,
 
+    #[asset(texture_atlas(tile_size_x = 105., tile_size_y = 106., columns = 9, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(path = "boss_2.png")]
+    pub boss_2: Handle<TextureAtlas>,
+
     #[asset(texture_atlas(tile_size_x = 8., tile_size_y = 8., columns = 2, rows = 1, padding_x = 0., padding_y = 0.))]
     #[asset(path = "boss_1_eye.png")]
     pub boss_1_eye: Handle<TextureAtlas>,
+
+    #[asset(texture_atlas(tile_size_x = 9., tile_size_y = 8., columns = 2, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(path = "boss_2_eye.png")]
+    pub boss_2_eye: Handle<TextureAtlas>,
 
     #[asset(texture_atlas(tile_size_x = 9., tile_size_y = 8., columns = 3, rows = 1, padding_x = 0., padding_y = 0.))]
     #[asset(path = "heart.png")]

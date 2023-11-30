@@ -2,13 +2,14 @@ use bevy::app::App;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::LdtkEntityAppExt;
 
-use crate::logic::Cutscene;
 use crate::{GameState, logic};
 use crate::entities::boss_1::Boss1Bundle;
+use crate::entities::boss_2::Boss2Bundle;
 use crate::entities::platform::DetectionPlatformBundle;
 use crate::entities::player::PlayerSize;
 use crate::entities::spawner::SpawnerBundle;
 use crate::entities::zombie::ZombieBundle;
+use crate::logic::Cutscene;
 
 use self::checkpoint::CheckpointBundle;
 use self::damage_zone::DamageZoneBundle;
@@ -25,6 +26,7 @@ mod checkpoint;
 mod boss_1;
 pub mod player_sensor;
 pub(crate) mod spawner;
+mod boss_2;
 
 pub struct EntitiesPlugin;
 
@@ -34,6 +36,8 @@ pub enum EntityID {
     Zombie(usize),
     DetectionPlatform(PlayerSize),
     Boss1,
+    Boss2,
+    Boss3,
 }
 
 // KinematicCharacterController with this component will hurt the player
@@ -56,6 +60,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
+            .register_ldtk_entity::<Boss2Bundle>("Boss2")
             .register_ldtk_entity::<DamageZoneBundle>("DamageZone")
             .register_ldtk_entity::<player_sensor::PlayerSensorBundle>("PlayerSensor")
             .register_ldtk_entity::<image_entity::ImageEntityBundle>("ImageEntity")
@@ -76,6 +81,8 @@ impl Plugin for EntitiesPlugin {
                     zombie::zombie_die,
                     boss_1::init,
                     boss_1::update,
+                    boss_2::init,
+                    boss_2::update,
                     player_sensor::update_player_sensors,
                     image_entity::set_image_for_image_entity,
                 ).run_if(in_state(GameState::Game))

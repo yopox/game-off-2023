@@ -51,7 +51,7 @@ pub struct Boss1;
 pub struct Boss1Part;
 
 #[derive(Component)]
-pub struct Eye {
+pub struct Boss1Eye {
     left: bool,
 }
 
@@ -91,10 +91,10 @@ pub fn init(
                     ),
                     ..default()
                 })
-                .insert(Eye { left })
-                .insert(get_enemy("Eye").expect("Couldn't find enemy"))
+                .insert(Boss1Eye { left })
+                .insert(get_enemy("Eye1").expect("Couldn't find enemy"))
                 .insert(ColliderBundle {
-                    collider: colliders::eye_collider(),
+                    collider: colliders::eye_1_collider(),
                     rigid_body: RigidBody::Fixed,
                     ..default()
                 })
@@ -109,7 +109,7 @@ pub fn update(
     mut commands: Commands,
     mut boss: Query<(&mut Boss1State, &mut Collider, &mut AnimStep), With<Boss1>>,
     mut damage: EventReader<Damaged>,
-    mut eyes: Query<(Entity, &Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
+    mut eyes: Query<(Entity, &Boss1Eye, &mut TextureAtlasSprite, &mut Transform), Without<Boss1>>,
     mut data: ResMut<GameData>,
     parts: Query<Entity, With<Boss1Part>>,
     mut time: ResMut<Time>,

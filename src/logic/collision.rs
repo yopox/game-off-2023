@@ -6,7 +6,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::definitions::colliders;
 use crate::entities::platform::PlatformType;
-use crate::entities::player::{PlayerSize, Player};
+use crate::entities::player::{Player, PlayerSize};
 use crate::entities::zombie::ZombieSize;
 use crate::level_collision_data::{collision_data_from_image, LevelCollisionData};
 use crate::logic::attack::Sword;
@@ -97,7 +97,12 @@ impl From<&EntityInstance> for ColliderBundle {
                 ..default()
             },
             "Boss1" => ColliderBundle {
-                collider: colliders::boss1(0),
+                collider: colliders::boss1(3),
+                rigid_body: RigidBody::Fixed,
+                ..default()
+            },
+            "Boss2" => ColliderBundle {
+                collider: colliders::boss2(8),
                 rigid_body: RigidBody::Fixed,
                 ..default()
             },

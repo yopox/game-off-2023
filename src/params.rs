@@ -108,6 +108,9 @@ pub const BOSS_EYES_Y: (f32, f32, f32) = (44.0, 52.0, 3.0);
 pub const BOSS_EYES_DX: f32 = 26.0;
 pub const BOSS1_EMITTER_OFFSET: (f32, f32) = (0.0, 42.0);
 
+// --- Boss 2
+pub const BOSS2_SHAKE: f32 = 1.5;
+
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
 pub const SHAKE_STEP: f32 = 0.05;
