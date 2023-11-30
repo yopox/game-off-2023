@@ -1,6 +1,7 @@
 use std::ops::Range;
 
 use crate::entities::player::PlayerSize;
+use crate::music::BGM;
 
 pub const WIDTH: usize = 320;
 pub const HALF_WIDTH: f32 = WIDTH as f32 / 2.;
@@ -126,3 +127,14 @@ pub const INITIAL_SPAWNER_ID: &str = "start";
 
 // --- Flags
 pub const GAME_DATA_KEY: &str = "game_data";
+
+// --- Music
+pub const BGM_VOLUME: f64 = 0.5;
+pub const SIZE_FADE: usize = 500;
+
+pub fn bgm_for_level(id: &str) -> BGM {
+    match id {
+        "Zone_1" => BGM::Caves,
+        _ => BGM::Caves,
+    }
+}

@@ -32,6 +32,7 @@ pub struct LevelOutline {
     pos: Vec2,
     size: Vec2,
     iid: String,
+    id: String,
 }
 
 impl LevelOutline {
@@ -135,6 +136,7 @@ fn init_level_outlines(
             pos: Vec2::new(*ll.world_x() as f32, -*ll.world_y() as f32),
             size: Vec2::new(*ll.px_wid() as f32, -*ll.px_hei() as f32),
             iid: ll.iid().clone(),
+            id: ll.identifier().clone(),
         })
         .for_each(|lo| level_manager.levels.push(lo));
 }
