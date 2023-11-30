@@ -70,6 +70,9 @@ pub struct Textures {
 
     #[asset(path = "frame.png")]
     pub frame: Handle<Image>,
+
+    #[asset(path = "new_heart.png")]
+    pub new_heart: Handle<Image>,
 }
 
 #[derive(AssetCollection, Resource)]

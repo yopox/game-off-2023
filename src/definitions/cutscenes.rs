@@ -11,7 +11,7 @@ lazy_static! {
         CSEvent::ToggleCinema(true),
         CSEvent::Wait(1.0),
         CSEvent::text_centered("Example text\nsecond line".to_string()),
-        CSEvent::Teleport("boss_1".into()),
+        CSEvent::Teleport("z1_start".into()),
         CSEvent::BGM(BGM::Caves),
         CSEvent::fade_in(),
         CSEvent::AddFlag(Flags::Intro),
