@@ -11,7 +11,7 @@
 	"iid": "f044a4b0-6280-11ee-ae32-c162b57b0ec1",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 42,
+	"nextUid": 44,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -599,6 +599,76 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "PlayerSensor",
+			"uid": 42,
+			"tags": [],
+			"exportToToc": false,
+			"doc": null,
+			"width": 10,
+			"height": 10,
+			"resizableX": true,
+			"resizableY": true,
+			"minWidth": 1,
+			"maxWidth": null,
+			"minHeight": 1,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#1BF3C8",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "Event",
+					"doc": null,
+					"__type": "String",
+					"uid": 43,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -811,6 +881,25 @@
 							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "boss_1", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["boss_1"]
+							}] }]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [1191,101],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": -432,
+							"__worldY": -171,
+							"iid": "dc313d10-8990-11ee-bf93-7fe61cca2b52",
+							"width": 9,
+							"height": 8,
+							"defUid": 40,
+							"px": [1191,101],
+							"fieldInstances": [{ "__identifier": "Image", "__type": "String", "__value": "new_heart.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["new_heart.png"]
 							}] }]
 						}
 					]
