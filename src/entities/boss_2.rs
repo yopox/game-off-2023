@@ -6,8 +6,9 @@ use bevy_rapier2d::geometry::Collider;
 use bevy_rapier2d::prelude::RigidBody;
 
 use crate::definitions::colliders;
-use crate::entities::animation::AnimStep;
+use crate::entities::animation::{AnimationEvent, AnimStep};
 use crate::entities::common::get_enemy;
+use crate::entities::damage_zone::DamageZone;
 use crate::entities::player::Player;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{Boss, BossKilled};
@@ -72,6 +73,8 @@ pub fn update(
     mut data: ResMut<GameData>,
     player: Query<&Transform, (Without<Boss2Eye>, Without<Boss2>, With<Player>)>,
     parts: Query<Entity, With<Boss2Part>>,
+    mut events: EventReader<AnimationEvent>,
+    mut damage_zone: Query<&mut Collider, (With<Boss2Part>, With<DamageZone>, Without<Boss2>)>,
 ) {
     let Ok((boss_e, mut state, mut collider, sprite, mut step)) = boss.get_single_mut() else { return; };
     let Ok(player_pos) = player.get_single() else { return };
@@ -130,6 +133,42 @@ pub fn update(
                     }
                 }
             }
+        }
+    }
+
+    // Damage zone apparition
+    for event in events.iter() {
+        match event {
+            AnimationEvent::Boss2DamageZone(i) => {
+                match i {
+                    1 => {
+                        commands
+                            .entity(boss_e)
+                            .with_children(|builder| {
+                                builder
+                                    .spawn(DamageZone)
+                                    .insert(ColliderBundle {
+                                        collider: colliders::boss2_damage_zone(1),
+                                        rigid_body: RigidBody::Fixed,
+                                        ..default()
+                                    })
+                                    .insert(VisibilityBundle::default())
+                                    .insert(TransformBundle::from_transform(Transform::from_xyz(0.0, 6.0, 0.0)))
+                                    .insert(Hitbox)
+                                    .insert(get_enemy("DamageZone").expect("Couldn't spawn DamageZone"))
+                                    .insert(Boss2Part)
+                                ;
+                            })
+                        ;
+                    }
+                    _ => {
+                        if let Ok(mut damage_zone_collider) = damage_zone.get_single_mut() {
+                            *damage_zone_collider = colliders::boss2_damage_zone(2);
+                        }
+                    }
+                }
+            }
+            _ => {}
         }
     }
 

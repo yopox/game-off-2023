@@ -63,8 +63,6 @@ pub fn entity_spawned(
             _ => ()
         }
 
-
-
         if let Some(enemy) = get_enemy(&instance.identifier) {
             e_c.insert(enemy);
         }

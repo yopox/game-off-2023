@@ -79,7 +79,14 @@ pub fn eye_2_collider() -> Collider {
 
 pub(crate) fn boss2(hp: u8) -> Collider {
     match hp {
-        6..=8 => rectangle(vec2(3.0, 15.0), vec2(14.0, 21.0)),
+        6..=8 => rectangle(vec2(1.0, 15.0), vec2(14.0, 21.0)),
         _ => rectangle(vec2(-1.0, 32.0), vec2(8.0, 62.0)),
+    }
+}
+
+pub fn boss2_damage_zone(index: u8) -> Collider {
+    match index {
+        1 => rectangle(Vec2::ZERO, vec2(72.0, 6.0)),
+        _ => rectangle(Vec2::ZERO, vec2(102.0, 6.0)),
     }
 }

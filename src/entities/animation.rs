@@ -21,6 +21,7 @@ pub enum AnimationEvent {
     AttackSwing,
     AttackRecoil,
     AttackOver,
+    Boss2DamageZone(u8),
 }
 
 pub enum SeqPart {
@@ -271,9 +272,9 @@ pub fn get_boss_2_rule(state: &AnimStep) -> AnimationRule {
         AnimStep::Idle => AnimationRule::Still(0),
         AnimStep::Walk => AnimationRule::Sequence(vec![
            SeqPart::Frame(1),
-           SeqPart::Wait(1.5),
+           SeqPart::WaitAnd(1.5, AnimationEvent::Boss2DamageZone(1)),
            SeqPart::Frame(2),
-           SeqPart::Wait(0.15),
+           SeqPart::WaitAnd(0.15, AnimationEvent::Boss2DamageZone(2)),
            SeqPart::Frame(3),
            SeqPart::Wait(0.15),
            SeqPart::Frame(4),
