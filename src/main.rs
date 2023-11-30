@@ -23,11 +23,6 @@ mod music;
 mod util;
 mod definitions;
 
-#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
-pub enum CustomSets {
-    Last,
-}
-
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 pub enum GameState {
     #[default]
