@@ -22,6 +22,7 @@ pub mod zombie;
 pub mod damage_zone;
 pub mod bird;
 pub mod image_entity;
+pub mod wall;
 mod common;
 pub mod animation;
 mod checkpoint;
@@ -98,6 +99,7 @@ impl Plugin for EntitiesPlugin {
                     boss_3::hit_player.before(player::player_hit),
                     player_sensor::update_player_sensors,
                     image_entity::set_image_for_image_entity,
+                    image_entity::levitate_image_entities
                 ).run_if(in_state(GameState::Game))
             )
             .add_systems(Update, (

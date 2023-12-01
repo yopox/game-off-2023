@@ -47,6 +47,17 @@ pub fn get_ldtk_field_string(fields: &Vec<FieldInstance>, name: &str) -> Option<
     return None
 }
 
+pub fn get_ldtk_field_bool(fields: &Vec<FieldInstance>, name: &str) -> Option<bool> {
+    for field in fields {
+        if field.identifier == name {
+            if let FieldValue::Bool(b) = &field.value {
+                return Some(b.clone());
+            }
+        }
+    }
+    return None
+}
+
 pub fn get_ldtk_field_int(fields: &Vec<FieldInstance>, name: &str) -> Option<usize> {
     for field in fields {
         if field.identifier == name {
@@ -63,6 +74,17 @@ pub fn get_ldtk_field_float(fields: &Vec<FieldInstance>, name: &str) -> Option<f
         if field.identifier == name {
             if let FieldValue::Float(Some(f)) = field.value {
                 return Some(f);
+            }
+        }
+    }
+    return None
+}
+
+pub fn get_ldtk_field_color(fields: &Vec<FieldInstance>, name: &str) -> Option<Color> {
+    for field in fields {
+        if field.identifier == name {
+            if let FieldValue::Color(c) = field.value {
+                return Some(c);
             }
         }
     }
