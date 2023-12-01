@@ -45,6 +45,14 @@ lazy_static! {
         CSEvent::text_centered("The end".to_string()),
     ]);
 
+    pub static ref DASH: VecDeque<CSEvent> = VecDeque::from([
+        CSEvent::Wait(1.0),
+        CSEvent::fade_out(),
+        CSEvent::text_centered("You found the dash!".to_string()),
+        CSEvent::text_centered("Try double tapping left/right.".to_string()),
+        CSEvent::fade_in(),
+    ]);
+
     pub static ref BOSS_3: VecDeque<CSEvent> = VecDeque::from([
         CSEvent::ToggleCinema(true),
         CSEvent::Wait(1.0),

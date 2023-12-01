@@ -2,11 +2,35 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::definitions::cutscenes;
+use crate::entities::{EntityID, NamedEntity};
 use crate::entities::animation::{AnimStep, EntityTimer};
-use crate::entities::EntityID;
 use crate::entities::player::{Dash, Player, Transformed};
-use crate::logic::{Flags, GameData};
+use crate::entities::player_sensor::PlayerEnteredSensorEvent;
+use crate::logic::{Cutscene, Flags, GameData, Vanish};
 use crate::params;
+
+pub fn collect_dash(
+    mut commands: Commands,
+    mut events: EventReader<PlayerEnteredSensorEvent>,
+    images: Query<(Entity, &NamedEntity)>,
+    mut game_data: ResMut<GameData>,
+) {
+    for event in events.iter() {
+        let event_name = event.name.as_str();
+        if event_name == "dash" {
+            for (entity, NamedEntity(name)) in images.iter() {
+                if name == "dash" && game_data.removed_named.insert(name.clone()) {
+                    commands.entity(entity).insert(Vanish::new(0.1));
+                    game_data.set_flag(Flags::Dash);
+                    commands.insert_resource(Cutscene::from(&cutscenes::DASH));
+                    break;
+                }
+            }
+        }
+
+    }
+}
 
 pub fn move_player(
     mut commands: Commands,
