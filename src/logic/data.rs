@@ -58,6 +58,8 @@ pub enum Flags {
     Boss1Defeated,
     /// If the 2nd boss is defeated
     Boss2Defeated,
+    /// Tension music
+    Tension,
     /// If the 3rd boss fight has begun
     Boss3Start,
     /// If the 3rd boss is defeated

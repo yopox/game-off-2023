@@ -4,6 +4,8 @@ use bevy_kira_audio::{Audio, AudioControl, AudioInstance, AudioSource, AudioTwee
 
 use crate::entities::EntityID;
 use crate::entities::player::{Player, PlayerSize};
+use crate::entities::player_sensor::PlayerEnteredSensorEvent;
+use crate::logic::{Flags, GameData};
 use crate::params;
 use crate::screens::Sounds;
 
@@ -16,7 +18,8 @@ impl Plugin for AudioPlugin {
             .add_event::<PlaySFXEvent>()
             .add_systems(Update, (
                 update,
-                change_size
+                change_size,
+                trigger_bgm,
             ).run_if(resource_exists::<Sounds>()))
         ;
     }
@@ -25,12 +28,13 @@ impl Plugin for AudioPlugin {
 #[derive(Copy, Clone, Debug)]
 pub enum BGM {
     Caves,
+    Forest,
 }
 
 impl BGM {
     fn source(&self, sounds: &Sounds, size: &PlayerSize) -> Handle<AudioSource> {
         match self {
-            BGM::Caves => match size {
+            BGM::Caves | BGM::Forest => match size {
                 PlayerSize::S => sounds.caves_s.clone(),
                 PlayerSize::M => sounds.caves_m.clone(),
                 PlayerSize::L => sounds.caves_m.clone(),
@@ -67,6 +71,30 @@ pub struct PlaySFXEvent(pub SFX);
 
 #[derive(Resource)]
 struct BGMInstance(BGM, PlayerSize, Handle<AudioInstance>);
+
+pub fn trigger_bgm(
+    mut events: EventReader<PlayerEnteredSensorEvent>,
+    mut bgm: EventWriter<PlayBGMEvent>,
+    mut game_data: ResMut<GameData>,
+) {
+    for PlayerEnteredSensorEvent { name, .. } in events.iter() {
+        if let Some(id) = name.strip_prefix("cutscene:") {
+            match id {
+                "zone1" => {
+                    if !game_data.has_flag(Flags::Tension) {
+                        bgm.send(PlayBGMEvent(BGM::Caves));
+                    }
+                }
+                "zone2" => {
+                    if !game_data.has_flag(Flags::Tension) {
+                        bgm.send(PlayBGMEvent(BGM::Forest));
+                    }
+                }
+                _ => { error!("Unrecognized bgm event") }
+            }
+        }
+    }
+}
 
 fn update(
     mut commands: Commands,
