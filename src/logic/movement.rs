@@ -5,6 +5,7 @@ use bevy_rapier2d::prelude::*;
 use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::entities::player::{Dash, Player, Transformed};
+use crate::logic::{Flags, GameData};
 use crate::params;
 
 pub fn move_player(
@@ -16,6 +17,7 @@ pub fn move_player(
         &mut KinematicCharacterController, &mut TextureAtlasSprite,
         Option<&KinematicCharacterControllerOutput>,
     ), With<Player>>,
+    data: Res<GameData>,
 ) {
     let Ok((
                e, mut step, mut dash, id, timer,
@@ -35,7 +37,7 @@ pub fn move_player(
     });
 
     // Side movement
-    if *step != AnimStep::Dash && dash.can_dash {
+    if *step != AnimStep::Dash && dash.can_dash && data.has_flag(Flags::Dash) {
         if input.just_pressed(KeyCode::Left) {
             if !dash.last_dir.0 && time.elapsed_seconds() - dash.last_dir.1 <= params::DASH_DETECTION {
                 step.set_if_neq(AnimStep::Dash);
