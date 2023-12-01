@@ -1,12 +1,15 @@
 use std::f32::consts::PI;
 
+use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::geometry::Collider;
+use bevy_rapier2d::plugin::RapierContext;
 
+use crate::entities::Enemy;
 use crate::entities::animation::{AnimationEvent, AnimStep};
 use crate::entities::common::get_enemy;
-use crate::entities::player::Player;
+use crate::entities::player::{Player, PlayerHitEvent};
 use crate::graphics::Hurt;
 use crate::graphics::particles::{Boss, BossKilled};
 use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
@@ -75,6 +78,23 @@ pub fn init(
     ;
 }
 
+pub fn hit_player(
+    boss: Query<(Entity, &Enemy, &Transform), With<Boss3>>,
+    player: Query<(Entity, &Transform), (With<Player>, Without<Boss3>)>,
+    collisions: Res<RapierContext>,
+    mut events: EventWriter<PlayerHitEvent>,
+) {
+    let Ok((boss_e, enemy, boss_pos)) = boss.get_single() else { return };
+    let Ok((player_e, player_pos)) = player.get_single() else { return };
+    if collisions.contact_pair(boss_e, player_e).is_some() {
+        events.send(PlayerHitEvent {
+            enemy_entity: boss_e,
+            enemy: enemy.clone(),
+            normal: if boss_pos.translation.x < player_pos.translation.x { vec2(1.0, 0.0) } else { vec2(-1.0, 0.0) },
+        });
+    }
+}
+
 pub fn update(
     mut commands: Commands,
     textures: Res<Textures>,
@@ -88,8 +108,6 @@ pub fn update(
     if !data.has_flag(Flags::Boss3Start) { return; }
     let Ok((boss_e, mut state, mut collider, mut boss_pos, mut step)) = boss.get_single_mut() else { return; };
     let Ok(player_pos) = player.get_single() else { return };
-
-    let old_hp = state.hp;
 
     // Damage
     for Damaged{ entity: e, .. } in damage.iter() {

@@ -165,9 +165,9 @@ pub fn change_size(
 
 #[derive(Debug, Clone, Event)]
 pub struct PlayerHitEvent {
-    enemy_entity: Entity,
-    enemy: Enemy,
-    normal: Vec2,
+    pub enemy_entity: Entity,
+    pub enemy: Enemy,
+    pub normal: Vec2,
 }
 
 
@@ -179,13 +179,13 @@ pub fn player_touches_enemy(
     let Ok(output) = player.get_single_mut() else { return };
     
     for col in output.collisions.iter() {
-        let mut normal;
-        match col.toi.status {
-            TOIStatus::Converged => { normal = col.toi.normal1; }
-            TOIStatus::Penetrating => { normal = Vect::from_angle(PI / 2.0); }
-            _ => continue
-        }
         if let Ok(enemy) = enemies.get(col.entity) {
+            let mut normal;
+            match col.toi.status {
+                TOIStatus::Converged => { normal = col.toi.normal1; }
+                TOIStatus::Penetrating => { normal = Vect::from_angle(PI / 2.0); }
+                _ => continue
+            }
             events.send(PlayerHitEvent {
                 enemy_entity: col.entity,
                 enemy: enemy.clone(),

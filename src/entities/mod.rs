@@ -91,6 +91,7 @@ impl Plugin for EntitiesPlugin {
                     boss_2::update,
                     boss_3::init,
                     boss_3::update,
+                    boss_3::hit_player.before(player::player_hit),
                     player_sensor::update_player_sensors,
                     image_entity::set_image_for_image_entity,
                 ).run_if(in_state(GameState::Game))
