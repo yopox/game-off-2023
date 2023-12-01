@@ -11,7 +11,7 @@
 	"iid": "f044a4b0-6280-11ee-ae32-c162b57b0ec1",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 48,
+	"nextUid": 49,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -249,13 +249,13 @@
 			]
 		},
 		{
-			"identifier": "DetectionPlatform",
+			"identifier": "Bird",
 			"uid": 31,
 			"tags": [],
 			"exportToToc": false,
 			"doc": "Moving platform",
-			"width": 16,
-			"height": 3,
+			"width": 32,
+			"height": 18,
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -282,44 +282,6 @@
 			"pivotY": 1,
 			"fieldDefs": [
 				{
-					"identifier": "Size",
-					"doc": "Size that triggers the platform",
-					"__type": "String",
-					"uid": 32,
-					"type": "F_String",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
-					"editorDisplayScale": 1,
-					"editorDisplayPos": "Above",
-					"editorLinkStyle": "StraightArrow",
-					"editorDisplayColor": null,
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": "/M|S|L|XS/g",
-					"acceptFileTypes": null,
-					"defaultOverride": {
-						"id": "V_String",
-						"params": ["S"]
-					},
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefsEntityUid": null,
-					"allowedRefTags": [],
-					"tilesetUid": null
-				},
-				{
 					"identifier": "Range",
 					"doc": null,
 					"__type": "Int",
@@ -341,6 +303,41 @@
 					"editorTextPrefix": null,
 					"useForSmartColor": false,
 					"min": 0,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "Flag",
+					"doc": null,
+					"__type": "String",
+					"uid": 48,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
@@ -879,22 +876,22 @@
 							]
 						},
 						{
-							"__identifier": "DetectionPlatform",
-							"__grid": [799,199],
+							"__identifier": "Bird",
+							"__grid": [802,211],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#EAD4AA",
-							"__worldX": -824,
-							"__worldY": -72,
+							"__worldX": -821,
+							"__worldY": -60,
 							"iid": "ba9774c0-6280-11ee-9f82-2ddf172ea8f8",
-							"width": 16,
-							"height": 3,
+							"width": 32,
+							"height": 18,
 							"defUid": 31,
-							"px": [799,200],
+							"px": [802,212],
 							"fieldInstances": [
-								{ "__identifier": "Size", "__type": "String", "__value": "S", "__tile": null, "defUid": 32, "realEditorValues": [] },
-								{ "__identifier": "Range", "__type": "Int", "__value": 320, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [320] }] }
+								{ "__identifier": "Range", "__type": "Int", "__value": 320, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [320] }] },
+								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
 							]
 						},
 						{
@@ -1309,7 +1306,7 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "DetectionPlatform",
+							"__identifier": "Bird",
 							"__grid": [2005,444],
 							"__pivot": [0.5,1],
 							"__tags": [],
@@ -1318,20 +1315,17 @@
 							"__worldX": 37,
 							"__worldY": -483,
 							"iid": "8d919d10-8990-11ee-a2e9-1724e3518fbc",
-							"width": 16,
-							"height": 3,
+							"width": 32,
+							"height": 18,
 							"defUid": 31,
 							"px": [2005,445],
 							"fieldInstances": [
-								{ "__identifier": "Size", "__type": "String", "__value": "M", "__tile": null, "defUid": 32, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["M"]
-								}] },
-								{ "__identifier": "Range", "__type": "Int", "__value": 51, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [51] }] }
+								{ "__identifier": "Range", "__type": "Int", "__value": 51, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [51] }] },
+								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
 							]
 						},
 						{
-							"__identifier": "DetectionPlatform",
+							"__identifier": "Bird",
 							"__grid": [2158,444],
 							"__pivot": [0.5,1],
 							"__tags": [],
@@ -1340,16 +1334,13 @@
 							"__worldX": 190,
 							"__worldY": -483,
 							"iid": "969f6c70-8990-11ee-a2e9-e36d183643cd",
-							"width": 16,
-							"height": 3,
+							"width": 32,
+							"height": 18,
 							"defUid": 31,
 							"px": [2158,445],
 							"fieldInstances": [
-								{ "__identifier": "Size", "__type": "String", "__value": "M", "__tile": null, "defUid": 32, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["M"]
-								}] },
-								{ "__identifier": "Range", "__type": "Int", "__value": 50, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+								{ "__identifier": "Range", "__type": "Int", "__value": 50, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
 							]
 						},
 						{

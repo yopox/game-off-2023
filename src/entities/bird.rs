@@ -10,10 +10,6 @@ use crate::entities::player::{Player, PlayerSize};
 use crate::logic::ColliderBundle;
 use crate::params;
 
-pub enum PlatformType {
-    Detection(PlayerSize)
-}
-
 #[derive(Component)]
 pub struct Range(pub f32);
 
@@ -31,7 +27,7 @@ impl From<&String> for PlayerSize {
 }
 
 #[derive(Clone, Default, Bundle, LdtkEntity)]
-pub struct DetectionPlatformBundle {
+pub struct BirdBundle {
     #[worldly]
     pub worldly: Worldly,
     #[from_entity_instance]
@@ -40,8 +36,8 @@ pub struct DetectionPlatformBundle {
     pub collider_bundle: ColliderBundle,
 }
 
-pub fn move_platform(
-    mut platform: Query<(Entity, &EntityID, &EntityInstance, &mut AnimStep, &EntityTimer, &Transform, &mut Velocity, &InitialY, &Range), Without<Player>>,
+pub fn move_bird(
+    mut bird: Query<(Entity, &EntityID, &EntityInstance, &mut AnimStep, &EntityTimer, &Transform, &mut Velocity, &InitialY, &Range), Without<Player>>,
     player: Query<(&EntityID, Option<&KinematicCharacterControllerOutput>), With<Player>>,
 ) {
     let mut collisions = vec![];
@@ -51,8 +47,8 @@ pub fn move_platform(
         output.collisions.iter().for_each(|c| collisions.push(c));
     }
 
-    for (entity, id, instance, mut step, timer, pos, mut velocity, InitialY(y_0), Range(range)) in platform.iter_mut() {
-        if let EntityID::DetectionPlatform(target) = *id {
+    for (entity, id, instance, mut step, timer, pos, mut velocity, InitialY(y_0), Range(range)) in bird.iter_mut() {
+        if let EntityID::Bird(target) = *id {
             // Update state
             let mut stop = true;
             if target == *size {

@@ -218,16 +218,26 @@ pub fn enemy_touches_player(
     }
 }
 
+/// Use this component to not damage player in a given size
+#[derive(Component)]
+pub struct IgnoreSize(pub PlayerSize);
+
 pub fn player_hit(
     mut commands: Commands,
-    mut player: Query<(Entity), (With<Player>, Without<Hurt>)>,
+    mut player: Query<(Entity, &EntityID), (With<Player>, Without<Hurt>)>,
     mut events: EventReader<PlayerHitEvent>,
     mut player_life: ResMut<PlayerLife>,
+    enemy_ignores: Query<Option<&IgnoreSize>>,
 ) {
-    let Ok(player_entity) = player.get_single_mut() else { return };
+    let Ok((player_entity, EntityID::Player(size))) = player.get_single_mut() else { return };
 
     for event in events.iter() {
-        let &PlayerHitEvent { normal, enemy, .. } = event;
+        let &PlayerHitEvent { enemy_entity, normal, enemy } = event;
+
+        // Damage ignored
+        if let Ok(Some(IgnoreSize(s))) = enemy_ignores.get(enemy_entity) { if *s == *size { continue } }
+
+        // Damage player
         player_life.lose();
         commands
             .entity(player_entity)

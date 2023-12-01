@@ -5,7 +5,6 @@ use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::definitions::colliders;
-use crate::entities::platform::PlatformType;
 use crate::entities::player::{Player, PlayerSize};
 use crate::entities::zombie::ZombieSize;
 use crate::level_collision_data::{collision_data_from_image, LevelCollisionData};
@@ -91,8 +90,8 @@ impl From<&EntityInstance> for ColliderBundle {
                 rotation_constraints,
                 ..default()
             },
-            "DetectionPlatform" => ColliderBundle {
-                collider: Collider::from(PlatformType::Detection(PlayerSize::S)),
+            "Bird" => ColliderBundle {
+                collider: colliders::bird(),
                 rigid_body: RigidBody::KinematicVelocityBased,
                 ..default()
             },

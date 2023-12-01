@@ -164,7 +164,7 @@ impl EntityID {
         match self {
             EntityID::Player(size) => get_player_rule(step, size),
             EntityID::Zombie(_) => get_zombie_rule(step),
-            EntityID::DetectionPlatform(_) => get_platform_rule(step),
+            EntityID::Bird(_) => get_bird_rule(step),
             EntityID::Boss1 => get_boss_1_rule(step),
             EntityID::Boss2 => get_boss_2_rule(step),
             EntityID::Boss3 => get_boss_3_rule(step),
@@ -235,10 +235,19 @@ pub fn get_zombie_rule(state: &AnimStep) -> AnimationRule {
     }
 }
 
-pub fn get_platform_rule(state: &AnimStep) -> AnimationRule {
+pub fn get_bird_rule(state: &AnimStep) -> AnimationRule {
     match state {
         AnimStep::Idle => AnimationRule::Still(0),
-        AnimStep::Jump => AnimationRule::Still(1),
+        AnimStep::Jump => AnimationRule::Loop(vec![
+            SeqPart::Frame(0),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(1),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(2),
+            SeqPart::Wait(0.35),
+            SeqPart::Frame(1),
+            SeqPart::Wait(0.35),
+        ]),
         _ => AnimationRule::Missing,
     }
 }

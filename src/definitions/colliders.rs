@@ -2,7 +2,6 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::entities::platform::PlatformType;
 use crate::entities::player::PlayerSize;
 use crate::entities::zombie::ZombieSize;
 
@@ -40,14 +39,8 @@ impl From<ZombieSize> for Collider {
     }
 }
 
-impl From<PlatformType> for Collider {
-    fn from(value: PlatformType) -> Self {
-        let (offset, size) = match value {
-            PlatformType::Detection(_) => (Vec2::new(0., 1.5), vec2(16., 3.)),
-        };
-
-        rectangle(offset, size)
-    }
+pub fn bird() -> Collider {
+    rectangle(vec2(0.0, 5.0), vec2(18.0, 6.0))
 }
 
 pub fn sword_collider(player_size: &PlayerSize, flip: bool) -> Collider {

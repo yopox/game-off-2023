@@ -9,6 +9,7 @@ use lazy_static::lazy_static;
 
 use crate::entities::animation::AnimStep;
 use crate::entities::EntityID;
+use crate::entities::player::PlayerSize;
 
 lazy_static! {
     pub static ref MISSING_ANIMATIONS: Mutex<HashSet<(EntityID, AnimStep)>> = Mutex::new(HashSet::new());
@@ -66,4 +67,17 @@ pub fn get_ldtk_field_float(fields: &Vec<FieldInstance>, name: &str) -> Option<f
         }
     }
     return None
+}
+
+fn get_ldtk_field_size(fields: &Vec<FieldInstance>) -> PlayerSize {
+    match fields.get(0) {
+        None => panic!("Missing size"),
+        Some(field) => {
+            if field.identifier == "Size" {
+                let FieldValue::String(Some(ref i)) = field.value else { panic!("Missing size") };
+                return PlayerSize::from(i);
+            }
+            panic!("Missing size")
+        }
+    }
 }

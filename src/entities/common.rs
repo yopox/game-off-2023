@@ -1,12 +1,11 @@
 use bevy::prelude::*;
 use bevy::sprite::Anchor;
 use bevy_ecs_ldtk::EntityInstance;
-use bevy_ecs_ldtk::ldtk::{FieldInstance, FieldValue};
 
 use crate::entities::animation::{AnimStep, EntityTimer};
+use crate::entities::bird::Range;
 use crate::entities::EntityID;
-use crate::entities::platform::Range;
-use crate::entities::player::PlayerSize;
+use crate::entities::player::{IgnoreSize, PlayerSize};
 use crate::logic::GameData;
 use crate::params;
 use crate::screens::Textures;
@@ -57,10 +56,11 @@ pub fn entity_spawned(
 
         // Entity specific components
         match instance.identifier.as_ref() {
-            "DetectionPlatform" => {
-                e_c.insert(Range(
-                    get_ldtk_field_int(&instance.field_instances, "Range").expect("Can't find platform range.") as f32)
-                );
+            "Bird" => {
+                e_c
+                    .insert(Range(get_ldtk_field_int(&instance.field_instances, "Range").expect("Can't find platform range.") as f32))
+                    .insert(IgnoreSize(PlayerSize::S))
+                ;
             },
             _ => ()
         }
@@ -95,9 +95,7 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
         "Zombie" => Some(EntityID::Zombie(
             get_ldtk_field_int(&instance.field_instances, "Size").expect("Can't find zombie size."),
         )),
-        "DetectionPlatform" => Some(EntityID::DetectionPlatform(
-            get_platform_size(&instance.field_instances),
-        )),
+        "Bird" => Some(EntityID::Bird(PlayerSize::S)),
         "Boss1" => Some(EntityID::Boss1),
         "Boss2" => Some(EntityID::Boss2),
         "Boss3" => Some(EntityID::Boss3),
@@ -119,24 +117,11 @@ pub fn add_initial_y(
     }
 }
 
-fn get_platform_size(fields: &Vec<FieldInstance>) -> PlayerSize {
-    match fields.get(0) {
-        None => panic!("Missing zombie size #1"),
-        Some(field) => {
-            if field.identifier == "Size" {
-                let FieldValue::String(Some(ref i)) = field.value else {panic!("Missing zombie size #2") };
-                return PlayerSize::from(i);
-            }
-            panic!("Missing zombie size #3")
-        }
-    }
-}
-
 pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<TextureAtlas>> {
     match id {
         "Player" => Some(textures.hero_m.clone()),
         "Zombie" => Some(textures.zombie_s.clone()),
-        "DetectionPlatform" => Some(textures.platform.clone()),
+        "Bird" => Some(textures.bird.clone()),
         "Boss1" => Some(textures.boss_1.clone()),
         "Boss2" => Some(textures.boss_2.clone()),
         "Boss3" => Some(textures.boss_3.clone()),
@@ -146,7 +131,7 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
 
 pub fn get_enemy(id: &str) -> Option<Enemy> {
     match id {
-        "Zombie" | "Eye1" | "Boss1" | "Boss2" | "Eye2" | "Boss3" => Some(Enemy {
+        "Zombie" | "Eye1" | "Bird" | "Boss1" | "Boss2" | "Eye2" | "Boss3" => Some(Enemy {
             player_knockback_speed: params::ENEMIES_KNOCKBACK_SPEED,
             player_knockback_time: params::ENEMIES_KNOCKBACK_TIME,
             player_hurt_time: params::ENEMIES_KNOCKBACK_TIME,

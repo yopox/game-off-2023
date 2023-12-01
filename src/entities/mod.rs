@@ -3,10 +3,10 @@ use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::LdtkEntityAppExt;
 
 use crate::{GameState, logic};
+use crate::entities::bird::BirdBundle;
 use crate::entities::boss_1::Boss1Bundle;
 use crate::entities::boss_2::Boss2Bundle;
 use crate::entities::boss_3::Boss3Bundle;
-use crate::entities::platform::DetectionPlatformBundle;
 use crate::entities::player::PlayerSize;
 use crate::entities::spawner::SpawnerBundle;
 use crate::entities::zombie::ZombieBundle;
@@ -19,7 +19,7 @@ use self::player::PlayerHitEvent;
 pub mod player;
 pub mod zombie;
 pub mod damage_zone;
-pub mod platform;
+pub mod bird;
 pub mod image_entity;
 mod common;
 pub mod animation;
@@ -36,7 +36,7 @@ pub struct EntitiesPlugin;
 pub enum EntityID {
     Player(PlayerSize),
     Zombie(usize),
-    DetectionPlatform(PlayerSize),
+    Bird(PlayerSize),
     Boss1,
     Boss2,
     Boss3,
@@ -63,7 +63,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<SpawnerBundle>("Spawner")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
-            .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
+            .register_ldtk_entity::<BirdBundle>("Bird")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
             .register_ldtk_entity::<Boss2Bundle>("Boss2")
             .register_ldtk_entity::<Boss3Bundle>("Boss3")
@@ -80,7 +80,7 @@ impl Plugin for EntitiesPlugin {
                     player::enemy_touches_player,
                     player::player_hit,
                     checkpoint::check_player_in_checkpoint,
-                    platform::move_platform,
+                    bird::move_bird,
                     zombie::patrol_zombie,
                     zombie::zombie_hit,
                     zombie::zombie_die,
