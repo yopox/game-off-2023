@@ -2178,20 +2178,55 @@
 						{
 							"__identifier": "Spawner",
 							"__grid": [999,524],
-                            "__pivot": [0.5,0.5],
-                            "__tags": [],
-                            "__tile": null,
-                            "__smartColor": "#BE4A2F",
-                            "__worldX": 1599,
-                            "__worldY": -540,
-                            "iid": "0e1710a0-8990-11ee-9921-3964a26facfb",
-                            "width": 6,
-                            "height": 17,
-                            "defUid": 14,
-                            "px": [999,524],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": 1599,
+							"__worldY": -540,
+							"iid": "0e1710a0-8990-11ee-9921-3964a26facfb",
+							"width": 6,
+							"height": 17,
+							"defUid": 14,
+							"px": [999,524],
 							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "intro_ship", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["intro_ship"]
+							}] }]
+						},
+						{
+							"__identifier": "OldGuy",
+							"__grid": [1705,542],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#63C74D",
+							"__worldX": 2305,
+							"__worldY": -521,
+							"iid": "0d5e7100-8990-11ee-a2e9-5d7eb045ef94",
+							"width": 8,
+							"height": 8,
+							"defUid": 49,
+							"px": [1705,543],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Spawner",
+							"__grid": [1660,531],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": 2260,
+							"__worldY": -533,
+							"iid": "10a16700-8990-11ee-a2e9-9bba85d3b520",
+							"width": 6,
+							"height": 17,
+							"defUid": 14,
+							"px": [1660,531],
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "intro_house", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["intro_house"]
 							}] }]
 						}
 					]
