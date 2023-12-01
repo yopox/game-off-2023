@@ -14,6 +14,7 @@ pub struct GameData {
     flags: HashSet<Flags>,
     pub last_spawner: String,
     pub max_life: usize,
+    pub removed_named: HashSet<String>,
 }
 
 impl Default for GameData {
@@ -22,6 +23,7 @@ impl Default for GameData {
             flags: HashSet::new(),
             last_spawner: params::INITIAL_SPAWNER_ID.to_string(),
             max_life: params::STARTING_LIFE,
+            removed_named: HashSet::new(),
         }
     }
 }

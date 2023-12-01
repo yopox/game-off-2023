@@ -1,8 +1,11 @@
 use bevy::{prelude::*};
 
+use crate::entities::NamedEntity;
+use crate::entities::image_entity::ImageEntity;
+use crate::entities::player_sensor::PlayerEnteredSensorEvent;
 use crate::{GameState, params, screens::Textures};
 use crate::definitions::cutscenes;
-use crate::logic::{Cutscene, GameData};
+use crate::logic::{Cutscene, GameData, Vanish};
 use crate::screens::ScreenShake;
 
 pub struct HeartsPlugin;
@@ -13,7 +16,7 @@ impl Plugin for HeartsPlugin {
             .add_systems(PostStartup, (init_life))
             .add_systems(OnEnter(GameState::Game), init_hearts_holder)
             .add_systems(Update,
-                         (update_hearts, die)
+                         (update_hearts, collect_new_heart, die)
                              .run_if(in_state(GameState::Game))
             )
         ;
@@ -118,5 +121,30 @@ fn update_hearts(
             .set_parent(hearts_holder)
         ;
         current_hearts += 1;
+    }
+}
+
+fn collect_new_heart(
+    mut commands: Commands,
+    mut life: ResMut<PlayerLife>,
+    mut events: EventReader<PlayerEnteredSensorEvent>,
+    heart_images: Query<(Entity, &NamedEntity)>,
+    mut game_data: ResMut<GameData>,
+) {
+    for event in events.iter() {
+        let event_name = event.name.as_str();
+        if let Some(target_heart_name) = event_name.strip_prefix("new-heart:") {
+            for (entity, NamedEntity(heart_name)) in heart_images.iter() {
+                if target_heart_name == heart_name && game_data.removed_named.insert(heart_name.clone()) {
+                    info!("Collected heart {}", heart_name);
+                    commands.entity(entity).insert(Vanish::new(0.3));
+                    life.max = life.max.max(life.current + 2);
+                    life.gain();
+                    life.gain();
+                    break;
+                }
+            }
+        }
+
     }
 }

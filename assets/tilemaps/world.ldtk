@@ -11,7 +11,7 @@
 	"iid": "f044a4b0-6280-11ee-ae32-c162b57b0ec1",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 47,
+	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -563,6 +563,41 @@
 					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
+				},
+				{
+					"identifier": "Name",
+					"doc": null,
+					"__type": "String",
+					"uid": 47,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -584,7 +619,7 @@
 			"tileOpacity": 1,
 			"fillOpacity": 1,
 			"lineOpacity": 1,
-			"hollow": false,
+			"hollow": true,
 			"color": "#1BF3C8",
 			"renderMode": "Rectangle",
 			"showName": true,
@@ -965,10 +1000,16 @@
 							"height": 8,
 							"defUid": 40,
 							"px": [1191,101],
-							"fieldInstances": [{ "__identifier": "Image", "__type": "String", "__value": "new_heart.png", "__tile": null, "defUid": 41, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["new_heart.png"]
-							}] }]
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "new_heart.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["new_heart.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "heart:lvl_1_top", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["heart:lvl_1_top"]
+								}] }
+							]
 						},
 						{
 							"__identifier": "Checkpoint",
@@ -1097,6 +1138,25 @@
 							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "z1_boss", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["z1_boss"]
+							}] }]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [1189,100],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -434,
+							"__worldY": -172,
+							"iid": "e7809760-8990-11ee-9898-6971ee7d9469",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [1189,100],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "new-heart:heart:lvl_1_top", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["new-heart:heart:lvl_1_top"]
 							}] }]
 						}
 					]
@@ -1427,6 +1487,50 @@
 							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "z2_save", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["z2_save"]
+							}] }]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [1968,479],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": 0,
+							"__worldY": -449,
+							"iid": "09110260-8990-11ee-9898-271692a0ec70",
+							"width": 9,
+							"height": 8,
+							"defUid": 40,
+							"px": [1968,479],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "new_heart.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["new_heart.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "heart:lvl_2_cave", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["heart:lvl_2_cave"]
+								}] }
+							]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [1968,479],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": 0,
+							"__worldY": -449,
+							"iid": "37a68410-8990-11ee-9898-1da13824438a",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [1968,479],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "new-heart:heart:lvl_2_cave", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["new-heart:heart:lvl_2_cave"]
 							}] }]
 						}
 					]

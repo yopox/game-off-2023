@@ -7,11 +7,12 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::entities::platform::Range;
 use crate::entities::player::PlayerSize;
+use crate::logic::GameData;
 use crate::params;
 use crate::screens::Textures;
-use crate::util::get_ldtk_field_int;
+use crate::util::{get_ldtk_field_int, get_ldtk_field_string};
 
-use super::Enemy;
+use super::{Enemy, NamedEntity};
 
 #[derive(Clone, Bundle)]
 pub struct GameEntityBundle {
@@ -37,6 +38,7 @@ pub fn entity_spawned(
     mut commands: Commands,
     entity: Query<(Entity, &EntityInstance, &Transform), Added<EntityInstance>>,
     textures: Option<Res<Textures>>,
+    game_data: Res<GameData>,
 ) {
     let Some(textures) = textures else { return };
 
@@ -75,6 +77,14 @@ pub fn entity_spawned(
                     anchor: Anchor::BottomCenter,
                     ..default()
                 });
+        }
+
+        if let Some(name) = get_ldtk_field_string(&instance.field_instances, "Name") {
+            if game_data.removed_named.contains(&name) {
+                e_c.despawn_recursive();
+            } else {
+                e_c.insert(NamedEntity(name));
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ pub mod player;
 pub mod zombie;
 pub mod damage_zone;
 pub mod platform;
-mod image_entity;
+pub mod image_entity;
 mod common;
 pub mod animation;
 mod checkpoint;
@@ -39,6 +39,9 @@ pub enum EntityID {
     Boss2,
     Boss3,
 }
+
+#[derive(Component, Clone, Debug, Default)]
+pub struct NamedEntity(pub String);
 
 // KinematicCharacterController with this component will hurt the player
 #[derive(Component, Copy, Clone, Debug)]
