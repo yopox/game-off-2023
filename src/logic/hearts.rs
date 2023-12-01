@@ -1,10 +1,9 @@
 use bevy::{prelude::*};
 
-use crate::entities::NamedEntity;
-use crate::entities::image_entity::ImageEntity;
-use crate::entities::player_sensor::PlayerEnteredSensorEvent;
 use crate::{GameState, params, screens::Textures};
 use crate::definitions::cutscenes;
+use crate::entities::NamedEntity;
+use crate::entities::player_sensor::PlayerEnteredSensorEvent;
 use crate::logic::{Cutscene, GameData, Vanish};
 use crate::screens::ScreenShake;
 
@@ -40,6 +39,10 @@ impl PlayerLife {
 
     pub fn gain(&mut self) {
         self.current = (self.current + 1).min(self.max);
+    }
+
+    pub fn heal(&mut self) {
+        self.current = self.max;
     }
 
     pub fn set_current(&mut self, to: usize) { self.current = to; }
@@ -136,11 +139,9 @@ fn collect_new_heart(
         if let Some(target_heart_name) = event_name.strip_prefix("new-heart:") {
             for (entity, NamedEntity(heart_name)) in heart_images.iter() {
                 if target_heart_name == heart_name && game_data.removed_named.insert(heart_name.clone()) {
-                    info!("Collected heart {}", heart_name);
                     commands.entity(entity).insert(Vanish::new(0.3));
-                    life.max = life.max.max(life.current + 2);
-                    life.gain();
-                    life.gain();
+                    life.max += 2;
+                    life.heal();
                     break;
                 }
             }
