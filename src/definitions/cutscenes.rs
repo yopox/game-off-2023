@@ -41,9 +41,15 @@ lazy_static! {
 
     pub static ref OUTRO: VecDeque<CSEvent> = VecDeque::from([
         CSEvent::ToggleCinema(true),
+        CSEvent::fade_out(),
+        CSEvent::Teleport("outro_rip".into()),
+        CSEvent::fade_in(),
+        CSEvent::text_offset("Phew...".to_string(), -92., 0.),
+        CSEvent::Wait(1.0),
+        CSEvent::text_offset("That was a close one...".to_string(), -92., 0.),
         CSEvent::Wait(1.0),
         CSEvent::fade_out(),
-        CSEvent::text_centered("The end".to_string()),
+        CSEvent::text_centered("Thanks for playing!".to_string()),
     ]);
 
     pub static ref DASH: VecDeque<CSEvent> = VecDeque::from([

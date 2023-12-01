@@ -7,7 +7,7 @@ use bevy_rapier2d::dynamics::{LockedAxes, RigidBody};
 use bevy_rapier2d::geometry::Collider;
 use bevy_rapier2d::plugin::RapierContext;
 
-use crate::definitions::colliders;
+use crate::definitions::{colliders, cutscenes};
 use crate::entities::{Enemy, EntityID};
 use crate::entities::animation::{AnimationEvent, AnimStep};
 use crate::entities::common::get_enemy;
@@ -15,7 +15,7 @@ use crate::entities::player::{Player, PlayerHitEvent};
 use crate::entities::zombie::Zombie;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{Boss, BossKilled};
-use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
+use crate::logic::{ColliderBundle, Cutscene, Damaged, Flags, GameData, Hitbox};
 use crate::params;
 use crate::screens::Textures;
 
@@ -271,6 +271,7 @@ pub fn update(
         if !data.has_flag(Flags::Boss3Defeated) {
             data.set_flag(Flags::Boss3Defeated);
             commands.insert_resource(BossKilled::new(3));
+            commands.insert_resource(Cutscene::from(&cutscenes::OUTRO));
         }
         step.set_if_neq(AnimStep::Fall);
         // Remove colliders
