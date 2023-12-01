@@ -87,8 +87,40 @@ pub struct Fonts {
 
 #[derive(AssetCollection, Resource)]
 pub struct Sounds {
+    #[asset(path = "bgm/1_Intro.ogg")]
+    pub intro: Handle<AudioSource>,
+
     #[asset(path = "bgm/2M_Caves.ogg")]
     pub caves_m: Handle<AudioSource>,
     #[asset(path = "bgm/2S_Caves.ogg")]
     pub caves_s: Handle<AudioSource>,
+    #[asset(path = "bgm/2L_Caves.ogg")]
+    pub caves_l: Handle<AudioSource>,
+
+    #[asset(path = "bgm/3M_Forest.ogg")]
+    pub forest_m: Handle<AudioSource>,
+    #[asset(path = "bgm/3S_Forest.ogg")]
+    pub forest_s: Handle<AudioSource>,
+    #[asset(path = "bgm/3L_Forest.ogg")]
+    pub forest_l: Handle<AudioSource>,
+
+    #[asset(path = "bgm/3M_Forest Boss.ogg")]
+    pub forest_boss_m: Handle<AudioSource>,
+    #[asset(path = "bgm/3S_Forest Boss.ogg")]
+    pub forest_boss_s: Handle<AudioSource>,
+    #[asset(path = "bgm/3L_Forest Boss.ogg")]
+    pub forest_boss_l: Handle<AudioSource>,
+
+    #[asset(path = "bgm/4_Dramatic Tension.ogg")]
+    pub tension: Handle<AudioSource>,
+
+    #[asset(path = "bgm/4M_Final Boss.ogg")]
+    pub final_boss_m: Handle<AudioSource>,
+    #[asset(path = "bgm/4S_Final Boss.ogg")]
+    pub final_boss_s: Handle<AudioSource>,
+    #[asset(path = "bgm/4L_Final Boss.ogg")]
+    pub final_boss_l: Handle<AudioSource>,
+
+    #[asset(path = "bgm/5_Final Scene.ogg")]
+    pub outro: Handle<AudioSource>,
 }

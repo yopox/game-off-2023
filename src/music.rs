@@ -27,17 +27,41 @@ impl Plugin for AudioPlugin {
 
 #[derive(Copy, Clone, Debug)]
 pub enum BGM {
+    Intro,
     Caves,
+    CavesBoss,
     Forest,
+    ForestBoss,
+    Tension,
+    FinalBoss,
+    Outro,
 }
 
 impl BGM {
     fn source(&self, sounds: &Sounds, size: &PlayerSize) -> Handle<AudioSource> {
         match self {
-            BGM::Caves | BGM::Forest => match size {
+            BGM::Caves => match size {
                 PlayerSize::S => sounds.caves_s.clone(),
                 PlayerSize::M => sounds.caves_m.clone(),
                 PlayerSize::L => sounds.caves_m.clone(),
+            }
+            BGM::Forest => match size {
+                PlayerSize::S => sounds.forest_s.clone(),
+                PlayerSize::M => sounds.forest_m.clone(),
+                PlayerSize::L => sounds.forest_l.clone(),
+            }
+            BGM::CavesBoss | BGM::ForestBoss => match size {
+                PlayerSize::S => sounds.forest_boss_s.clone(),
+                PlayerSize::M => sounds.forest_boss_m.clone(),
+                PlayerSize::L => sounds.forest_boss_l.clone(),
+            }
+            BGM::Intro => sounds.intro.clone(),
+            BGM::Tension => sounds.tension.clone(),
+            BGM::Outro => sounds.outro.clone(),
+            BGM::FinalBoss => match size {
+                PlayerSize::S => sounds.final_boss_s.clone(),
+                PlayerSize::M => sounds.final_boss_m.clone(),
+                PlayerSize::L => sounds.final_boss_l.clone(),
             }
         }
     }
@@ -78,7 +102,7 @@ pub fn trigger_bgm(
     mut game_data: ResMut<GameData>,
 ) {
     for PlayerEnteredSensorEvent { name, .. } in events.iter() {
-        if let Some(id) = name.strip_prefix("cutscene:") {
+        if let Some(id) = name.strip_prefix("bgm:") {
             match id {
                 "zone1" => {
                     if !game_data.has_flag(Flags::Tension) {
@@ -120,6 +144,7 @@ fn update(
     for PlayBGMEvent(bgm) in bgm_event.iter() {
         if let Some(ref mut instance) = bgm_instance {
             if let Some(mut handle) = audio_instances.get_mut(&instance.2) {
+                if instance.0 == *bgm { continue }
                 handle.stop(AudioTween::default());
                 instance.0 = bgm.clone();
                 instance.1 = size.clone();

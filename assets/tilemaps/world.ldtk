@@ -1274,6 +1274,25 @@
 								"id": "V_String",
 								"params": ["ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac"]
 							}] }]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [795,24],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -828,
+							"__worldY": -248,
+							"iid": "1bab71d0-8990-11ee-a2e9-b5ef6870990e",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [795,24],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "bgm:zone1", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["bgm:zone1"]
+							}] }]
 						}
 					]
 				}
@@ -1391,18 +1410,18 @@
 						},
 						{
 							"__identifier": "Bird",
-							"__grid": [2005,444],
+							"__grid": [2011,455],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#EAD4AA",
-							"__worldX": 37,
-							"__worldY": -483,
+							"__worldX": 43,
+							"__worldY": -472,
 							"iid": "8d919d10-8990-11ee-a2e9-1724e3518fbc",
 							"width": 32,
 							"height": 18,
 							"defUid": 31,
-							"px": [2005,445],
+							"px": [2011,456],
 							"fieldInstances": [
 								{ "__identifier": "Range", "__type": "Int", "__value": 51, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [51] }] },
 								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
@@ -1410,18 +1429,18 @@
 						},
 						{
 							"__identifier": "Bird",
-							"__grid": [2158,444],
+							"__grid": [2151,455],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#EAD4AA",
-							"__worldX": 190,
-							"__worldY": -483,
+							"__worldX": 183,
+							"__worldY": -472,
 							"iid": "969f6c70-8990-11ee-a2e9-e36d183643cd",
 							"width": 32,
 							"height": 18,
 							"defUid": 31,
-							"px": [2158,445],
+							"px": [2151,456],
 							"fieldInstances": [
 								{ "__identifier": "Range", "__type": "Int", "__value": 50, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
 								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
@@ -1699,6 +1718,44 @@
 								"id": "V_String",
 								"params": ["cutscene:sword2"]
 							}] }]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [1140,632],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -828,
+							"__worldY": -296,
+							"iid": "1e2c2940-8990-11ee-a2e9-5f3707d66f18",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [1140,632],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "bgm:zone2", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["bgm:zone2"]
+							}] }]
+						},
+						{
+							"__identifier": "Bird",
+							"__grid": [1842,455],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"__worldX": -126,
+							"__worldY": -472,
+							"iid": "ee015a30-8990-11ee-a2e9-973faadddf14",
+							"width": 32,
+							"height": 18,
+							"defUid": 31,
+							"px": [1842,456],
+							"fieldInstances": [
+								{ "__identifier": "Range", "__type": "Int", "__value": 60, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [60] }] },
+								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
+							]
 						}
 					]
 				}
