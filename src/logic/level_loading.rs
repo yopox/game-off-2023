@@ -6,6 +6,8 @@ use bevy_ecs_ldtk::{Respawn, Worldly};
 use crate::entities::player::Player;
 use crate::entities::spawner::{SpawnerInfo, SpawnPlayer};
 use crate::GameState;
+use crate::logic::{Flags, GameData};
+use crate::music::{BGM, PlayBGMEvent};
 
 #[derive(Debug, Event)]
 pub struct LevelUnloadedEvent(pub LevelIid);
@@ -148,6 +150,8 @@ fn reload_world(
     levels: Query<Entity, With<LevelIid>>,
     worldly_entities: Query<Entity, With<Worldly>>,
     player: Query<Entity, With<Player>>,
+    mut bgm: EventWriter<PlayBGMEvent>,
+    mut data: ResMut<GameData>,
 ) {
     if level_manager.reload {
         level_manager.reload = false;
@@ -168,6 +172,15 @@ fn reload_world(
         }
 
         commands.insert_resource(SpawnPlayer);
+
+        match level_manager.current_checkpoint_level() {
+            None => {}
+            Some(outline) => { match outline.id.as_ref() {
+                "Zone_1" => { bgm.send(PlayBGMEvent(if data.has_flag(Flags::Tension) { BGM::Tension } else { BGM::Caves })); }
+                "Zone_2" => { bgm.send(PlayBGMEvent(if data.has_flag(Flags::Tension) { BGM::Tension } else { BGM::Forest })); }
+                _ => {}
+            } }
+        }
     }
 }
 
