@@ -18,7 +18,7 @@ pub fn collect_dash(
 ) {
     for event in events.iter() {
         let event_name = event.name.as_str();
-        if event_name == "dash" {
+        if event_name == "collect:dash" {
             for (entity, NamedEntity(name)) in images.iter() {
                 if name == "dash" && game_data.removed_named.insert(name.clone()) {
                     commands.entity(entity).insert(Vanish::new(0.1));

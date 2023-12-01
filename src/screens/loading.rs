@@ -105,6 +105,11 @@ pub struct Sounds {
     #[asset(path = "bgm/2L_Caves.ogg")]
     pub caves_l: Handle<AudioSource>,
 
+    #[asset(path = "bgm/2M_Caves Boss.ogg")]
+    pub caves_boss_m: Handle<AudioSource>,
+    #[asset(path = "bgm/2S_Caves Boss.ogg")]
+    pub caves_boss_s: Handle<AudioSource>,
+
     #[asset(path = "bgm/3M_Forest.ogg")]
     pub forest_m: Handle<AudioSource>,
     #[asset(path = "bgm/3S_Forest.ogg")]

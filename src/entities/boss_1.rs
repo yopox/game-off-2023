@@ -179,6 +179,7 @@ pub fn update(
         // Kill animation
         if !data.has_flag(Flags::Boss1Defeated) {
             data.set_flag(Flags::Boss1Defeated);
+            data.remove_flag(Flags::Boss1WallPresent);
             commands.insert_resource(BossKilled::new(1));
         }
         step.set_if_neq(AnimStep::Fall);

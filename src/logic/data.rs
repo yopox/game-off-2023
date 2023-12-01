@@ -54,8 +54,12 @@ pub enum Flags {
     SizeL,
     /// If the player can dash
     Dash,
+    /// If the 1st boss fight has begun
+    Boss1Start,
     /// If the 1st boss is defeated
     Boss1Defeated,
+    /// If the 2nd boss fight has begun
+    Boss2Start,
     /// If the 2nd boss is defeated
     Boss2Defeated,
     /// Tension music

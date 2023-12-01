@@ -9,6 +9,7 @@ use crate::params;
 lazy_static! {
     pub static ref INTRO: VecDeque<CSEvent> = VecDeque::from([
         CSEvent::ToggleCinema(true),
+        CSEvent::AddFlag(Flags::Boss3WallPresent),
         CSEvent::BGM(BGM::Intro),
         CSEvent::Wait(1.5),
         CSEvent::text_centered("TOTENINSEL\n\nby LaDorille, Vico, Tobias & yopox".to_string()),
@@ -50,6 +51,31 @@ lazy_static! {
         CSEvent::fade_out(),
         CSEvent::text_centered("You found the dash!".to_string()),
         CSEvent::text_centered("Try double tapping left/right.".to_string()),
+        CSEvent::fade_in(),
+    ]);
+
+    pub static ref BOSS_1: VecDeque<CSEvent> = VecDeque::from([
+        CSEvent::AddFlag(Flags::Boss1Start),
+        CSEvent::AddFlag(Flags::Boss1WallPresent),
+        CSEvent::BGM(BGM::CavesBoss),
+    ]);
+
+    pub static ref BOSS_2: VecDeque<CSEvent> = VecDeque::from([
+        CSEvent::AddFlag(Flags::Boss2Start),
+        CSEvent::AddFlag(Flags::Boss2WallPresent),
+        CSEvent::BGM(BGM::ForestBoss),
+    ]);
+
+    pub static ref BOSS_2_END: VecDeque<CSEvent> = VecDeque::from([
+        CSEvent::Wait(1.0),
+        CSEvent::fade_out(),
+        CSEvent::text_centered("Well done!".to_string()),
+        CSEvent::Wait(1.0),
+        CSEvent::BGM(BGM::Tension),
+        CSEvent::AddFlag(Flags::Tension),
+        CSEvent::RemoveFlag(Flags::Boss2WallPresent),
+        CSEvent::RemoveFlag(Flags::Boss3WallPresent),
+        CSEvent::text_centered("Find me in the caves.".to_string()),
         CSEvent::fade_in(),
     ]);
 

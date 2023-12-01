@@ -5,14 +5,14 @@ use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::geometry::Collider;
 use bevy_rapier2d::prelude::RigidBody;
 
-use crate::definitions::colliders;
+use crate::definitions::{colliders, cutscenes};
 use crate::entities::animation::{AnimationEvent, AnimStep};
 use crate::entities::common::get_enemy;
 use crate::entities::damage_zone::DamageZone;
 use crate::entities::player::Player;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{Boss, BossKilled};
-use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
+use crate::logic::{ColliderBundle, Cutscene, Damaged, Flags, GameData, Hitbox};
 use crate::music::{BGM, PlayBGMEvent};
 use crate::params;
 use crate::screens::{ScreenShake, Textures};
@@ -199,6 +199,7 @@ pub fn update(
         if !data.has_flag(Flags::Boss2Defeated) {
             data.set_flag(Flags::Boss2Defeated);
             commands.insert_resource(BossKilled::new(2));
+            commands.insert_resource(Cutscene::from(&cutscenes::BOSS_2_END));
         }
         step.set_if_neq(AnimStep::Fall);
         // Remove colliders

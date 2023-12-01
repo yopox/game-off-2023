@@ -61,7 +61,11 @@ fn die(
     mut data: ResMut<GameData>,
 ) {
     if life.is_changed() && life.current == 0 {
+        data.remove_flag(Flags::Boss1Start);
+        data.remove_flag(Flags::Boss2Start);
         data.remove_flag(Flags::Boss3Start);
+        data.remove_flag(Flags::Boss1WallPresent);
+        data.remove_flag(Flags::Boss2WallPresent);
         commands.insert_resource(ScreenShake::new(params::DEATH_SHAKE_TIME));
         commands.insert_resource(Cutscene::from(&cutscenes::DEATH));
     }

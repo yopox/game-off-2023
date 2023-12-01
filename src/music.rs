@@ -50,7 +50,12 @@ impl BGM {
                 PlayerSize::M => sounds.forest_m.clone(),
                 PlayerSize::L => sounds.forest_l.clone(),
             }
-            BGM::CavesBoss | BGM::ForestBoss => match size {
+            BGM::CavesBoss => match size {
+                PlayerSize::S => sounds.caves_boss_s.clone(),
+                PlayerSize::M => sounds.caves_boss_m.clone(),
+                PlayerSize::L => sounds.caves_boss_m.clone(),
+            }
+            BGM::ForestBoss => match size {
                 PlayerSize::S => sounds.forest_boss_s.clone(),
                 PlayerSize::M => sounds.forest_boss_m.clone(),
                 PlayerSize::L => sounds.forest_boss_l.clone(),
@@ -63,6 +68,19 @@ impl BGM {
                 PlayerSize::M => sounds.final_boss_m.clone(),
                 PlayerSize::L => sounds.final_boss_l.clone(),
             }
+        }
+    }
+
+    fn get_loop(&self) -> Option<f64> {
+        match self {
+            BGM::Intro => None,
+            BGM::Caves => Some(36.571),
+            BGM::CavesBoss => None,
+            BGM::Forest => Some(36.571),
+            BGM::ForestBoss => None,
+            BGM::Tension => None,
+            BGM::FinalBoss => Some(45.939),
+            BGM::Outro => None,
         }
     }
 }
@@ -148,18 +166,20 @@ fn update(
                 handle.stop(AudioTween::default());
                 instance.0 = bgm.clone();
                 instance.1 = size.clone();
-                instance.2 = audio
-                    .play(bgm.source(&sounds, size))
-                    .handle()
-                ;
+                if let Some(l) = bgm.get_loop() {
+                    instance.2 = audio.play(bgm.source(&sounds, size)).loop_from(l).handle();
+                } else {
+                    instance.2 = audio.play(bgm.source(&sounds, size)).handle();
+                }
             } else {
                 error!("No handle for bgm channel");
             }
         } else {
-            let handle = audio
-                .play(bgm.source(&sounds, size))
-                .handle()
-            ;
+            let handle = if let Some(l) = bgm.get_loop() {
+                audio.play(bgm.source(&sounds, size)).loop_from(l).handle()
+            } else {
+                audio.play(bgm.source(&sounds, size)).handle()
+            };
             commands
                 .insert_resource(BGMInstance(bgm.clone(), size.clone(), handle))
             ;
