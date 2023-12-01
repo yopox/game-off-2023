@@ -4,7 +4,7 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterControllerOutput;
-use bevy_rapier2d::geometry::TOIStatus;
+use bevy_rapier2d::geometry::{TOIStatus, Sensor};
 use bevy_rapier2d::math::Vect;
 use bevy_rapier2d::plugin::RapierContext;
 use bevy_rapier2d::prelude::Collider;
@@ -97,7 +97,7 @@ pub fn change_size(
     m_sensor: Query<(Entity), With<PlayerSizeChangeSensorM>>,
     l_sensor: Query<(Entity), With<PlayerSizeChangeSensorL>>,
     collisions: Res<RapierContext>,
-    is_wall: Query<Entity, With<LevelColliderGroup>>,
+    is_sensor: Query<Entity, With<Sensor>>,
     data: Res<GameData>,
 ) {
     if !input.just_pressed(KeyCode::Up) && !input.just_pressed(KeyCode::Down) { return; }
@@ -134,7 +134,7 @@ pub fn change_size(
         let ok_entities = vec![player, m_sensor, l_sensor];
         for (e1, e2, _) in collisions.intersections_with(sensor) {
             let other_entity = if e1 == sensor { e2 } else { e1 };
-            if ok_entities.iter().all(|&e| e != other_entity) {
+            if ok_entities.iter().all(|&e| e != other_entity) && !is_sensor.contains(other_entity) {
                 println!("cannot change size because colliding with {:?}", other_entity);
                 return;
             }
