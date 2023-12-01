@@ -15,6 +15,7 @@ pub mod z_pos {
     pub const BIRD: f32 = 10.0;
     pub const PARTICLES: f32 = 60.0;
     pub const GUI: f32 = 100.;
+    pub const IMAGE_ENTITY: f32 = 5.;
 }
 
 pub mod ui_z {

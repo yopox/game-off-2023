@@ -1623,6 +1623,441 @@
 									"params": ["wall_boss3.png"]
 								}] }
 							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3043,313],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1420,
+							"__worldY": 41,
+							"iid": "05323d20-8990-11ee-9e31-d3d86fedb89b",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3043,313],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3031,305],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1408,
+							"__worldY": 33,
+							"iid": "3dabc9f0-8990-11ee-9e31-d940f0fbe57b",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3031,305],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3061,301],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1438,
+							"__worldY": 29,
+							"iid": "3eb23d70-8990-11ee-9e31-619b3c4d7c0f",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3061,301],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3069,325],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1446,
+							"__worldY": 53,
+							"iid": "3fd97f60-8990-11ee-9e31-c757d527ec44",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3069,325],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3031,323],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1408,
+							"__worldY": 51,
+							"iid": "40d78e70-8990-11ee-9e31-733ec4bcb901",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3031,323],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3015,322],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1392,
+							"__worldY": 50,
+							"iid": "41aa95e0-8990-11ee-9e31-4f753856626d",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3015,322],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3073,303],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1450,
+							"__worldY": 31,
+							"iid": "42a4d460-8990-11ee-9e31-7bf7f0b13697",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3073,303],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3015,301],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#4C4C7C",
+							"__worldX": 1392,
+							"__worldY": 29,
+							"iid": "43fe70f0-8990-11ee-9e31-a170b0001356",
+							"width": 2,
+							"height": 2,
+							"defUid": 40,
+							"px": [3015,301],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#4C4C7C", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [5000316] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3054,307],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#B6B8DC",
+							"__worldX": 1431,
+							"__worldY": 35,
+							"iid": "47861110-8990-11ee-9e31-b7fbf6f77280",
+							"width": 1,
+							"height": 1,
+							"defUid": 40,
+							"px": [3054,307],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#B6B8DC", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [11974876] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3037,302],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#B6B8DC",
+							"__worldX": 1414,
+							"__worldY": 30,
+							"iid": "62474780-8990-11ee-9e31-85131d506bca",
+							"width": 1,
+							"height": 1,
+							"defUid": 40,
+							"px": [3037,302],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#B6B8DC", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [11974876] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3055,326],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#B6B8DC",
+							"__worldX": 1432,
+							"__worldY": 54,
+							"iid": "66e25370-8990-11ee-9e31-656bd46e16f6",
+							"width": 1,
+							"height": 1,
+							"defUid": 40,
+							"px": [3055,326],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#B6B8DC", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [11974876] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3022,324],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#B6B8DC",
+							"__worldX": 1399,
+							"__worldY": 52,
+							"iid": "67e03b70-8990-11ee-9e31-1b7ab6de7de5",
+							"width": 1,
+							"height": 1,
+							"defUid": 40,
+							"px": [3022,324],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#B6B8DC", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [11974876] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3086,326],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#B6B8DC",
+							"__worldX": 1463,
+							"__worldY": 54,
+							"iid": "68d0b5f0-8990-11ee-9e31-ffdd88dabd8d",
+							"width": 1,
+							"height": 1,
+							"defUid": 40,
+							"px": [3086,326],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#B6B8DC", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [11974876] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3086,308],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#B6B8DC",
+							"__worldX": 1463,
+							"__worldY": 36,
+							"iid": "69c13070-8990-11ee-9e31-0da98badcb3a",
+							"width": 1,
+							"height": 1,
+							"defUid": 40,
+							"px": [3086,308],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "pixel.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pixel.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#B6B8DC", "__tile": null, "defUid": 49, "realEditorValues": [{ "id": "V_Int", "params": [11974876] }] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": true, "__tile": null, "defUid": 50, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3119,323],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": 1496,
+							"__worldY": 51,
+							"iid": "8490faf0-8990-11ee-9766-27a9d2f7560d",
+							"width": 7,
+							"height": 14,
+							"defUid": 40,
+							"px": [3119,323],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "sword1.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["sword1.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "Sword1", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Sword1"]
+								}] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFFFFF", "__tile": null, "defUid": 49, "realEditorValues": [] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": false, "__tile": null, "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 51, "realEditorValues": [] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
 						}
 					]
 				}
@@ -2178,6 +2613,35 @@
 									"id": "V_String",
 									"params": ["wall_boss2.png"]
 								}] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [112,464],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": -1856,
+							"__worldY": -464,
+							"iid": "bea15460-8990-11ee-9766-17e53a93cf78",
+							"width": 7,
+							"height": 24,
+							"defUid": 40,
+							"px": [112,464],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "sword2.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["sword2.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "Sword2", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Sword2"]
+								}] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFFFFF", "__tile": null, "defUid": 49, "realEditorValues": [] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": false, "__tile": null, "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 51, "realEditorValues": [] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
 							]
 						}
 					]

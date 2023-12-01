@@ -25,7 +25,6 @@ impl From<&EntityInstance> for ImageEntity {
     fn from(entity_instance: &EntityInstance) -> Self {
         let hash = hash_to_u64(&entity_instance.iid);
         let random_offset = (hash & 0xffff) as f32 / 0xffff as f32 * 2. * PI;
-        println!("random_offset: {}", random_offset);
 
         Self {
             image_name: get_ldtk_field_string(&entity_instance.field_instances, "Image").unwrap(),
@@ -48,10 +47,10 @@ pub struct ImageEntityBundle {
 
 pub fn set_image_for_image_entity(
     mut commands: Commands,
-    mut new_image_entities: Query<(Entity, &ImageEntity), Added<ImageEntity>>,
+    mut new_image_entities: Query<(Entity, &ImageEntity, &mut Transform), Added<ImageEntity>>,
     textures: Res<AssetServer>,
 ) {
-    for (image, image_entity) in new_image_entities.iter_mut() {
+    for (image, image_entity, mut transform) in new_image_entities.iter_mut() {
         let texture: Handle<Image> = textures.load(&image_entity.image_name);
         // info!("Setting image for image entity: {:?}", image_entity.image_name);
         commands.entity(image)
@@ -64,6 +63,7 @@ pub fn set_image_for_image_entity(
                 },
             ))
         ;
+        transform.translation.z = crate::params::z_pos::IMAGE_ENTITY;
     } 
 }
 
