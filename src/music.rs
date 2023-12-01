@@ -75,9 +75,9 @@ impl BGM {
         match self {
             BGM::Intro => None,
             BGM::Caves => Some(36.571),
-            BGM::CavesBoss => None,
+            BGM::CavesBoss => Some(16.271),
             BGM::Forest => Some(36.571),
-            BGM::ForestBoss => None,
+            BGM::ForestBoss => Some(16.00),
             BGM::Tension => None,
             BGM::FinalBoss => Some(45.939),
             BGM::Outro => None,
