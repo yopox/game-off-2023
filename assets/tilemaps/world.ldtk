@@ -1598,6 +1598,31 @@
 							"defUid": 49,
 							"px": [973,204],
 							"fieldInstances": []
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [1000,287],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#000000",
+							"__worldX": -623,
+							"__worldY": 15,
+							"iid": "34c49cc0-8990-11ee-9e31-d1e7e2a94e43",
+							"width": 20,
+							"height": 17,
+							"defUid": 53,
+							"px": [1000,287],
+							"fieldInstances": [
+								{ "__identifier": "Name", "__type": "String", "__value": "Boss3Wall", "__tile": null, "defUid": 54, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Boss3Wall"]
+								}] },
+								{ "__identifier": "Image", "__type": "String", "__value": "wall_boss3.png", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["wall_boss3.png"]
+								}] }
+							]
 						}
 					]
 				}
@@ -2129,6 +2154,31 @@
 								"id": "V_String",
 								"params": ["collect:dash"]
 							}] }]
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [1968,286],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#000000",
+							"__worldX": 0,
+							"__worldY": -642,
+							"iid": "e02c76f0-8990-11ee-9e31-3dcd8945783d",
+							"width": 19,
+							"height": 31,
+							"defUid": 53,
+							"px": [1968,286],
+							"fieldInstances": [
+								{ "__identifier": "Name", "__type": "String", "__value": "Boss2Wall", "__tile": null, "defUid": 54, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Boss2Wall"]
+								}] },
+								{ "__identifier": "Image", "__type": "String", "__value": "wall_boss2.png", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["wall_boss2.png"]
+								}] }
+							]
 						}
 					]
 				}
