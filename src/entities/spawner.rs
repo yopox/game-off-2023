@@ -102,7 +102,7 @@ pub fn spawn_player(
 
     let a_little_smaller_transform = Transform {
         translation: Vec3::new(0.0, 0.05, 0.0),
-        scale: Vec3::new(0.95, 1.0, 1.0),
+        scale: Vec3::new(0.5, 0.95, 1.0),
         ..default()
     };
 
