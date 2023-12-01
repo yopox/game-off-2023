@@ -1,7 +1,9 @@
 use bevy::app::App;
 use bevy::prelude::*;
 use bevy_kira_audio::{Audio, AudioControl, AudioInstance, AudioSource, AudioTween};
+use rand::{Rng, thread_rng};
 
+use crate::entities::animation::AnimationEvent;
 use crate::entities::EntityID;
 use crate::entities::player::{Player, PlayerSize};
 use crate::entities::player_sensor::PlayerEnteredSensorEvent;
@@ -20,6 +22,7 @@ impl Plugin for AudioPlugin {
                 update,
                 change_size,
                 trigger_bgm,
+                trigger_sfx,
             ).run_if(resource_exists::<Sounds>()))
         ;
     }
@@ -85,17 +88,54 @@ impl BGM {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum SFX {
-    Select,
+    JumpS,
+    JumpM,
+    JumpL,
+    Downsize,
+    Upsize,
+    Hurt,
+    PlayerHurt,
+    Sword,
+    Step,
+    Dash,
+    BossOut,
+    BossKilled,
+    NewHeart,
+    Heal,
 }
 
 impl SFX {
-    // fn source(&self, sounds: &Sounds) -> Handle<AudioSource> {
-    //     match self {
-    //         SFX::Select => sounds.select.clone(),
-    //     }
-    // }
+    fn source(&self, sounds: &Sounds) -> Handle<AudioSource> {
+        match self {
+            SFX::JumpS => sounds.jump_s.clone(),
+            SFX::JumpM => sounds.jump.clone(),
+            SFX::JumpL => sounds.jump_l.clone(),
+            SFX::Downsize => sounds.downsize.clone(),
+            SFX::Upsize => sounds.upsize.clone(),
+            SFX::Hurt => sounds.hurt.clone(),
+            SFX::PlayerHurt => sounds.player_hurt_m.clone(),
+            SFX::Sword => sounds.sword.clone(),
+            SFX::Dash => sounds.dash.clone(),
+            SFX::BossOut => sounds.boss_out.clone(),
+            SFX::BossKilled => sounds.boss_explosion.clone(),
+            SFX::Heal => sounds.heal.clone(),
+            SFX::NewHeart => sounds.obtain_heart.clone(),
+            SFX::Step => {
+                match thread_rng().gen_range(0..8) {
+                    0..=1 => sounds.step_1.clone(),
+                    1..=2 => sounds.step_2.clone(),
+                    2..=3 => sounds.step_3.clone(),
+                    3..=4 => sounds.step_4.clone(),
+                    4..=5 => sounds.step_5.clone(),
+                    5..=6 => sounds.step_6.clone(),
+                    6..=7 => sounds.step_7.clone(),
+                    _ => sounds.step_8.clone(),
+                }
+            }
+        }
+    }
 
     fn volume(&self) -> f32 {
         match self {
@@ -110,9 +150,20 @@ pub struct PlayBGMEvent(pub BGM);
 #[derive(Event)]
 pub struct PlaySFXEvent(pub SFX);
 
-
 #[derive(Resource)]
 struct BGMInstance(BGM, PlayerSize, Handle<AudioInstance>);
+
+pub fn trigger_sfx(
+    mut events: EventReader<AnimationEvent>,
+    mut sfx: EventWriter<PlaySFXEvent>,
+) {
+    for event in events.iter() {
+        match event {
+            AnimationEvent::PlaySFX(s) => sfx.send(PlaySFXEvent(s.clone())).clone(),
+            _ => {}
+        }
+    }
+}
 
 pub fn trigger_bgm(
     mut events: EventReader<PlayerEnteredSensorEvent>,
@@ -154,9 +205,9 @@ fn update(
     };
 
     // SFX
-    // for PlaySFXEvent(sfx) in sfx_event.iter() {
-    //     // audio.play(sfx.source(&sounds));
-    // }
+    for PlaySFXEvent(sfx) in sfx_event.iter() {
+        audio.play(sfx.source(&sounds));
+    }
 
     // BGM
     for PlayBGMEvent(bgm) in bgm_event.iter() {

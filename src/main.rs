@@ -27,10 +27,7 @@ mod definitions;
 pub enum GameState {
     #[default]
     Loading,
-    SimpleText,
-    Title,
     Game,
-    GameOver,
 }
 
 impl GameState {

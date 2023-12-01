@@ -4,7 +4,7 @@ use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterControllerOutput;
-use bevy_rapier2d::geometry::{TOIStatus, Sensor};
+use bevy_rapier2d::geometry::{Sensor, TOIStatus};
 use bevy_rapier2d::math::Vect;
 use bevy_rapier2d::plugin::RapierContext;
 use bevy_rapier2d::prelude::Collider;
@@ -13,7 +13,8 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{ColliderBundle, Flags, GameData, Knockback, LevelColliderGroup, PlayerLife};
+use crate::logic::{ColliderBundle, Flags, GameData, Knockback, PlayerLife};
+use crate::music::{PlaySFXEvent, SFX};
 use crate::params;
 use crate::screens::Textures;
 
@@ -99,6 +100,7 @@ pub fn change_size(
     collisions: Res<RapierContext>,
     is_sensor: Query<Entity, With<Sensor>>,
     data: Res<GameData>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     if !input.just_pressed(KeyCode::Up) && !input.just_pressed(KeyCode::Down) { return; }
 
@@ -142,6 +144,9 @@ pub fn change_size(
     }
 
     *size = new_size;
+
+    if input.just_pressed(KeyCode::Up) { sfx.send(PlaySFXEvent(SFX::Upsize)); }
+    else { sfx.send(PlaySFXEvent(SFX::Downsize)); }
 
     commands
         .entity(player)
@@ -231,6 +236,7 @@ pub fn player_hit(
     mut events: EventReader<PlayerHitEvent>,
     mut player_life: ResMut<PlayerLife>,
     enemy_ignores: Query<Option<&IgnoreSize>>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     let Ok((player_entity, EntityID::Player(size))) = player.get_single_mut() else { return };
 
@@ -242,6 +248,7 @@ pub fn player_hit(
 
         // Damage player
         player_life.lose();
+        sfx.send(PlaySFXEvent(SFX::PlayerHurt));
         commands
             .entity(player_entity)
             .insert(Knockback::new(normal * enemy.player_knockback_speed, enemy.player_knockback_time))

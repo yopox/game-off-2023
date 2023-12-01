@@ -5,9 +5,10 @@ use bevy_rapier2d::prelude::*;
 use crate::definitions::cutscenes;
 use crate::entities::{EntityID, NamedEntity};
 use crate::entities::animation::{AnimStep, EntityTimer};
-use crate::entities::player::{Dash, Player, Transformed};
+use crate::entities::player::{Dash, Player, PlayerSize, Transformed};
 use crate::entities::player_sensor::PlayerEnteredSensorEvent;
 use crate::logic::{Cutscene, Flags, GameData, Vanish};
+use crate::music::{PlaySFXEvent, SFX};
 use crate::params;
 
 pub fn collect_dash(
@@ -42,6 +43,7 @@ pub fn move_player(
         Option<&KinematicCharacterControllerOutput>,
     ), With<Player>>,
     data: Res<GameData>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     let Ok((
                e, mut step, mut dash, id, timer,
@@ -66,6 +68,7 @@ pub fn move_player(
             if !dash.last_dir.0 && time.elapsed_seconds() - dash.last_dir.1 <= params::DASH_DETECTION {
                 step.set_if_neq(AnimStep::Dash);
                 dash.can_dash = false;
+                sfx.send(PlaySFXEvent(SFX::Dash));
             } else {
                 dash.last_dir = (false, time.elapsed_seconds());
             }
@@ -73,6 +76,7 @@ pub fn move_player(
             if dash.last_dir.0 && time.elapsed_seconds() - dash.last_dir.1 <= params::DASH_DETECTION {
                 step.set_if_neq(AnimStep::Dash);
                 dash.can_dash = false;
+                sfx.send(PlaySFXEvent(SFX::Dash));
             } else {
                 dash.last_dir = (true, time.elapsed_seconds());
             }
@@ -128,6 +132,11 @@ pub fn move_player(
         };
         if grounded || coyote {
             step.set_if_neq(AnimStep::Prejump);
+            sfx.send(PlaySFXEvent(match size {
+                PlayerSize::S => SFX::JumpS,
+                PlayerSize::M => SFX::JumpM,
+                PlayerSize::L => SFX::JumpL,
+            }));
         }
     }
 

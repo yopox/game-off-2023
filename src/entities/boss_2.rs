@@ -13,7 +13,7 @@ use crate::entities::player::Player;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{Boss, BossKilled};
 use crate::logic::{ColliderBundle, Cutscene, Damaged, Flags, GameData, Hitbox};
-use crate::music::{BGM, PlayBGMEvent};
+use crate::music::{BGM, PlayBGMEvent, PlaySFXEvent, SFX};
 use crate::params;
 use crate::screens::{ScreenShake, Textures};
 
@@ -77,6 +77,7 @@ pub fn update(
     mut events: EventReader<AnimationEvent>,
     mut damage_zone: Query<&mut Collider, (With<Boss2Part>, With<DamageZone>, Without<Boss2>)>,
     mut bgm: EventWriter<PlayBGMEvent>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     let Ok((boss_e, mut state, mut collider, sprite, mut step)) = boss.get_single_mut() else { return; };
     let Ok(player_pos) = player.get_single() else { return };
@@ -97,6 +98,7 @@ pub fn update(
                 commands.remove_resource::<ScreenShake>();
                 commands.insert_resource(ScreenShake::new(params::BOSS2_SHAKE));
                 bgm.send(PlayBGMEvent(BGM::ForestBoss));
+                sfx.send(PlaySFXEvent(SFX::BossOut));
                 commands.entity(boss_e).insert(Hurt::new_with_shake(params::ENEMY_HURT_TIME, params::BOSS2_SHAKE));
                 step.set_if_neq(AnimStep::Walk);
 

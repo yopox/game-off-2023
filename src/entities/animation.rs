@@ -5,6 +5,7 @@ use bevy::sprite::TextureAtlasSprite;
 use crate::{logic, params, util};
 use crate::entities::{animation, EntityID, player};
 use crate::entities::player::PlayerSize;
+use crate::music::SFX;
 
 pub type Index = usize;
 pub type Seconds = f32;
@@ -22,6 +23,7 @@ pub enum AnimationEvent {
     AttackRecoil,
     AttackOver,
     Boss2DamageZone(u8),
+    PlaySFX(SFX),
 }
 
 pub enum SeqPart {
@@ -185,11 +187,11 @@ pub fn get_player_rule(state: &AnimStep, size: &PlayerSize) -> AnimationRule {
             SeqPart::Frame(13),
             SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
             SeqPart::Frame(12),
-            SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
+            SeqPart::WaitAnd(params::PLAYER_WALK_INTERFRAME, AnimationEvent::PlaySFX(SFX::Step)),
             SeqPart::Frame(14),
             SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
             SeqPart::Frame(12),
-            SeqPart::Wait(params::PLAYER_WALK_INTERFRAME),
+            SeqPart::WaitAnd(params::PLAYER_WALK_INTERFRAME, AnimationEvent::PlaySFX(SFX::Step)),
         ]),
         AnimStep::Prejump => AnimationRule::Still(5),
         AnimStep::Jump => AnimationRule::Sequence(vec![

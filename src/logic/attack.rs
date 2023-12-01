@@ -6,16 +6,19 @@ use crate::definitions::colliders;
 use crate::entities::animation::{AnimationEvent, AnimStep};
 use crate::entities::EntityID;
 use crate::entities::player::Player;
+use crate::music::{PlaySFXEvent, SFX};
 
 pub fn attack(
     mut player: Query<(&mut AnimStep, &KinematicCharacterControllerOutput), With<Player>>,
     input: Res<Input<KeyCode>>,
     mut events: EventReader<AnimationEvent>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     let Ok((mut step, output)) = player.get_single_mut() else { return };
 
     if input.just_pressed(KeyCode::C) && *step != AnimStep::Attack {
         step.set_if_neq(AnimStep::Attack);
+        // sfx.send(PlaySFXEvent(SFX::Sword));
     }
 
     for event in events.iter() {
@@ -37,6 +40,7 @@ pub fn update_sword(
     mut events: EventReader<AnimationEvent>,
     sword: Query<Entity, With<Sword>>,
     player: Query<(&EntityID, &Transform, &TextureAtlasSprite), With<Player>>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     if let Ok(e) = sword.get_single() {
         if let Ok((_, pos, _)) = player.get_single() {
@@ -55,6 +59,7 @@ pub fn update_sword(
                     .insert(GlobalTransform::default())
                     .insert(Sword(vec![]))
                 ;
+                sfx.send(PlaySFXEvent(SFX::Sword));
             }
             AnimationEvent::AttackRecoil => {
                 sword.iter().for_each(|id| commands.entity(id).despawn_recursive());

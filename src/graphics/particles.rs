@@ -7,6 +7,7 @@ use bevy_particle_systems::ColorOverTime::Gradient;
 use rand::{Rng, thread_rng};
 
 use crate::entities::player::Player;
+use crate::music::{PlaySFXEvent, SFX};
 use crate::params;
 use crate::params::z_pos;
 use crate::screens::{ScreenShake, Textures};
@@ -148,9 +149,11 @@ pub fn update_boss_spawner(
     mut time: ResMut<Time>,
     boss_killed: Option<ResMut<BossKilled>>,
     boss_emitters: Query<(Entity, &BossSpawner)>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     let Some(mut boss_killed) = boss_killed else { return };
     if boss_killed.is_added() {
+        sfx.send(PlaySFXEvent(SFX::BossKilled));
         time.set_relative_speed(0.25);
         commands.insert_resource(ScreenShake::new(params::BOSS_EMITTER_DELAY * 3.5));
     }

@@ -5,6 +5,7 @@ use crate::definitions::cutscenes;
 use crate::entities::NamedEntity;
 use crate::entities::player_sensor::PlayerEnteredSensorEvent;
 use crate::logic::{Cutscene, Flags, GameData, Vanish};
+use crate::music::{PlaySFXEvent, SFX};
 use crate::screens::ScreenShake;
 
 pub struct HeartsPlugin;
@@ -139,6 +140,7 @@ fn collect_new_heart(
     mut events: EventReader<PlayerEnteredSensorEvent>,
     heart_images: Query<(Entity, &NamedEntity)>,
     mut game_data: ResMut<GameData>,
+    mut sfx: EventWriter<PlaySFXEvent>,
 ) {
     for event in events.iter() {
         let event_name = event.name.as_str();
@@ -148,6 +150,7 @@ fn collect_new_heart(
                     commands.entity(entity).insert(Vanish::new(0.1));
                     life.max += 2;
                     life.heal();
+                    sfx.send(PlaySFXEvent(SFX::NewHeart));
                     break;
                 }
             }

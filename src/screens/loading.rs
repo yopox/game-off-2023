@@ -136,4 +136,71 @@ pub struct Sounds {
 
     #[asset(path = "bgm/5_Final Scene.ogg")]
     pub outro: Handle<AudioSource>,
+
+    #[asset(path = "sfx/FX_AmbientBoss.ogg")]
+    pub ambient_boss: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_BJump.ogg")]
+    pub jump_l: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Boss Explosion.ogg")]
+    pub boss_explosion: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Boss out.ogg")]
+    pub boss_out: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_BPlayer hurt.ogg")]
+    pub player_hurt_l: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_CollectSword.ogg")]
+    pub collect_sword: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Dash.ogg")]
+    pub dash: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Downsize.ogg")]
+    pub downsize: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_FinalBossDie.ogg")]
+    pub final_boss_die: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_FinalBossTransform.ogg")]
+    pub final_boss_transform: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Game Over.ogg")]
+    pub game_over: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Heal.ogg")]
+    pub heal: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Hurt.ogg")]
+    pub hurt: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Jump.ogg")]
+    pub jump: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_MobHurt.ogg")]
+    pub mob_hurt: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_NPlayer hurt.ogg")]
+    pub player_hurt_m: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_ObtainHeart.ogg")]
+    pub obtain_heart: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_SPlayer hurt.ogg")]
+    pub player_hurt_s: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_SJump.ogg")]
+    pub jump_s: Handle<AudioSource>,
+
+    #[asset(path = "sfx/FX_Step1.ogg")]
+    pub step_1: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step2.ogg")]
+    pub step_2: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step3.ogg")]
+    pub step_3: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step4.ogg")]
+    pub step_4: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step5.ogg")]
+    pub step_5: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step6.ogg")]
+    pub step_6: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step7.ogg")]
+    pub step_7: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Step8.ogg")]
+    pub step_8: Handle<AudioSource>,
+
+
+    #[asset(path = "sfx/FX_Sword Finalboss.ogg")]
+    pub sword_final_boss: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Sword ForestBoss.ogg")]
+    pub sword_forest_boss: Handle<AudioSource>,
+    #[asset(path = "sfx/FX_Sword.ogg")]
+    pub sword: Handle<AudioSource>,
+
+    #[asset(path = "sfx/FX_Upsize.ogg")]
+    pub upsize: Handle<AudioSource>,
 }
