@@ -2029,6 +2029,35 @@
 								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 1.2, "__tile": null, "defUid": 51, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] },
 								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 8, "__tile": null, "defUid": 52, "realEditorValues": [{ "id": "V_Float", "params": [8] }] }
 							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [3119,323],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": 1496,
+							"__worldY": 51,
+							"iid": "8490faf0-8990-11ee-9766-27a9d2f7560d",
+							"width": 7,
+							"height": 14,
+							"defUid": 40,
+							"px": [3119,323],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "sword1.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["sword1.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "Sword1", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Sword1"]
+								}] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFFFFF", "__tile": null, "defUid": 49, "realEditorValues": [] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": false, "__tile": null, "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 51, "realEditorValues": [] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
 						}
 					]
 				}
@@ -2584,6 +2613,35 @@
 									"id": "V_String",
 									"params": ["wall_boss2.png"]
 								}] }
+							]
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [112,464],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": -1856,
+							"__worldY": -464,
+							"iid": "bea15460-8990-11ee-9766-17e53a93cf78",
+							"width": 7,
+							"height": 24,
+							"defUid": 40,
+							"px": [112,464],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "sword2.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["sword2.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "Sword2", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Sword2"]
+								}] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFFFFF", "__tile": null, "defUid": 49, "realEditorValues": [] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": false, "__tile": null, "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 51, "realEditorValues": [] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
 							]
 						}
 					]
