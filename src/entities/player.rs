@@ -10,7 +10,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{ColliderBundle, Knockback, LevelColliderGroup, LevelManager, PlayerLife};
+use crate::logic::{ColliderBundle, Knockback, LevelColliderGroup, PlayerLife};
 use crate::params;
 use crate::screens::Textures;
 
@@ -237,18 +237,4 @@ pub fn player_hit(
         break;
     }
     events.clear();
-}
-
-pub fn player_goes_out_of_screen(
-    player: Query<&GlobalTransform, With<Player>>,
-    mut level_manager: ResMut<LevelManager>,
-) {
-    let Ok(transform) = player.get_single() else { return; };
-
-    let pos = transform.translation().truncate();
-
-    if !level_manager.is_vec_inside_any_level(pos) {
-        info!("Player went out of screen, reloading level");
-        level_manager.reload();
-    }
 }

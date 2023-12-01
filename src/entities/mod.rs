@@ -79,7 +79,6 @@ impl Plugin for EntitiesPlugin {
                     player::player_touches_enemy,
                     player::enemy_touches_player,
                     player::player_hit,
-                    // player::player_goes_out_of_screen,
                     checkpoint::check_player_in_checkpoint,
                     platform::move_platform,
                     zombie::patrol_zombie,
