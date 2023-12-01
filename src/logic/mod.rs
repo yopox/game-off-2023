@@ -25,6 +25,7 @@ mod knockback;
 mod cutscene;
 mod data;
 mod vanish;
+mod swords_disappear;
 
 pub struct LogicPlugin;
 
@@ -37,7 +38,7 @@ impl Plugin for LogicPlugin {
             .add_plugins(hearts::HeartsPlugin)
             .add_event::<attack::SpawnSword>()
             .add_systems(Startup, (init_logic))
-            .add_systems(Update, (vanish::update_vanish, movement::collect_dash))
+            .add_systems(Update, (vanish::update_vanish, movement::collect_dash, swords_disappear::make_swords_disappear))
             .add_systems(Update, (data::save, data::reset))
             .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword)
                 .run_if(not(resource_exists::<Cutscene>()))
