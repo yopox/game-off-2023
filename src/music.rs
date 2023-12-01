@@ -81,7 +81,7 @@ impl BGM {
             BGM::CavesBoss => Some(16.271),
             BGM::Forest => Some(36.571),
             BGM::ForestBoss => Some(16.00),
-            BGM::Tension => None,
+            BGM::Tension => Some(0.08),
             BGM::FinalBoss => Some(45.939),
             BGM::Outro => None,
         }
@@ -218,18 +218,18 @@ fn update(
                 instance.0 = bgm.clone();
                 instance.1 = size.clone();
                 if let Some(l) = bgm.get_loop() {
-                    instance.2 = audio.play(bgm.source(&sounds, size)).loop_from(l).handle();
+                    instance.2 = audio.play(bgm.source(&sounds, size)).with_volume(0.5).loop_from(l).handle();
                 } else {
-                    instance.2 = audio.play(bgm.source(&sounds, size)).handle();
+                    instance.2 = audio.play(bgm.source(&sounds, size)).with_volume(0.5).looped().handle();
                 }
             } else {
                 error!("No handle for bgm channel");
             }
         } else {
             let handle = if let Some(l) = bgm.get_loop() {
-                audio.play(bgm.source(&sounds, size)).loop_from(l).handle()
+                audio.play(bgm.source(&sounds, size)).with_volume(0.5).loop_from(l).handle()
             } else {
-                audio.play(bgm.source(&sounds, size)).handle()
+                audio.play(bgm.source(&sounds, size)).with_volume(0.5).looped().handle()
             };
             commands
                 .insert_resource(BGMInstance(bgm.clone(), size.clone(), handle))
