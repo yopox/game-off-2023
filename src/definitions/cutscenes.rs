@@ -48,6 +48,10 @@ lazy_static! {
         CSEvent::Wait(1.0),
         CSEvent::text_offset("That was a close one...".to_string(), -92., 0.),
         CSEvent::Wait(1.0),
+        CSEvent::text_offset("Was he...".to_string(), -92., 0.),
+        CSEvent::Wait(1.0),
+        CSEvent::text_offset("Was he Death itself ?".to_string(), -92., 0.),
+        CSEvent::Wait(1.0),
         CSEvent::fade_out(),
         CSEvent::text_centered("Thanks for playing!".to_string()),
     ]);
@@ -90,6 +94,7 @@ lazy_static! {
         CSEvent::Wait(1.0),
         CSEvent::text_offset("Hehehe!!".to_string(), -64., 0.0),
         CSEvent::text_offset("Thanks for the swords.".to_string(), -64., 0.0),
+        CSEvent::text_offset("This is your final test".to_string(), -64., 0.0),
         CSEvent::AddFlag(Flags::Boss3Start),
         CSEvent::BGM(BGM::FinalBoss),
         CSEvent::RemoveFlag(Flags::SizeS),
