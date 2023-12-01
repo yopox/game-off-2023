@@ -877,21 +877,24 @@
 						},
 						{
 							"__identifier": "Bird",
-							"__grid": [802,211],
+							"__grid": [801,211],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#EAD4AA",
-							"__worldX": -821,
+							"__worldX": -822,
 							"__worldY": -60,
 							"iid": "ba9774c0-6280-11ee-9f82-2ddf172ea8f8",
 							"width": 32,
 							"height": 18,
 							"defUid": 31,
-							"px": [802,212],
+							"px": [801,212],
 							"fieldInstances": [
 								{ "__identifier": "Range", "__type": "Int", "__value": 320, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [320] }] },
-								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
+								{ "__identifier": "Flag", "__type": "String", "__value": "Boss1Defeated", "__tile": null, "defUid": 48, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Boss1Defeated"]
+								}] }
 							]
 						},
 						{
@@ -1593,7 +1596,7 @@
 							"defUid": 31,
 							"px": [1854,545],
 							"fieldInstances": [
-								{ "__identifier": "Range", "__type": "Int", "__value": 25, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [25] }] },
+								{ "__identifier": "Range", "__type": "Int", "__value": 32, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [32] }] },
 								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
 							]
 						}

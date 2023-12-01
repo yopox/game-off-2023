@@ -12,6 +12,7 @@ pub const SCALE: f32 = 4.;
 
 pub mod z_pos {
     pub const PLAYER: f32 = 10.0;
+    pub const BIRD: f32 = 10.0;
     pub const PARTICLES: f32 = 60.0;
     pub const GUI: f32 = 100.;
 }

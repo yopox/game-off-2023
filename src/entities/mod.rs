@@ -80,6 +80,7 @@ impl Plugin for EntitiesPlugin {
                     player::enemy_touches_player,
                     player::player_hit,
                     checkpoint::check_player_in_checkpoint,
+                    bird::init_bird,
                     bird::move_bird,
                     zombie::patrol_zombie,
                     zombie::zombie_hit,

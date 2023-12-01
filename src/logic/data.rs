@@ -4,6 +4,7 @@ use bevy::utils::hashbrown::HashSet;
 use bevy_pkv::PkvStore;
 use log::{error, info, warn};
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumString;
 
 use crate::logic::{LevelManager, PlayerLife};
 use crate::params;
@@ -43,7 +44,7 @@ impl GameData {
     }
 }
 
-#[derive(Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Debug, Hash)]
+#[derive(Serialize, Deserialize, Copy, Clone, Eq, PartialEq, Debug, Hash, EnumString)]
 pub enum Flags {
     /// If the intro has been seen
     Intro,

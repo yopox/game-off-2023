@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterControllerOutput;
@@ -7,11 +9,17 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::common::InitialY;
 use crate::entities::EntityID;
 use crate::entities::player::{Player, PlayerSize};
-use crate::logic::ColliderBundle;
+use crate::logic::{ColliderBundle, Flags, GameData};
 use crate::params;
 
 #[derive(Component)]
 pub struct Range(pub f32);
+
+#[derive(Component)]
+pub struct BirdFlag(pub String);
+
+#[derive(Component, Clone, Default)]
+pub struct Bird;
 
 impl From<&String> for PlayerSize {
     fn from(value: &String) -> Self {
@@ -34,11 +42,21 @@ pub struct BirdBundle {
     entity_instance: EntityInstance,
     #[from_entity_instance]
     pub collider_bundle: ColliderBundle,
+    pub bird: Bird,
+}
+
+pub fn init_bird(
+    mut bird: Query<&mut Transform, Added<Bird>>,
+) {
+    for (mut bird_pos) in bird.iter_mut() {
+        bird_pos.translation.z = params::z_pos::BIRD;
+    }
 }
 
 pub fn move_bird(
-    mut bird: Query<(Entity, &EntityID, &EntityInstance, &mut AnimStep, &EntityTimer, &Transform, &mut Velocity, &InitialY, &Range), Without<Player>>,
+    mut bird: Query<(Entity, &EntityID, &EntityInstance, &BirdFlag, &mut AnimStep, &EntityTimer, &Transform, &mut Velocity, &InitialY, &Range), Without<Player>>,
     player: Query<(&EntityID, Option<&KinematicCharacterControllerOutput>), With<Player>>,
+    data: Res<GameData>,
 ) {
     let mut collisions = vec![];
     let Ok((EntityID::Player(size), output)) = player.get_single() else { return };
@@ -47,16 +65,14 @@ pub fn move_bird(
         output.collisions.iter().for_each(|c| collisions.push(c));
     }
 
-    for (entity, id, instance, mut step, timer, pos, mut velocity, InitialY(y_0), Range(range)) in bird.iter_mut() {
+    for (entity, id, _, flag, mut step, timer, pos, mut velocity, InitialY(y_0), Range(range)) in bird.iter_mut() {
         if let EntityID::Bird(target) = *id {
             // Update state
             let mut stop = true;
             if target == *size {
-                if let Some(collision) = collisions.iter().find(|c| c.entity == entity) {
-                    if collision.toi.normal2.y < -0.5 {
-                        stop = false;
-                        step.set_if_neq(AnimStep::Jump);
-                    }
+                if let Some(_) = collisions.iter().find(|c| c.entity == entity) {
+                    stop = false;
+                    step.set_if_neq(AnimStep::Jump);
                 }
             }
             if stop {
@@ -64,11 +80,16 @@ pub fn move_bird(
             }
 
             // Update pos
-            let y_velocity = match *step {
+            let mut y_velocity = match *step {
                 AnimStep::Idle => if pos.translation.y <= *y_0 { 0.0 } else { params::PLATFORM_DOWN_SPEED },
                 AnimStep::Jump => if pos.translation.y < *y_0 + *range { params::PLATFORM_UP_SPEED } else { 0.0 },
                 _ => 0.0
-            } ;
+            };
+            if y_velocity > 0.0
+                && !flag.0.is_empty()
+                && !data.has_flag(Flags::from_str(&flag.0).expect(&format!("Bad flag for bird ({})", flag.0))) {
+                y_velocity = 0.0;
+            }
             velocity.linvel.y = y_velocity;
         }
     }

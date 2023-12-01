@@ -3,7 +3,7 @@ use bevy::sprite::Anchor;
 use bevy_ecs_ldtk::EntityInstance;
 
 use crate::entities::animation::{AnimStep, EntityTimer};
-use crate::entities::bird::Range;
+use crate::entities::bird::{BirdFlag, Range};
 use crate::entities::EntityID;
 use crate::entities::player::{IgnoreSize, PlayerSize};
 use crate::logic::GameData;
@@ -60,6 +60,7 @@ pub fn entity_spawned(
                 e_c
                     .insert(Range(get_ldtk_field_int(&instance.field_instances, "Range").expect("Can't find platform range.") as f32))
                     .insert(IgnoreSize(PlayerSize::S))
+                    .insert(BirdFlag(get_ldtk_field_string(&instance.field_instances, "Flag").unwrap_or(String::new())))
                 ;
             },
             _ => ()
