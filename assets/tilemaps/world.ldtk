@@ -1558,6 +1558,44 @@
 								"id": "V_String",
 								"params": ["new-heart:heart:lvl_2_cave"]
 							}] }]
+						},
+						{
+							"__identifier": "Bird",
+							"__grid": [1772,564],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"__worldX": -196,
+							"__worldY": -363,
+							"iid": "4c8c6b20-8990-11ee-a2e9-9d035241fb84",
+							"width": 32,
+							"height": 18,
+							"defUid": 31,
+							"px": [1772,565],
+							"fieldInstances": [
+								{ "__identifier": "Range", "__type": "Int", "__value": 50, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Bird",
+							"__grid": [1854,544],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"__worldX": -114,
+							"__worldY": -383,
+							"iid": "4f886d10-8990-11ee-a2e9-ef35af903920",
+							"width": 32,
+							"height": 18,
+							"defUid": 31,
+							"px": [1854,545],
+							"fieldInstances": [
+								{ "__identifier": "Range", "__type": "Int", "__value": 25, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [25] }] },
+								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
+							]
 						}
 					]
 				}
