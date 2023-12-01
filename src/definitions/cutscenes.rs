@@ -3,18 +3,36 @@ use std::collections::VecDeque;
 use lazy_static::lazy_static;
 
 use crate::logic::{CSEvent, Flags};
+use crate::music::BGM;
 use crate::params;
 
 lazy_static! {
     pub static ref INTRO: VecDeque<CSEvent> = VecDeque::from([
         CSEvent::ToggleCinema(true),
         CSEvent::Wait(1.0),
-        CSEvent::text_centered("Example text\nsecond line".to_string()),
+        CSEvent::text_centered("TOTENINSEL\n\nby LaDorille, Vico, Tobias & yopox".to_string()),
         CSEvent::Teleport("z1_start".into()),
         // CSEvent::BGM(BGM::Caves),
         CSEvent::fade_in(),
         CSEvent::AddFlag(Flags::Intro),
-        CSEvent::AddFlag(Flags::Dash),
+    ]);
+
+    pub static ref OUTRO: VecDeque<CSEvent> = VecDeque::from([
+        CSEvent::ToggleCinema(true),
+        CSEvent::Wait(1.0),
+        CSEvent::fade_out(),
+        CSEvent::text_centered("The end".to_string()),
+    ]);
+
+    pub static ref BOSS_3: VecDeque<CSEvent> = VecDeque::from([
+        CSEvent::ToggleCinema(true),
+        CSEvent::Wait(1.0),
+        CSEvent::text_offset("Hehehe!!".to_string(), -64., 0.0),
+        CSEvent::text_offset("Thanks for the swords.".to_string(), -64., 0.0),
+        CSEvent::AddFlag(Flags::Boss3Start),
+        CSEvent::BGM(BGM::FinalBoss),
+        CSEvent::RemoveFlag(Flags::SizeS),
+        CSEvent::RemoveFlag(Flags::SizeL),
     ]);
 
     pub static ref DEATH: VecDeque<CSEvent> = VecDeque::from([

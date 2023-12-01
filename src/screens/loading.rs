@@ -42,6 +42,10 @@ pub struct Textures {
     #[asset(path = "zombie_S.png")]
     pub zombie_s: Handle<TextureAtlas>,
 
+    #[asset(texture_atlas(tile_size_x = 17., tile_size_y = 20., columns = 2, rows = 1, padding_x = 0., padding_y = 0.))]
+    #[asset(path = "zombie_2_L.png")]
+    pub zombie_2_l: Handle<TextureAtlas>,
+
     #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 18., columns = 4, rows = 1, padding_x = 0., padding_y = 0.))]
     #[asset(path = "bird.png")]
     pub bird: Handle<TextureAtlas>,

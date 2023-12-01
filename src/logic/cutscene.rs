@@ -255,6 +255,11 @@ pub fn trigger_cutscene(
                         commands.insert_resource(Cutscene::from(&cutscenes::SWORD_2));
                     }
                 }
+                "boss3" => {
+                    if !game_data.has_flag(Flags::Boss3Start) {
+                        commands.insert_resource(Cutscene::from(&cutscenes::BOSS_3));
+                    }
+                }
                 _ => {}
             }
         }

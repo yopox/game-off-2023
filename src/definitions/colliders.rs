@@ -3,7 +3,6 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::entities::player::PlayerSize;
-use crate::entities::zombie::ZombieSize;
 
 fn rectangle(offset: Vec2, size: Vec2) -> Collider {
     Collider::compound(vec![(
@@ -25,17 +24,10 @@ impl From<PlayerSize> for Collider {
     }
 }
 
-impl From<ZombieSize> for Collider {
-    fn from(value: ZombieSize) -> Self {
-        let (offset, size) = match value {
-            ZombieSize::S => (vec2(-0.5, 5.0), ZombieSize::S.hitbox() / 2.),
-        };
-
-        Collider::compound(vec![(
-            Vect::new(offset.x, offset.y),
-            0.0,
-            Collider::cuboid(size.x, size.y)
-        )])
+pub fn zombie(size: usize) -> Collider {
+    match size {
+        2 => rectangle(vec2(-2.0, 0.0), vec2(11., 20.)),
+        _ => rectangle(vec2(-0.5, 5.0), vec2(7., 11.)),
     }
 }
 

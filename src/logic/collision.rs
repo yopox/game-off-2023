@@ -6,7 +6,6 @@ use bevy_rapier2d::prelude::*;
 
 use crate::definitions::colliders;
 use crate::entities::player::{Player, PlayerSize};
-use crate::entities::zombie::ZombieSize;
 use crate::level_collision_data::{collision_data_from_image, LevelCollisionData};
 use crate::logic::attack::Sword;
 
@@ -85,7 +84,7 @@ impl From<&EntityInstance> for ColliderBundle {
                 ..Default::default()
             },
             "Zombie" => ColliderBundle {
-                collider: Collider::from(ZombieSize::S),
+                collider: colliders::zombie(1),
                 rigid_body: RigidBody::Dynamic,
                 rotation_constraints,
                 ..default()

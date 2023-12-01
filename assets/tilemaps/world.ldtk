@@ -1361,18 +1361,18 @@
 						},
 						{
 							"__identifier": "Spawner",
-							"__grid": [638,329],
+							"__grid": [657,329],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#BE4A2F",
-							"__worldX": -985,
+							"__worldX": -966,
 							"__worldY": 57,
 							"iid": "ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac",
 							"width": 6,
 							"height": 17,
 							"defUid": 14,
-							"px": [638,329],
+							"px": [657,329],
 							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "z1_end", "__tile": null, "defUid": 29, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["z1_end"]

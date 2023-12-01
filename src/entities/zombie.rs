@@ -7,28 +7,7 @@ use bevy_rapier2d::geometry::{Sensor, TOIStatus};
 use crate::graphics::Hurt;
 use crate::logic::{ColliderBundle, Damaged, Hitbox, HitStop, Knockback};
 use crate::params::{DEFAULT_ZOMBIE_LIVES, DEFAULT_ZOMBIE_SPEED, ENEMY_HURT_TIME, ZOMBIE_AFRAID_SPEED_MUL, ZOMBIE_HIT_STOP_DURATION, ZOMBIE_INITIAL_KNOCKBACK_SPEED, ZOMBIE_KNOCKBACK_TIME};
-use crate::screens::Textures;
 use crate::util::get_ldtk_field_float;
-
-#[derive(Copy, Clone, Eq, PartialEq, Default)]
-pub enum ZombieSize {
-    #[default]
-    S,
-}
-
-impl ZombieSize {
-    pub fn atlas(&self, textures: &Textures) -> Handle<TextureAtlas> {
-        match self {
-            ZombieSize::S => textures.zombie_s.clone(),
-        }
-    }
-
-    pub fn hitbox(&self) -> Vec2 {
-        match self {
-            ZombieSize::S => vec2(7., 11.),
-        }
-    }
-}
 
 #[derive(Clone, Default, Component)]
 pub struct Zombie {
@@ -37,14 +16,19 @@ pub struct Zombie {
     lives: usize,
 }
 
-impl From<&EntityInstance> for Zombie {
-    fn from(value: &EntityInstance) -> Self {
-        let direction = get_ldtk_field_float(&value.field_instances, "Direction").unwrap_or(0.0);
+impl Zombie {
+    pub fn from_dir(direction: f32) -> Self {
         Zombie {
             direction: direction.signum() * DEFAULT_ZOMBIE_SPEED,
             speed: DEFAULT_ZOMBIE_SPEED,
             lives: DEFAULT_ZOMBIE_LIVES,
         }
+    }
+}
+
+impl From<&EntityInstance> for Zombie {
+    fn from(value: &EntityInstance) -> Self {
+        Zombie::from_dir(get_ldtk_field_float(&value.field_instances, "Direction").unwrap_or(0.0))
     }
 }
 

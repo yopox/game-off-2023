@@ -4,7 +4,7 @@ use crate::{GameState, params, screens::Textures};
 use crate::definitions::cutscenes;
 use crate::entities::NamedEntity;
 use crate::entities::player_sensor::PlayerEnteredSensorEvent;
-use crate::logic::{Cutscene, GameData, Vanish};
+use crate::logic::{Cutscene, Flags, GameData, Vanish};
 use crate::screens::ScreenShake;
 
 pub struct HeartsPlugin;
@@ -58,8 +58,10 @@ fn init_life(
 fn die(
     mut commands: Commands,
     mut life: ResMut<PlayerLife>,
+    mut data: ResMut<GameData>,
 ) {
     if life.is_changed() && life.current == 0 {
+        data.remove_flag(Flags::Boss3Start);
         commands.insert_resource(ScreenShake::new(params::DEATH_SHAKE_TIME));
         commands.insert_resource(Cutscene::from(&cutscenes::DEATH));
     }

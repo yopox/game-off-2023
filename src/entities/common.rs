@@ -134,7 +134,7 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
 
 pub fn get_enemy(id: &str) -> Option<Enemy> {
     match id {
-        "Zombie" | "Eye1" | "Bird" | "Boss1" | "Boss2" | "Eye2" | "Boss3" => Some(Enemy {
+        "Zombie" | "ZombieL" | "Eye1" | "Bird" | "Boss1" | "Boss2" | "Eye2" | "Boss3" => Some(Enemy {
             player_knockback_speed: params::ENEMIES_KNOCKBACK_SPEED,
             player_knockback_time: params::ENEMIES_KNOCKBACK_TIME,
             player_hurt_time: params::ENEMIES_KNOCKBACK_TIME,

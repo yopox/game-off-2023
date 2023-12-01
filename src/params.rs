@@ -115,8 +115,9 @@ pub const BOSS2_SHAKE: f32 = 1.5;
 
 // --- Boss 3
 pub const BOSS3_GROUND: f32 = -66.0;
-pub const BOSS3_LEVITATION_Y: f32 = 16.0;
-pub const BOSS3_LEVITATION_AMPLITUDE: f32 = 8.0;
+pub const BOSS3_X: f32 = -1087.0;
+pub const BOSS3_LEVITATION_Y: f32 = 14.0;
+pub const BOSS3_LEVITATION_AMPLITUDE: f32 = 4.0;
 pub const BOSS3_LEVITATION_SPEED: f32 = 2.0;
 pub const BOSS3_JUMP_X_MAX: f32 = 48.0;
 pub const BOSS3_JUMP_HEIGHT: f32 = 16.0;

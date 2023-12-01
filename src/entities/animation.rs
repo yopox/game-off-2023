@@ -300,6 +300,20 @@ pub fn get_boss_2_rule(state: &AnimStep) -> AnimationRule {
 pub fn get_boss_3_rule(state: &AnimStep) -> AnimationRule {
     match state {
         AnimStep::Idle => AnimationRule::Still(0),
+        AnimStep::Walk => {
+            let mut steps = vec![];
+            for i in 0..21 {
+                steps.push(SeqPart::Frame(i));
+                steps.push(SeqPart::Wait(0.2));
+            }
+            AnimationRule::Sequence(steps)
+        },
+        AnimStep::Prejump => AnimationRule::Loop(vec![
+            SeqPart::Frame(25),
+            SeqPart::Wait(0.5),
+            SeqPart::Frame(26),
+            SeqPart::Wait(0.5),
+        ]),
         AnimStep::Jump => AnimationRule::Loop(vec![
             SeqPart::Frame(28),
             SeqPart::Wait(0.5),
