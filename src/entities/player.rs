@@ -10,7 +10,7 @@ use crate::entities::animation::{AnimStep, EntityTimer};
 use crate::entities::EntityID;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{PlayerSpawner, PlayFor};
-use crate::logic::{ColliderBundle, Knockback, LevelColliderGroup, PlayerLife};
+use crate::logic::{ColliderBundle, Flags, GameData, Knockback, LevelColliderGroup, PlayerLife};
 use crate::params;
 use crate::screens::Textures;
 
@@ -95,6 +95,7 @@ pub fn change_size(
     l_sensor: Query<(Entity), With<PlayerSizeChangeSensorL>>,
     collisions: Res<RapierContext>,
     is_wall: Query<Entity, With<LevelColliderGroup>>,
+    data: Res<GameData>,
 ) {
     if !input.just_pressed(KeyCode::Up) && !input.just_pressed(KeyCode::Down) { return; }
 
@@ -114,6 +115,8 @@ pub fn change_size(
         }};
 
     if *size == new_size { return; }
+    if new_size == PlayerSize::S && !data.has_flag(Flags::SizeS) { return; }
+    if new_size == PlayerSize::L && !data.has_flag(Flags::SizeL) { return; }
 
     let m_sensor = m_sensor.single();
     let l_sensor = l_sensor.single();
@@ -134,7 +137,6 @@ pub fn change_size(
             }
         }
     }
-
 
     *size = new_size;
 

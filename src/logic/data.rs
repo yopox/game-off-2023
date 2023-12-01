@@ -48,6 +48,10 @@ impl GameData {
 pub enum Flags {
     /// If the intro has been seen
     Intro,
+    /// If the player can become small
+    SizeS,
+    /// If the player can become large
+    SizeL,
     /// If the player can dash
     Dash,
     /// If the 1st boss is defeated

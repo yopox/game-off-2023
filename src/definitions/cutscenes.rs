@@ -14,6 +14,8 @@ lazy_static! {
         // CSEvent::BGM(BGM::Caves),
         CSEvent::fade_in(),
         CSEvent::AddFlag(Flags::Intro),
+        CSEvent::AddFlag(Flags::SizeS),
+        CSEvent::AddFlag(Flags::SizeL),
     ]);
 
     pub static ref DEATH: VecDeque<CSEvent> = VecDeque::from([
