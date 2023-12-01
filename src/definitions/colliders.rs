@@ -90,3 +90,7 @@ pub fn boss2_damage_zone(index: u8) -> Collider {
         _ => rectangle(Vec2::ZERO, vec2(102.0, 6.0)),
     }
 }
+
+pub(crate) fn boss3() -> Collider {
+    rectangle(vec2(-9.5, 26.0), vec2(13.0, 51.0))
+}

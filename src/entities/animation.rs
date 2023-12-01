@@ -167,6 +167,7 @@ impl EntityID {
             EntityID::DetectionPlatform(_) => get_platform_rule(step),
             EntityID::Boss1 => get_boss_1_rule(step),
             EntityID::Boss2 => get_boss_2_rule(step),
+            EntityID::Boss3 => get_boss_3_rule(step),
             _ => AnimationRule::Missing,
         }
     }
@@ -271,18 +272,37 @@ pub fn get_boss_2_rule(state: &AnimStep) -> AnimationRule {
     match state {
         AnimStep::Idle => AnimationRule::Still(0),
         AnimStep::Walk => AnimationRule::Sequence(vec![
-           SeqPart::Frame(1),
-           SeqPart::WaitAnd(1.5, AnimationEvent::Boss2DamageZone(1)),
-           SeqPart::Frame(2),
-           SeqPart::WaitAnd(0.15, AnimationEvent::Boss2DamageZone(2)),
-           SeqPart::Frame(3),
-           SeqPart::Wait(0.15),
-           SeqPart::Frame(4),
+            SeqPart::Frame(1),
+            SeqPart::WaitAnd(1.5, AnimationEvent::Boss2DamageZone(1)),
+            SeqPart::Frame(2),
+            SeqPart::WaitAnd(0.15, AnimationEvent::Boss2DamageZone(2)),
+            SeqPart::Frame(3),
+            SeqPart::Wait(0.15),
+            SeqPart::Frame(4),
         ]),
         AnimStep::Jump => AnimationRule::Still(4),
         AnimStep::Attack => AnimationRule::Still(5),
         AnimStep::Dash => AnimationRule::Still(7),
         AnimStep::Fall => AnimationRule::Still(1),
+        _ => AnimationRule::Missing,
+    }
+}
+
+pub fn get_boss_3_rule(state: &AnimStep) -> AnimationRule {
+    match state {
+        AnimStep::Idle => AnimationRule::Still(0),
+        AnimStep::Jump => AnimationRule::Loop(vec![
+            SeqPart::Frame(28),
+            SeqPart::Wait(0.5),
+            SeqPart::Frame(29),
+            SeqPart::Wait(0.5),
+        ]),
+        AnimStep::Dash => AnimationRule::Loop(vec![
+            SeqPart::Frame(30),
+            SeqPart::Wait(0.5),
+            SeqPart::Frame(31),
+            SeqPart::Wait(0.5),
+        ]),
         _ => AnimationRule::Missing,
     }
 }

@@ -5,6 +5,7 @@ use bevy_ecs_ldtk::prelude::LdtkEntityAppExt;
 use crate::{GameState, logic};
 use crate::entities::boss_1::Boss1Bundle;
 use crate::entities::boss_2::Boss2Bundle;
+use crate::entities::boss_3::Boss3Bundle;
 use crate::entities::platform::DetectionPlatformBundle;
 use crate::entities::player::PlayerSize;
 use crate::entities::spawner::SpawnerBundle;
@@ -27,6 +28,7 @@ mod boss_1;
 pub mod player_sensor;
 pub(crate) mod spawner;
 mod boss_2;
+mod boss_3;
 
 pub struct EntitiesPlugin;
 
@@ -64,6 +66,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<DetectionPlatformBundle>("DetectionPlatform")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")
             .register_ldtk_entity::<Boss2Bundle>("Boss2")
+            .register_ldtk_entity::<Boss3Bundle>("Boss3")
             .register_ldtk_entity::<DamageZoneBundle>("DamageZone")
             .register_ldtk_entity::<player_sensor::PlayerSensorBundle>("PlayerSensor")
             .register_ldtk_entity::<image_entity::ImageEntityBundle>("ImageEntity")
@@ -86,6 +89,8 @@ impl Plugin for EntitiesPlugin {
                     boss_1::update,
                     boss_2::init,
                     boss_2::update,
+                    boss_3::init,
+                    boss_3::update,
                     player_sensor::update_player_sensors,
                     image_entity::set_image_for_image_entity,
                 ).run_if(in_state(GameState::Game))

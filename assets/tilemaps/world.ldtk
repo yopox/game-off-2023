@@ -1158,6 +1158,41 @@
 								"id": "V_String",
 								"params": ["new-heart:heart:lvl_1_top"]
 							}] }]
+						},
+						{
+							"__identifier": "Boss3",
+							"__grid": [536,338],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"__worldX": -1087,
+							"__worldY": 66,
+							"iid": "9a383640-8990-11ee-a2e9-658a1091d632",
+							"width": 8,
+							"height": 8,
+							"defUid": 46,
+							"px": [536,338],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Spawner",
+							"__grid": [638,329],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": -985,
+							"__worldY": 57,
+							"iid": "ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac",
+							"width": 6,
+							"height": 17,
+							"defUid": 14,
+							"px": [638,329],
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "z1_end", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["z1_end"]
+							}] }]
 						}
 					]
 				}

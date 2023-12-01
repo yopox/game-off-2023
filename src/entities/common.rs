@@ -139,6 +139,7 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
         "DetectionPlatform" => Some(textures.platform.clone()),
         "Boss1" => Some(textures.boss_1.clone()),
         "Boss2" => Some(textures.boss_2.clone()),
+        "Boss3" => Some(textures.boss_3.clone()),
         _ => None,
     }
 }

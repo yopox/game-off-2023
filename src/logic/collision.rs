@@ -106,6 +106,11 @@ impl From<&EntityInstance> for ColliderBundle {
                 rigid_body: RigidBody::Fixed,
                 ..default()
             },
+            "Boss3" => ColliderBundle {
+                collider: colliders::boss3(),
+                rigid_body: RigidBody::Fixed,
+                ..default()
+            },
             "DamageZone" => ColliderBundle {
                 collider: Collider::cuboid(5., 5.),
                 rigid_body: RigidBody::Fixed,

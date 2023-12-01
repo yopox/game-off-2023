@@ -53,6 +53,10 @@ pub enum Flags {
     Boss1Defeated,
     /// If the 2nd boss is defeated
     Boss2Defeated,
+    /// If the 3rd boss fight has begun
+    Boss3Start,
+    /// If the 3rd boss is defeated
+    Boss3Defeated,
 }
 
 pub fn save(

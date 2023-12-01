@@ -112,6 +112,17 @@ pub const BOSS1_EMITTER_OFFSET: (f32, f32) = (0.0, 42.0);
 // --- Boss 2
 pub const BOSS2_SHAKE: f32 = 1.5;
 
+// --- Boss 3
+pub const BOSS3_GROUND: f32 = -66.0;
+pub const BOSS3_LEVITATION_Y: f32 = 16.0;
+pub const BOSS3_LEVITATION_AMPLITUDE: f32 = 8.0;
+pub const BOSS3_LEVITATION_SPEED: f32 = 2.0;
+pub const BOSS3_JUMP_X_MAX: f32 = 48.0;
+pub const BOSS3_JUMP_HEIGHT: f32 = 16.0;
+pub const BOSS3_JUMP_DURATION: f32 = 0.75;
+pub const BOSS3_AFTER_JUMP: f32 = 1.0;
+pub const BOSS3_FALL_SPEED: f32 = 0.5;
+
 // --- Camera
 pub const CAM_Y_OFFSET: f32 = HEIGHT as f32 / 8.;
 pub const SHAKE_STEP: f32 = 0.05;
