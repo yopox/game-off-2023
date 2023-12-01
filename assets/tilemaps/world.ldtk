@@ -2081,6 +2081,54 @@
 							"defUid": 49,
 							"px": [1947,449],
 							"fieldInstances": []
+						},
+						{
+							"__identifier": "ImageEntity",
+							"__grid": [1352,572],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFFFFF",
+							"__worldX": -616,
+							"__worldY": -356,
+							"iid": "3af5bc90-8990-11ee-a2e9-1f29f6085577",
+							"width": 10,
+							"height": 10,
+							"defUid": 40,
+							"px": [1352,572],
+							"fieldInstances": [
+								{ "__identifier": "Image", "__type": "String", "__value": "dash.png", "__tile": null, "defUid": 41, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["dash.png"]
+								}] },
+								{ "__identifier": "Name", "__type": "String", "__value": "dash", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["dash"]
+								}] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFFFFF", "__tile": null, "defUid": 49, "realEditorValues": [] },
+								{ "__identifier": "Levitate", "__type": "Bool", "__value": false, "__tile": null, "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 51, "realEditorValues": [] },
+								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [1352,570],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -616,
+							"__worldY": -358,
+							"iid": "d189b5d0-8990-11ee-a2e9-39c6447154b3",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [1352,570],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "collect:dash", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["collect:dash"]
+							}] }]
 						}
 					]
 				}
