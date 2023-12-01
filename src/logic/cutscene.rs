@@ -20,6 +20,8 @@ pub enum CSEvent {
     Wait(f32),
     /// Show a text (top dy / left dx / timer)
     Text(String, f32, f32, f32),
+    /// Show a text (top dy / left dx / timer)
+    EternalText(String, f32, f32, f32),
     /// Fade to black
     FadeOut(f32, f32),
     /// Fade from black
@@ -52,6 +54,7 @@ impl CSEvent {
     pub fn fade_out() -> Self { CSEvent::FadeOut(0.0, 1.0) }
     pub fn fade_out_with_speed(speed: f32) -> Self { CSEvent::FadeOut(0.0, speed) }
     pub fn text_centered(text: String) -> Self { CSEvent::Text(text, 0.0, 0.0, 0.0) }
+    pub fn eternal_text(text: String) -> Self { CSEvent::EternalText(text, 0.0, 0.0, 0.0) }
     pub fn text_offset(text: String, top: f32, left: f32) -> Self { CSEvent::Text(text, top, left, 0.0) }
 
     fn is_over(&self, input: &Input<KeyCode>) -> bool {
@@ -60,6 +63,7 @@ impl CSEvent {
             CSEvent::FadeOut(t, speed) => input.just_pressed(KeyCode::Space) || *t * *speed >= 1.0,
             CSEvent::FadeIn(t, speed) => input.just_pressed(KeyCode::Space) || *t * *speed >= 1.0,
             CSEvent::Text(txt, _, _, timer) => input.just_pressed(KeyCode::Space) || *timer >= (txt.len() as f32 * params::CHAR_DISPLAY_TIME + params::TEXT_FADE_TIME * 2.0),
+            CSEvent::EternalText(..) => false,
             _ => true
         }
     }
@@ -221,6 +225,32 @@ pub fn update(
                     if input.just_pressed(KeyCode::Space) { 0.0 }
                     else if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
                     else if *timer >= t_fade_out { (1.0 - (*timer - t_fade_out) / params::TEXT_FADE_TIME).max(0.0) }
+                    else { 1.0 }
+                );
+            }
+        }
+        CSEvent::EternalText(txt, top, left, timer) => {
+            let (mut t2, mut s2) = text2.single_mut();
+            if let Ok((mut t, mut s)) = text.get_single_mut() {
+                if *timer == 0.0 {
+                    s.top = Val::Px(*top);
+                    s2.top = Val::Px(*top + 4.);
+                    s.left = Val::Px(*left);
+                    s2.left = Val::Px(*left + 4.);
+                    t.sections[0].value = txt.to_string();
+                    t2.sections[0].value = txt.to_string();
+                }
+
+                *timer += time.delta_seconds();
+
+                t.sections[0].style = TextStyles::Basic.style_with_alpha(
+                    &fonts,
+                    if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
+                    else { 1.0 }
+                );
+                t2.sections[0].style = TextStyles::Black.style_with_alpha(
+                    &fonts,
+                    if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
                     else { 1.0 }
                 );
             }

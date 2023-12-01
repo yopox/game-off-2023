@@ -85,7 +85,7 @@ lazy_static! {
         CSEvent::text_offset("Was he Death itself?".to_string(), -92., 0.),
         CSEvent::Wait(4.0),
         CSEvent::fade_out(),
-        CSEvent::eternal_text("The end".to_string()),
+        CSEvent::eternal_text("THE END".to_string()),
     ]);
 
     pub static ref DASH: VecDeque<CSEvent> = VecDeque::from([
