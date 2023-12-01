@@ -7,6 +7,7 @@ use crate::screens::Fonts;
 
 pub enum TextStyles {
     Basic,
+    Black,
 }
 
 impl TextStyles {
@@ -16,6 +17,11 @@ impl TextStyles {
                 font: fonts.chunky.clone(),
                 font_size: 8.0 * 4.0,
                 color: Color::WHITE,
+            },
+            TextStyles::Black => TextStyle {
+                font: fonts.chunky.clone(),
+                font_size: 8.0 * 4.0,
+                color: Color::BLACK,
             },
         }
     }

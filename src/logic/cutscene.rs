@@ -81,6 +81,9 @@ pub struct Frame;
 #[derive(Component)]
 pub struct CutsceneText;
 
+#[derive(Component)]
+pub struct CutsceneText2;
+
 pub fn init(
     mut commands: Commands,
     textures: Res<Textures>,
@@ -119,6 +122,20 @@ pub fn init(
         .insert(CutsceneText)
     ;
 
+    commands
+        .spawn(TextBundle {
+            style: Style {
+                position_type: PositionType::Absolute,
+                margin: UiRect::all(Val::Auto),
+                ..default()
+            },
+            text: Text::from_section("", TextStyles::Black.style(&fonts)).with_alignment(TextAlignment::Center),
+            z_index: ZIndex::Global(params::ui_z::TEXT2),
+            ..default()
+        })
+        .insert(CutsceneText2)
+    ;
+
     let initial_cutscene = !data.has_flag(Flags::Intro);
 
     if initial_cutscene {
@@ -147,6 +164,7 @@ pub fn update(
     mut frame: Query<&mut BackgroundColor, (With<Frame>, Without<Cinema>)>,
     mut level_manager: ResMut<LevelManager>,
     mut text: Query<(&mut Text, &mut Style), With<CutsceneText>>,
+    mut text2: Query<(&mut Text, &mut Style), (With<CutsceneText2>, Without<CutsceneText>)>,
     fonts: Res<Fonts>,
     input: Res<Input<KeyCode>>,
     mut data: ResMut<GameData>,
@@ -177,17 +195,28 @@ pub fn update(
             }
         }
         CSEvent::Text(txt, top, left, timer) => {
+            let (mut t2, mut s2) = text2.single_mut();
             if let Ok((mut t, mut s)) = text.get_single_mut() {
                 if *timer == 0.0 {
                     s.top = Val::Px(*top);
+                    s2.top = Val::Px(*top + 4.);
                     s.left = Val::Px(*left);
+                    s2.left = Val::Px(*left + 4.);
                     t.sections[0].value = txt.to_string();
+                    t2.sections[0].value = txt.to_string();
                 }
 
                 *timer += time.delta_seconds();
 
                 let t_fade_out = params::TEXT_FADE_TIME + txt.len() as f32 * params::CHAR_DISPLAY_TIME;
                 t.sections[0].style = TextStyles::Basic.style_with_alpha(
+                    &fonts,
+                    if input.just_pressed(KeyCode::Space) { 0.0 }
+                    else if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
+                    else if *timer >= t_fade_out { (1.0 - (*timer - t_fade_out) / params::TEXT_FADE_TIME).max(0.0) }
+                    else { 1.0 }
+                );
+                t2.sections[0].style = TextStyles::Black.style_with_alpha(
                     &fonts,
                     if input.just_pressed(KeyCode::Space) { 0.0 }
                     else if *timer <= params::TEXT_FADE_TIME { (*timer / params::TEXT_FADE_TIME).min(1.0) }
