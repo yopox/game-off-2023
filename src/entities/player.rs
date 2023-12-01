@@ -1,8 +1,11 @@
+use std::f32::consts::PI;
+
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::control::KinematicCharacterControllerOutput;
 use bevy_rapier2d::geometry::TOIStatus;
+use bevy_rapier2d::math::Vect;
 use bevy_rapier2d::plugin::RapierContext;
 use bevy_rapier2d::prelude::Collider;
 
@@ -176,19 +179,17 @@ pub fn player_touches_enemy(
     let Ok(output) = player.get_single_mut() else { return };
     
     for col in output.collisions.iter() {
-        if col.toi.status != TOIStatus::Converged {
-            continue;
+        let mut normal;
+        match col.toi.status {
+            TOIStatus::Converged => { normal = col.toi.normal1; }
+            TOIStatus::Penetrating => { normal = Vect::from_angle(PI / 2.0); }
+            _ => continue
         }
         if let Ok(enemy) = enemies.get(col.entity) {
-            /*commands
-                .entity(player_entity)
-                .insert(Knockback::new(col.toi.normal1 * 2., 0.3))
-                .insert(Hurt::new(0.3))
-            ;*/
             events.send(PlayerHitEvent {
                 enemy_entity: col.entity,
                 enemy: enemy.clone(),
-                normal: col.toi.normal1,
+                normal,
             });
             break;
         }
