@@ -64,6 +64,12 @@ pub enum Flags {
     Boss3Start,
     /// If the 3rd boss is defeated
     Boss3Defeated,
+    /// Wheather to show the boss1 wall
+    Boss1WallPresent,
+    /// Wheather to show the boss2 wall
+    Boss2WallPresent,
+    /// Wheather to show the boss3 wall
+    Boss3WallPresent,
 }
 
 pub fn save(

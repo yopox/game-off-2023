@@ -75,6 +75,7 @@ impl Plugin for EntitiesPlugin {
             .register_ldtk_entity::<DamageZoneBundle>("DamageZone")
             .register_ldtk_entity::<player_sensor::PlayerSensorBundle>("PlayerSensor")
             .register_ldtk_entity::<image_entity::ImageEntityBundle>("ImageEntity")
+            .register_ldtk_entity::<wall::WallBundle>("Wall")
             .add_systems(Update, (common::entity_spawned, common::add_initial_y))
             .add_systems(Update, (spawner::init_spawners).run_if(not(resource_exists::<spawner::SpawnersInit>())))
             .add_systems(Update, (spawner::spawn_player).run_if(resource_exists::<spawner::SpawnPlayer>()))
@@ -99,8 +100,14 @@ impl Plugin for EntitiesPlugin {
                     boss_3::hit_player.before(player::player_hit),
                     player_sensor::update_player_sensors,
                     image_entity::set_image_for_image_entity,
-                    image_entity::levitate_image_entities
+                    image_entity::levitate_image_entities,
+                    // tuple is full, continue down below
                 ).run_if(in_state(GameState::Game))
+            )
+            .add_systems(Update, 
+                (
+                    wall::update_walls,
+                )
             )
             .add_systems(Update, (
                 animation::update_timers,

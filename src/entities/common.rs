@@ -105,7 +105,8 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
         | "Checkpoint"
         | "DamageZone"
         | "PlayerSensor"
-        | "ImageEntity" => None,
+        | "ImageEntity" 
+        | "Wall" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
     }
 }
