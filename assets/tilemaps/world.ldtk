@@ -1193,6 +1193,87 @@
 								"id": "V_String",
 								"params": ["z1_end"]
 							}] }]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [3026,347],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": 1403,
+							"__worldY": 75,
+							"iid": "7a5019b0-8990-11ee-a2e9-cf6317e20fc3",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [3026,347],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "cutscene:sword1", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cutscene:sword1"]
+							}] }]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [918,180],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -705,
+							"__worldY": -92,
+							"iid": "a64a3000-8990-11ee-a2e9-b5effed4fcd4",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [918,180],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "cutscene:boss1", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cutscene:boss1"]
+							}] }]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [605,321],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -1018,
+							"__worldY": 49,
+							"iid": "bec60a50-8990-11ee-a2e9-87f5d446a9a5",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [605,321],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "cutscene:boss3", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cutscene:boss3"]
+							}] }]
+						},
+						{
+							"__identifier": "Checkpoint",
+							"__grid": [993,293],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#C0CBDC",
+							"__worldX": -630,
+							"__worldY": 21,
+							"iid": "dbdbdf20-8990-11ee-a2e9-1b6f7b3dd0a8",
+							"width": 5,
+							"height": 5,
+							"defUid": 30,
+							"px": [993,293],
+							"fieldInstances": [{ "__identifier": "spawner", "__type": "EntityRef", "__value": {
+								"entityIid": "ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac",
+								"layerIid": "768aebf0-6280-11ee-ae32-8d8aa5d494a2",
+								"levelIid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40",
+								"worldIid": "f044a4b1-6280-11ee-ae32-670d53449d63"
+							}, "__tile": null, "defUid": 31, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac"]
+							}] }]
 						}
 					]
 				}
@@ -1599,6 +1680,25 @@
 								{ "__identifier": "Range", "__type": "Int", "__value": 32, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [32] }] },
 								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
 							]
+						},
+						{
+							"__identifier": "PlayerSensor",
+							"__grid": [185,494],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#1BF3C8",
+							"__worldX": -1783,
+							"__worldY": -434,
+							"iid": "6b6a9fb0-8990-11ee-a2e9-7f1c15d44a66",
+							"width": 10,
+							"height": 10,
+							"defUid": 42,
+							"px": [185,494],
+							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "cutscene:sword2", "__tile": null, "defUid": 43, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cutscene:sword2"]
+							}] }]
 						}
 					]
 				}

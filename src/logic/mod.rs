@@ -4,13 +4,13 @@ use bevy_pkv::PkvStore;
 
 pub use collision::{ColliderBundle, Damaged, Hitbox, LevelColliderGroup};
 pub use cutscene::CSEvent;
+pub use cutscene::Cutscene;
 pub use data::{Flags, GameData};
 pub use hearts::PlayerLife;
 pub use hit_stop::HitStop;
 pub use knockback::Knockback;
 pub use level_loading::*;
 pub use movement::move_player;
-pub use cutscene::Cutscene;
 pub use vanish::Vanish;
 
 use crate::{entities::zombie::patrol_zombie, GameState, params};
@@ -39,7 +39,9 @@ impl Plugin for LogicPlugin {
             .add_systems(Startup, (init_logic))
             .add_systems(Update, (vanish::update_vanish))
             .add_systems(Update, (data::save, data::reset))
-            .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword).run_if(not(resource_exists::<Cutscene>())))
+            .add_systems(Update, (movement::move_player, attack::attack, attack::update_sword)
+                .run_if(not(resource_exists::<Cutscene>()))
+            )
             .add_systems(Update,
                 (
                     (knockback::process_knockback, hit_stop::process_hit_stop).chain()
@@ -48,7 +50,9 @@ impl Plugin for LogicPlugin {
                 ).run_if(in_state(GameState::Game))
             )
             .add_systems(OnEnter(GameState::Game), (cutscene::init))
-            .add_systems(Update, (cutscene::update).run_if(in_state(GameState::Game)))
+            .add_systems(Update, (cutscene::update, cutscene::trigger_cutscene.after(movement::move_player))
+                .run_if(in_state(GameState::Game))
+            )
         ;
     }
 }

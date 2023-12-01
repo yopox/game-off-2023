@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::{EntityInstance, LdtkEntity};
-use bevy_rapier2d::{geometry::{Sensor, Collider}, plugin::RapierContext};
+use bevy_rapier2d::{geometry::{Collider, Sensor}, plugin::RapierContext};
 
 use crate::util::get_ldtk_field_string;
 
@@ -70,7 +70,7 @@ pub fn update_player_sensors(
     for (sensor_entity, sensor) in unentered_sensors.iter() {
         //println!("{:?}", collisions.intersection_pair(sensor_entity, player));
         if collisions.intersection_pair(sensor_entity, player).is_some() {
-            info!("Player entered sensor {}", sensor.event_name);
+            // info!("Player entered sensor {}", sensor.event_name);
             player_entered_sensor_events.send(PlayerEnteredSensorEvent {
                 sensor_entity,
                 name: sensor.event_name.clone(),
@@ -81,7 +81,7 @@ pub fn update_player_sensors(
 
     for (sensor_entity, sensor) in entered_sensors.iter() {
         if collisions.intersection_pair(sensor_entity, player).is_none() {
-            info!("Player exited sensor {}", sensor.event_name);
+            // info!("Player exited sensor {}", sensor.event_name);
             player_exited_sensor_events.send(PlayerExitedSensorEvent {
                 sensor_entity,
                 name: sensor.event_name.clone(),

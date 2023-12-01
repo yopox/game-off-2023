@@ -3,13 +3,15 @@ use std::collections::VecDeque;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::EntityInstance;
 
-use crate::params;
 use crate::definitions::cutscenes;
 use crate::entities::animation::AnimStep;
+use crate::entities::player::Player;
+use crate::entities::player_sensor::PlayerEnteredSensorEvent;
 use crate::graphics::TextStyles;
 use crate::logic::{GameData, LevelManager, PlayerLife};
 use crate::logic::data::Flags;
 use crate::music::{BGM, PlayBGMEvent};
+use crate::params;
 use crate::screens::{Fonts, Textures};
 
 #[derive(Clone, Debug)]
@@ -227,6 +229,34 @@ pub fn update(
         if cutscene.0.is_empty() {
             commands.remove_resource::<Cutscene>();
         } else {
+        }
+    }
+}
+
+pub fn trigger_cutscene(
+    mut commands: Commands,
+    mut events: EventReader<PlayerEnteredSensorEvent>,
+    mut game_data: ResMut<GameData>,
+    mut player: Query<&mut AnimStep, With<Player>>,
+) {
+    let Ok(mut step) = player.get_single_mut() else { return };
+    for PlayerEnteredSensorEvent { name, .. } in events.iter() {
+        if let Some(id) = name.strip_prefix("cutscene:") {
+            match id {
+                "sword1" => {
+                    if !game_data.has_flag(Flags::SizeS) {
+                        step.set_if_neq(AnimStep::Idle);
+                        commands.insert_resource(Cutscene::from(&cutscenes::SWORD_1));
+                    }
+                }
+                "sword2" => {
+                    if !game_data.has_flag(Flags::SizeL) {
+                        step.set_if_neq(AnimStep::Idle);
+                        commands.insert_resource(Cutscene::from(&cutscenes::SWORD_2));
+                    }
+                }
+                _ => {}
+            }
         }
     }
 }
