@@ -139,7 +139,7 @@ fn collect_new_heart(
         if let Some(target_heart_name) = event_name.strip_prefix("new-heart:") {
             for (entity, NamedEntity(heart_name)) in heart_images.iter() {
                 if target_heart_name == heart_name && game_data.removed_named.insert(heart_name.clone()) {
-                    commands.entity(entity).insert(Vanish::new(0.3));
+                    commands.entity(entity).insert(Vanish::new(0.1));
                     life.max += 2;
                     life.heal();
                     break;
