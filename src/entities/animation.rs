@@ -163,7 +163,7 @@ impl EntityID {
     fn get_rule(&self, step: &AnimStep) -> AnimationRule {
         match self {
             EntityID::Player(size) => get_player_rule(step, size),
-            EntityID::Zombie(_) => get_zombie_rule(step),
+            EntityID::Zombie(_) | EntityID::OldGuy => get_zombie_rule(step),
             EntityID::Bird(_) => get_bird_rule(step),
             EntityID::Boss1 => get_boss_1_rule(step),
             EntityID::Boss2 => get_boss_2_rule(step),

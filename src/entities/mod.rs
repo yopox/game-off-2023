@@ -7,6 +7,7 @@ use crate::entities::bird::BirdBundle;
 use crate::entities::boss_1::Boss1Bundle;
 use crate::entities::boss_2::Boss2Bundle;
 use crate::entities::boss_3::Boss3Bundle;
+use crate::entities::old_guy::OldGuyBundle;
 use crate::entities::player::PlayerSize;
 use crate::entities::spawner::SpawnerBundle;
 use crate::entities::zombie::ZombieBundle;
@@ -29,6 +30,7 @@ pub mod player_sensor;
 pub(crate) mod spawner;
 mod boss_2;
 mod boss_3;
+mod old_guy;
 
 pub struct EntitiesPlugin;
 
@@ -37,6 +39,7 @@ pub enum EntityID {
     Player(PlayerSize),
     Zombie(usize),
     Bird(PlayerSize),
+    OldGuy,
     Boss1,
     Boss2,
     Boss3,
@@ -62,6 +65,7 @@ impl Plugin for EntitiesPlugin {
             .add_event::<player_sensor::PlayerExitedSensorEvent>()
             .register_ldtk_entity::<SpawnerBundle>("Spawner")
             .register_ldtk_entity::<ZombieBundle>("Zombie")
+            .register_ldtk_entity::<OldGuyBundle>("OldGuy")
             .register_ldtk_entity::<CheckpointBundle>("Checkpoint")
             .register_ldtk_entity::<BirdBundle>("Bird")
             .register_ldtk_entity::<Boss1Bundle>("Boss1")

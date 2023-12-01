@@ -100,11 +100,12 @@ fn get_entity_id(instance: &EntityInstance) -> Option<EntityID> {
         "Boss1" => Some(EntityID::Boss1),
         "Boss2" => Some(EntityID::Boss2),
         "Boss3" => Some(EntityID::Boss3),
-        "Spawner" => None,
-        "Checkpoint" => None,
-        "DamageZone" => None,
-        "PlayerSensor" => None,
-        "ImageEntity" => None,
+        "OldGuy" => Some(EntityID::OldGuy),
+        "Spawner"
+        | "Checkpoint"
+        | "DamageZone"
+        | "PlayerSensor"
+        | "ImageEntity" => None,
         _ => panic!("Unknown entity: {}", instance.identifier)
     }
 }
@@ -122,6 +123,7 @@ pub fn sprite_atlas(id: &str, textures: &Res<Textures>) -> Option<Handle<Texture
     match id {
         "Player" => Some(textures.hero_m.clone()),
         "Zombie" => Some(textures.zombie_s.clone()),
+        "OldGuy" => Some(textures.old_guy.clone()),
         "Bird" => Some(textures.bird.clone()),
         "Boss1" => Some(textures.boss_1.clone()),
         "Boss2" => Some(textures.boss_2.clone()),
