@@ -11,7 +11,7 @@
 	"iid": "f044a4b0-6280-11ee-ae32-c162b57b0ec1",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 49,
+	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -769,6 +769,40 @@
 			"pivotX": 0.5,
 			"pivotY": 0.5,
 			"fieldDefs": []
+		},
+		{
+			"identifier": "OldGuy",
+			"uid": 49,
+			"tags": [],
+			"exportToToc": false,
+			"doc": null,
+			"width": 8,
+			"height": 8,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#63C74D",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 1,
+			"limitScope": "PerLevel",
+			"limitBehavior": "PreventAdding",
+			"pivotX": 0.5,
+			"pivotY": 1,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -1293,6 +1327,22 @@
 								"id": "V_String",
 								"params": ["bgm:zone1"]
 							}] }]
+						},
+						{
+							"__identifier": "OldGuy",
+							"__grid": [973,203],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#63C74D",
+							"__worldX": -650,
+							"__worldY": -68,
+							"iid": "76fa1540-8990-11ee-a2e9-bd8d6bfef3d9",
+							"width": 8,
+							"height": 8,
+							"defUid": 49,
+							"px": [973,204],
+							"fieldInstances": []
 						}
 					]
 				}
@@ -1756,6 +1806,22 @@
 								{ "__identifier": "Range", "__type": "Int", "__value": 60, "__tile": null, "defUid": 33, "realEditorValues": [{ "id": "V_Int", "params": [60] }] },
 								{ "__identifier": "Flag", "__type": "String", "__value": null, "__tile": null, "defUid": 48, "realEditorValues": [] }
 							]
+						},
+						{
+							"__identifier": "OldGuy",
+							"__grid": [1947,448],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#63C74D",
+							"__worldX": -21,
+							"__worldY": -479,
+							"iid": "7c4166c0-8990-11ee-a2e9-ffa61d11a4bb",
+							"width": 8,
+							"height": 8,
+							"defUid": 49,
+							"px": [1947,449],
+							"fieldInstances": []
 						}
 					]
 				}
