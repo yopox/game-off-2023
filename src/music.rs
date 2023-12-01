@@ -24,8 +24,15 @@ impl Plugin for AudioPlugin {
                 trigger_bgm,
                 trigger_sfx,
             ).run_if(resource_exists::<Sounds>()))
+            .add_systems(PostStartup, init)
         ;
     }
+}
+
+fn init(
+    mut audio: ResMut<Audio>,
+) {
+    audio.set_volume(0.15);
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
