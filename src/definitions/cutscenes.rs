@@ -124,12 +124,15 @@ lazy_static! {
 
     pub static ref BOSS_3: VecDeque<CSEvent> = VecDeque::from([
         CSEvent::ToggleCinema(true),
+        CSEvent::BGM(BGM::FinalBoss),
         CSEvent::Wait(1.0),
         CSEvent::text_offset("Hehehe!!".to_string(), -64., 0.0),
+        CSEvent::Wait(0.5),
         CSEvent::text_offset("Thanks for the swords.".to_string(), -64., 0.0),
-        CSEvent::text_offset("This is your final test".to_string(), -64., 0.0),
+        CSEvent::Wait(0.5),
+        CSEvent::text_offset("This is your final test.".to_string(), -64., 0.0),
+        CSEvent::Wait(0.5),
         CSEvent::AddFlag(Flags::Boss3Start),
-        CSEvent::BGM(BGM::FinalBoss),
         CSEvent::RemoveFlag(Flags::SizeS),
         CSEvent::RemoveFlag(Flags::SizeL),
     ]);
