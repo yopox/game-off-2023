@@ -10,6 +10,7 @@ use crate::entities::common::get_enemy;
 use crate::graphics::Hurt;
 use crate::graphics::particles::{Boss, BossKilled};
 use crate::logic::{ColliderBundle, Damaged, Flags, GameData, Hitbox};
+use crate::music::{BGM, PlayBGMEvent};
 use crate::params;
 use crate::screens::Textures;
 
@@ -113,6 +114,7 @@ pub fn update(
     mut data: ResMut<GameData>,
     parts: Query<Entity, With<Boss1Part>>,
     mut time: ResMut<Time>,
+    mut bgm: EventWriter<PlayBGMEvent>,
 ) {
     let Ok((mut state, mut collider, mut step)) = boss.get_single_mut() else { return; };
 
@@ -181,6 +183,7 @@ pub fn update(
             data.set_flag(Flags::Boss1Defeated);
             data.remove_flag(Flags::Boss1WallPresent);
             commands.insert_resource(BossKilled::new(1));
+            bgm.send(PlayBGMEvent(BGM::Caves));
         }
         step.set_if_neq(AnimStep::Fall);
         // Remove colliders
