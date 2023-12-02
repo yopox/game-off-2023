@@ -218,8 +218,10 @@ fn update(
 
     // BGM
     for PlayBGMEvent(bgm) in bgm_event.iter() {
+        let mut played = false;
         if let Some(ref mut instance) = bgm_instance {
             if let Some(mut handle) = audio_instances.get_mut(&instance.2) {
+                played = true;
                 if instance.0 == *bgm { continue }
                 handle.stop(AudioTween::default());
                 instance.0 = bgm.clone();
@@ -229,18 +231,16 @@ fn update(
                 } else {
                     instance.2 = audio.play(bgm.source(&sounds, size)).with_volume(0.5).looped().handle();
                 }
-            } else {
-                error!("No handle for bgm channel");
             }
-        } else {
+        }
+
+        if !played {
             let handle = if let Some(l) = bgm.get_loop() {
                 audio.play(bgm.source(&sounds, size)).with_volume(0.5).loop_from(l).handle()
             } else {
                 audio.play(bgm.source(&sounds, size)).with_volume(0.5).looped().handle()
             };
-            commands
-                .insert_resource(BGMInstance(bgm.clone(), size.clone(), handle))
-            ;
+            commands.insert_resource(BGMInstance(bgm.clone(), size.clone(), handle));
         }
     }
 }
