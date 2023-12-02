@@ -173,6 +173,10 @@ fn reload_world(
 
         commands.insert_resource(SpawnPlayer);
 
+        data.remove_flag(Flags::Boss1Start);
+        data.remove_flag(Flags::Boss2Start);
+        data.remove_flag(Flags::Boss3Start);
+
         match level_manager.current_checkpoint_level() {
             None => {}
             Some(outline) => { match outline.id.as_ref() {

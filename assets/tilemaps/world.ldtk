@@ -1465,25 +1465,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "Spawner",
-							"__grid": [657,329],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#BE4A2F",
-							"__worldX": -966,
-							"__worldY": 57,
-							"iid": "ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac",
-							"width": 6,
-							"height": 17,
-							"defUid": 14,
-							"px": [657,329],
-							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "z1_end", "__tile": null, "defUid": 29, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["z1_end"]
-							}] }]
-						},
-						{
 							"__identifier": "PlayerSensor",
 							"__grid": [3026,347],
 							"__pivot": [0,0],
@@ -1538,30 +1519,6 @@
 							"fieldInstances": [{ "__identifier": "Event", "__type": "String", "__value": "cutscene:boss3", "__tile": null, "defUid": 43, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["cutscene:boss3"]
-							}] }]
-						},
-						{
-							"__identifier": "Checkpoint",
-							"__grid": [987,288],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#C0CBDC",
-							"__worldX": -636,
-							"__worldY": 16,
-							"iid": "dbdbdf20-8990-11ee-a2e9-1b6f7b3dd0a8",
-							"width": 11,
-							"height": 14,
-							"defUid": 30,
-							"px": [987,288],
-							"fieldInstances": [{ "__identifier": "spawner", "__type": "EntityRef", "__value": {
-								"entityIid": "ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac",
-								"layerIid": "768aebf0-6280-11ee-ae32-8d8aa5d494a2",
-								"levelIid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40",
-								"worldIid": "f044a4b1-6280-11ee-ae32-670d53449d63"
-							}, "__tile": null, "defUid": 31, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["ab6e7e10-8990-11ee-a2e9-8f5d6ba255ac"]
 							}] }]
 						},
 						{
@@ -2058,6 +2015,49 @@
 								{ "__identifier": "LevitateAmplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 51, "realEditorValues": [] },
 								{ "__identifier": "LevitateTime", "__type": "Float", "__value": 10, "__tile": null, "defUid": 52, "realEditorValues": [] }
 							]
+						},
+						{
+							"__identifier": "Checkpoint",
+							"__grid": [811,276],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#C0CBDC",
+							"__worldX": -812,
+							"__worldY": 4,
+							"iid": "44dabb00-8990-11ee-af2f-7909a4adaf01",
+							"width": 20,
+							"height": 61,
+							"defUid": 30,
+							"px": [811,276],
+							"fieldInstances": [{ "__identifier": "spawner", "__type": "EntityRef", "__value": {
+								"entityIid": "511b2cb0-8990-11ee-af2f-8b18301c20ee",
+								"layerIid": "768aebf0-6280-11ee-ae32-8d8aa5d494a2",
+								"levelIid": "f044cbc0-6280-11ee-ae32-d524d5d7bb40",
+								"worldIid": "f044a4b1-6280-11ee-ae32-670d53449d63"
+							}, "__tile": null, "defUid": 31, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["511b2cb0-8990-11ee-af2f-8b18301c20ee"]
+							}] }]
+						},
+						{
+							"__identifier": "Spawner",
+							"__grid": [670,330],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"__worldX": -953,
+							"__worldY": 58,
+							"iid": "511b2cb0-8990-11ee-af2f-8b18301c20ee",
+							"width": 6,
+							"height": 17,
+							"defUid": 14,
+							"px": [670,330],
+							"fieldInstances": [{ "__identifier": "id", "__type": "String", "__value": "z1_end", "__tile": null, "defUid": 29, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["z1_end"]
+							}] }]
 						}
 					]
 				}
