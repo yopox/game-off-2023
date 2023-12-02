@@ -46,6 +46,8 @@ pub enum CSEvent {
     SetLife(usize),
     /// Update relative time
     SetRelativeTime(f32),
+    /// Reset game data
+    Reset,
 }
 
 impl CSEvent {
@@ -280,6 +282,7 @@ pub fn update(
         CSEvent::Reload => level_manager.reload(),
         CSEvent::SetLife(life) => { player_life.set_current(*life); }
         CSEvent::SetRelativeTime(factor) => { time.set_relative_speed(*factor); }
+        CSEvent::Reset => { *data = GameData::default(); }
     }
 
     // Go to next event
