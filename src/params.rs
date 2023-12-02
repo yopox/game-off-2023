@@ -135,7 +135,7 @@ pub const SHAKE_LEN_S: f32 = SHAKE_STEP * 6.0;
 
 // --- Cutscenes
 pub const TEXT_FADE_TIME: f32 = 0.4;
-pub const CHAR_DISPLAY_TIME: f32 = 0.06;
+pub const CHAR_DISPLAY_TIME: f32 = 0.08;
 
 // --- Level
 pub const INITIAL_SPAWNER_ID: &str = "start";
