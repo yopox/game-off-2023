@@ -309,7 +309,7 @@ pub fn trigger_cutscene(
                     }
                 }
                 "boss1" => {
-                    if !game_data.has_flag(Flags::Boss1Start) {
+                    if !game_data.has_flag(Flags::Boss1Start) && !game_data.has_flag(Flags::Boss1Defeated) {
                         commands.insert_resource(Cutscene::from(&cutscenes::BOSS_1));
                     }
                 }
