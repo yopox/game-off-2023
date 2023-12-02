@@ -1,7 +1,6 @@
 use std::collections::VecDeque;
 
 use bevy::prelude::*;
-use bevy_ecs_ldtk::EntityInstance;
 
 use crate::definitions::cutscenes;
 use crate::entities::animation::AnimStep;
@@ -30,10 +29,6 @@ pub enum CSEvent {
     Teleport(String),
     /// Play a BGM
     BGM(BGM),
-    /// Make an entity move on the x axis with the given speed and x limit
-    Walk(String, f32, f32),
-    /// Set the [AnimStep] of an entity to play an animation
-    Anim(String, AnimStep),
     /// Set the corresponding flag to true
     AddFlag(Flags),
     /// Set the corresponding flag to false
@@ -197,13 +192,6 @@ pub fn update(
     match event {
         CSEvent::Wait(t) => { *t -= time.raw_delta_seconds(); }
         CSEvent::BGM(music) => { bgm.send(PlayBGMEvent(*music)); }
-        CSEvent::Anim(e, s) => {
-            if let Some((_, mut step)) = entities.iter_mut().find(|((e_i, _))| e_i.identifier == *e) {
-                *step = *s;
-            } else {
-                error!("Couldn't find entity with identifier {}", e);
-            }
-        }
         CSEvent::Text(txt, top, left, timer) => {
             let (mut t2, mut s2) = text2.single_mut();
             if let Ok((mut t, mut s)) = text.get_single_mut() {
@@ -280,7 +268,6 @@ pub fn update(
             level_manager.set_spawner_id(spawner_id.clone());
             level_manager.reload();
         }
-        CSEvent::Walk(_, _, _) => {}
         CSEvent::AddFlag(flag) => data.set_flag(*flag),
         CSEvent::RemoveFlag(flag) => data.remove_flag(*flag),
         CSEvent::Reload => level_manager.reload(),
