@@ -166,13 +166,13 @@ pub fn update(
     mut cinema: Query<(&mut Visibility, &mut BackgroundColor), With<Cinema>>,
     mut time: ResMut<Time>,
     mut bgm: EventWriter<PlayBGMEvent>,
-    mut entities: Query<(&EntityInstance, &mut AnimStep)>,
     mut frame: Query<&mut BackgroundColor, (With<Frame>, Without<Cinema>)>,
     mut level_manager: ResMut<LevelManager>,
     mut text: Query<(&mut Text, &mut Style), With<CutsceneText>>,
     mut text2: Query<(&mut Text, &mut Style), (With<CutsceneText2>, Without<CutsceneText>)>,
     fonts: Res<Fonts>,
     input: Res<Input<KeyCode>>,
+    mut player: Query<&mut AnimStep, With<Player>>,
     mut data: ResMut<GameData>,
     mut player_life: ResMut<PlayerLife>,
 ) {
@@ -188,6 +188,10 @@ pub fn update(
     }
 
     let Some(event) = cutscene.0.get_mut(0) else { return };
+
+    if let Ok(mut player_step) = player.get_single_mut() {
+        player_step.set_if_neq(AnimStep::Idle);
+    }
 
     // Play event
     match event {
