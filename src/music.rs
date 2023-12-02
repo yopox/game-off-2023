@@ -144,9 +144,12 @@ impl SFX {
         }
     }
 
-    fn volume(&self) -> f32 {
+    fn volume(&self) -> f64 {
         match self {
-            _ => 0.35,
+            SFX::Dash => 0.2,
+            SFX::JumpS | SFX::JumpM | SFX::JumpL => 2.0,
+            SFX::Upsize | SFX::Downsize => 0.3,
+            _ => 1.0,
         }
     }
 }
@@ -213,7 +216,10 @@ fn update(
 
     // SFX
     for PlaySFXEvent(sfx) in sfx_event.iter() {
-        audio.play(sfx.source(&sounds));
+        audio
+            .play(sfx.source(&sounds))
+            .with_volume(sfx.volume())
+        ;
     }
 
     // BGM
